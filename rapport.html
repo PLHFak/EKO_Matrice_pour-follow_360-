@@ -1,0 +1,1822 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composer la sortie EKO sans polluer le PGM · EKO Matrice Follow</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('eko-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah v" d="M2 1L8 5L2 9"/></marker><marker id="ah-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah a" d="M2 1L8 5L2 9"/></marker><marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah l" d="M2 1L8 5L2 9"/></marker><marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah c" d="M2 1L8 5L2 9"/></marker><marker id="ah-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah n" d="M2 1L8 5L2 9"/></marker></defs></svg>
+<div class="page report">
+<header class="top">
+  <a class="brand" href="index.html"><span class="brand-eko">EKO</span><span class="brand-sub">Kreativ Labs</span></a>
+  <nav class="pages"><a href="index.html">Synthèse</a><a href="rapport.html" aria-current="page">Rapport complet</a></nav>
+  <div class="tools">
+    <a class="tool lang" href="en/report.html" hreflang="en" title="English">EN</a>
+    <button class="tool" id="theme" type="button" title="Thème clair ou sombre" aria-label="Thème clair ou sombre"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
+    <button class="tool" id="print" type="button" title="Imprimer ou enregistrer en PDF" aria-label="Imprimer ou enregistrer en PDF">PDF</button>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-in">
+    <p class="eyebrow">Dossier R&D · v0.1 · 11 octobre 2026 · Document interne</p>
+    <h1>Composer la sortie EKO sans polluer le PGM</h1>
+    <p class="lede">Le rapport complet : chaque affirmation garde sa source en lien, et ce qui n'a pas pu être confirmé est marqué comme tel.</p>
+  </div>
+</section>
+<div class="layout">
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <a class="l2" href="#s1">1. Synthèse et verdict</a>
+    <a class="l2" href="#s2">2. La fonction à réaliser</a>
+    <a class="l2" href="#s3">3. Comment la réaliser</a>
+    <a class="l3" href="#s3-1">3.1 Matrice hybride baseband</a>
+    <a class="l3" href="#s3-2">3.2 Car ST 2110</a>
+    <a class="l3" href="#s3-3">3.3 Matrice transparente</a>
+    <a class="l3" href="#s3-4">3.4 PGM Follow par le système de contrôle</a>
+    <a class="l3" href="#s3-5">3.5 Suivi dans le mélangeur</a>
+    <a class="l2" href="#s4">4. La chaîne LTC</a>
+    <a class="l3" href="#s4-1">4.1 Ce que sortent les serveurs EVS</a>
+    <a class="l3" href="#s4-2">4.2 Limites du signal LTC</a>
+    <a class="l3" href="#s4-3">4.3 LTC en audio PCM</a>
+    <a class="l3" href="#s4-4">4.4 Options de conversion et prix relevés</a>
+    <a class="l3" href="#s4-5">4.5 Classement des options pour trois LTC</a>
+    <a class="l2" href="#s5">5. Le marché des matrices</a>
+    <a class="l3" href="#s5-1">5.1 Grandes matrices hybrides</a>
+    <a class="l3" href="#s5-2">5.2 Matrices moyennes et compactes</a>
+    <a class="l3" href="#s5-3">5.3 Passerelles IP (ST 2110 vers SDI)</a>
+    <a class="l3" href="#s5-4">5.4 Ce que l&#x27;on trouve dans les cars, en ordre de grandeur</a>
+    <a class="l2" href="#s6">6. Systèmes de contrôle et protocoles mélangeur</a>
+    <a class="l3" href="#s6-1">6.1 Systèmes de contrôle</a>
+    <a class="l3" href="#s6-2">6.2 Protocoles</a>
+    <a class="l2" href="#s7">7. Ce que les prestataires ont dans leurs cars</a>
+    <a class="l3" href="#s7-1">7.1 France</a>
+    <a class="l3" href="#s7-2">7.2 Belgique et Pays-Bas</a>
+    <a class="l3" href="#s7-3">7.3 Allemagne, Autriche et Suisse</a>
+    <a class="l3" href="#s7-4">7.4 Espagne, Italie et cars software-defined</a>
+    <a class="l3" href="#s7-5">7.5 Royaume-Uni et Irlande</a>
+    <a class="l3" href="#s7-6">7.6 Amérique du Nord</a>
+    <a class="l3" href="#s7-7">7.7 Australie et Moyen-Orient</a>
+    <a class="l3" href="#s7-8">7.8 Les tendances</a>
+    <a class="l2" href="#s8">8. Est-ce à la portée d&#x27;un car ? Grille par type de car</a>
+    <a class="l2" href="#s9">9. Limites et points à tester</a>
+    <a class="l2" href="#s10">10. Questions à poser au chef de car</a>
+    <a class="l2" href="#s11">11. Lacunes de cette recherche</a>
+  </nav>
+  <main>
+<section class="abstract"><p class="abstract-title">Résumé</p><p>La sortie SDI dédiée que demande EKO — vidéo PGM ou source à l'antenne, son international, et les trois LTC des LSM en audio sur les canaux 14, 15 et 16 — correspond à une fonction native de l'étage audio des matrices hybrides et des passerelles ST 2110 : les grandes familles hybrides (Evertz, Sirius 800, NVISION 8500, Platinum, UTAH-400, Ultrix) et les passerelles dont la fonction est documentée composent 16 canaux mono par sortie SDI, destination par destination, donc sans toucher au PGM qui quitte le car, la granularité mono restant non confirmée pour MediorNet et FOR-A <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">Evertz EMX3-FR, manuel p. 115</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">GV NV8500, manuel p. 69</a> ; <a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/20797/lawos-.edge-receives-audio-supercharge-and-provides-color-correction">Lawo .edge, The Broadcast Bridge</a></span>. <strong>Elle n'est toutefois pas acquise d'office sur toutes les sorties</strong> : sauf sur NEXX, Ultrix et MicroN, où l'embedding est annoncé sur chaque port, elle dépend de cartes de sortie embedder et le plus souvent d'une licence, et, dans beaucoup de cars, seule une partie des sorties en est équipée (constat des notes de recherche, non sourcé car par car) <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/products/sirius_800_series/">GV Sirius 800</a> ; <a target="_blank" rel="noopener" href="https://grassvalley.com/docs/Release_Notes/routers/nvision_8500/TN0027-08_NV8500_Pre-Installation_Guide.pdf">GV TN0027-08</a></span>. <strong>Aucune fonction nommée « PGM Follow » n'a été trouvée dans la documentation publique atteinte des systèmes de contrôle</strong> : le suivi du bus programme se construit par règles (logique GPIO et crosspoints de Lawo VSM, « Virtual Tally Router » de TSL TallyMan) ou dans le mélangeur (Bus Linking du K-Frame, Auto Follow Ross, Internal Bus Link Sony d'après un rapport de formation tiers), avec un retard qu'aucun constructeur ne publie <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-gpio">Lawo VSM, GPIO</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1324/02-router-set-up.pdf">TSL TallyMan, manuel 02</a> ; <a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/docs/Manuals/switchers/kayenne/071-8963-01-AB_Kayenne_Karrera_GV_Korona_K-Frame_User_v11.0.pdf">GV K-Frame, manuel v11.0</a></span>. Sur une sortie ré-embeddée de matrice, la transparence à tout l'ancillaire (HANC et VANC) n'est écrite noir sur blanc que pour le GV Vega, sans que l'ATC y soit nommé ; FOR-A documente que sa carte de sortie laisse passer tout l'ANC avec Quiet Switch désactivé et n'en transmet qu'une liste restreinte une fois ce mode activé ; côté passerelles, seul Lawo nomme l'ATC : c'est le premier point à tester car par car <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">GV Vega, datasheet</a> ; <a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">FOR-A MFR-3100EX, fiche de spécifications</a></span>. Sur le prix : <strong>aucun prix public n'a été trouvé pour un module d'entrée audio analogique de matrice ; le soupçon d'un surcoût par rapport à une entrée numérique n'est donc ni confirmé ni réfuté</strong>. Ce que les documents montrent, c'est que Sirius 800, NVISION 8500, Ross Ultrix, MicroN et Lawo .edge n'ont pas d'entrée analogique documentée, et qu'un embedder externe à quatre entrées analogiques coûte de 275 $ (Blackmagic, Markertek, vu le 2026-10-11) à 1 118 $ (AJA 3G-AMA, Markertek, vu le 2026-10-11) <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek, Blackmagic CONVMCAUDS2</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek, AJA 3G-AMA</a></span>. L'inconnue décisive n'est pas la matrice mais la source : le seul énoncé de manuel EVS trouvé sur ce point (XT3, Hardware Technical Reference 12.05) dit que les connecteurs Timecode émettent le LTC « that corresponds to PGM1 » ; qu'il n'y ait qu'une sortie par serveur est une inférence, rien n'est confirmé pour la génération VIA, et rien n'a été trouvé sur le comportement de cette sortie en ralenti, en jog ou à l'arrêt sur image <span class="cite"><a target="_blank" rel="noopener" href="https://manualzilla.com/doc/5929487/369-m__hardware-technical-reference?page=67">EVS XT3, Hardware Technical Reference 12.05</a></span>.</p></section>
+
+<h2 id="s1">1. Synthèse et verdict : faisable sur la plupart des architectures documentées, garanti nulle part sans essai</h2>
+<p><strong>Réalisation (question 1).</strong> Trois architectures aboutissent au même signal. Dans une matrice hybride baseband, les cartes d'entrée dé-embeddent vers un bus TDM, le crosspoint audio route au niveau mono, et la carte de sortie embedder insère 16 canaux par sortie depuis n'importe quelle entrée AES, analogique ou MADI <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">Evertz EMX3-FR, manuel p. 115</a></span>. Dans un car ST 2110, la sortie SDI est reconstruite dans la passerelle à partir de récepteurs indépendants (vidéo -20, audio -30/-31, ANC -40), et l'audio embedded est exclu par la norme du flux -40 : « vidéo qui suit, audio fixe » y est le comportement par défaut (inférence des notes, qui suppose que le récepteur -40 suive le récepteur -20) <span class="cite"><a target="_blank" rel="noopener" href="https://pub.smpte.org/pub/st2110-40/st2110-40-2023.pdf">SMPTE ST 2110-40:2023</a> ; <a target="_blank" rel="noopener" href="https://potato.vsf.tv/events_archive/2022-04_NABShow2022/IPS-NAB2022-monoAudio-tuesday-1030-mailhot-v1.pdf">VSF IP Showcase NAB 2022, Mailhot</a></span>. Avec une matrice transparente (Blackmagic Videohub, AJA KUMO), un embedder externe placé entre la sortie dédiée et EKO est obligatoire <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/blackmagicvideohub/techspecs/W-VHS-23">Blackmagic Videohub, spécifications</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-kumo-323212g/aja-kumo-3232-12g-compact-32x32-12g-sdi-router-for-4k-ultra-hd">Markertek, AJA KUMO 3232-12G</a></span>. Le suivi du bus programme n'existe sous forme de fonction nommée dans aucune documentation publique atteinte ; il se construit à partir des briques documentées, et c'est l'intégrateur, non le produit, qui lui donne un nom (inférence des notes de recherche à partir de <a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-gpio">Lawo VSM, GPIO</a> et <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1347/20-examples.pdf">TSL TallyMan, manuel 20</a>).</p>
+<p><strong>Marché (question 2).</strong> Les quatre constructeurs historiques de grandes matrices (Evertz EQX/NEXX, Grass Valley Sirius 800 et NVISION 8500, Imagine Platinum IP3/MX, Utah UTAH-400 Series 2) proposent tous un crosspoint audio TDM mono à côté du crosspoint vidéo, avec 16 canaux embedded gérés par SDI <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQX-IO">Evertz EQX-IO</a> ; <a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/me1g2siz/sirius-800_ds-pub-3-0711c-en.pdf">GV Sirius 800, datasheet</a> ; <a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Imagine Platinum IP3</a> ; <a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2022/09/Utah-400-Series-2_2025-1.pdf">Utah-400 Series 2, brochure 2025</a></span>. Dans le milieu de gamme, Ross Ultrix est le cas le plus net de « matrice qui compose elle-même le signal », FOR-A MFR-3100EX est, des cinq familles compactes étudiées ensemble (Ultrix, MediorNet, FOR-A MFR, Videohub, KUMO), la seule à accepter l'analogique nativement, Imagine Platinum MX et FOR-A MFR-5000/8000 disposant aussi de cartes d'entrée analogiques, et Riedel MediorNet place un embedder 16 canaux sur chaque port <span class="cite"><a target="_blank" rel="noopener" href="https://www.rossvideo.com/company/media/news-releases/ross-video-launches-ultrix-the-ultimate-connectivity-platform">Ross, communiqué Ultrix 2015</a> ; <a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/">FOR-A MFR-3100EX</a> ; <a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">Riedel MicroN, datasheet</a></span>.</p>
+<p><strong>Portée et limites (question 3).</strong> La fonction est à la portée d'un car équipé d'une matrice hybride ou de passerelles ST 2110, et plausible mais non confirmée sur un réseau MediorNet, sous deux réserves pratiques : une destination embedder libre, et une entrée pour les trois LTC. Le MADI est le point d'entrée le plus général (Ultrix, MicroN et la couche audio de la NVISION 8500 n'ont pas d'entrée AES3 documentée ; .edge n'accepte que des flux 2110-30 et -31) ; parmi les familles étudiées, une vraie entrée analogique n'est documentée en châssis que chez Evertz (cartes EMR, dans un châssis séparé), Utah (ADC-400A/12S), Imagine (PT-ADCT-IB) et FOR-A (MFR-8AAI) <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EMR-AA">Evertz EMR-AA</a> ; <a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2024/04/US-Catalog-2405-web.pdf">Utah, catalogue 2024-05</a> ; <a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Imagine Platinum IP3</a> ; <a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">FOR-A MFR-3100EX, fiche de spécifications</a></span>. Le prix de ces modules n'est publié nulle part ; la conversion externe, elle, est chiffrée (section 4).</p>
+<p><strong>Parc des prestataires (question 4).</strong> Dans l'inventaire NEP, Gravity Media, États-Unis, Canada et Royaume-Uni des cars médiatisés (qui contient aussi quelques unités d'Australie, de Belgique, des Pays-Bas, d'Allemagne, de France et du Qatar), environ 60 % des lignes identifiables sont IP et 25 % baseband ; en Europe continentale, les prestataires privés restent majoritairement en baseband, en MediorNet ou en hybride, sous Lawo VSM dans 19 des 25 lignes où le contrôle est nommé (décomptes internes aux notes de recherche, biaisés vers les cars que la presse et les constructeurs ont choisi de médiatiser ; sources ligne par ligne en section 7). EMG fait exception avec EVS Cerebrum, NEP avec sa plate-forme propriétaire TFC <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/twin-top-end-emg-uhd-trucks-settle-in-to-life-on-the-road-in-europe/?print=1">SVG Europe, octobre 2020</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/02/08/neps-tfc-infrastructure-and-ss71-ibc-style-core-power-a-progressive-super-bowl-lx-infrastructure-for-nbc-sports/">SVG, 8 février 2026</a></span>.</p>
+<p><strong>Verdict.</strong> Le dénominateur commun réaliste est « une sortie SDI avec audio embedded, configurée par le système de contrôle du car » ; en Europe continentale, une entrée ST 2110 native sur EKO serait un confort pour une minorité de cars, non un prérequis (inférence des notes, formulée pour l'échantillon continental). Cinq points conditionnent la mise en service et ne sont tranchés par aucun document : la tenue de l'ATC sur la sortie ré-embeddée, le retard et le comportement du suivi pendant les transitions, ce que la sortie LTC d'un serveur EVS délivre réellement hors vitesse nominale, qui reste le point le plus important, le décalage entre l'audio et la vidéo sur la destination EKO, et la disponibilité d'une entrée analogique pour les trois LTC.</p>
+<h2 id="s2">2. La fonction à réaliser : une destination, trois essences indépendantes</h2>
+<p>Le signal attendu par EKO est une seule sortie SDI de la matrice. Sa vidéo est le PGM, ou, en mode « PGM Follow », la source que le mélangeur a mise à l'antenne, prise directement sur la matrice. Son audio embedded porte le son international sur les premiers canaux et, sur les derniers (par exemple 14, 15 et 16), le LTC de chacun des trois serveurs EVS LSM, transporté comme un canal audio PCM ordinaire. La composition est faite par la matrice sur cette destination seulement : comme l'embedding est réalisé par carte de sortie et indépendamment par destination, le même PGM routé vers la sortie de diffusion n'est pas affecté, à condition que le LTC ne soit pas embeddé en amont, par exemple sur la sortie PGM du mélangeur (inférence des notes à partir de <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">GV NV8500, manuel p. 69</a> et <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">Evertz EMX3-FR, manuel p. 115</a>).</p>
+<p>L'intérêt de prendre l'image « à la matrice » plutôt qu'en sortie du mélangeur tient à l'ancillaire. Dans un flux HD-SDI, le timecode existe sous deux formes, ATC_LTC et ATC_VITC, toutes deux en paquets ancillaires sur des lignes dédiées <span class="cite"><a target="_blank" rel="noopener" href="https://cobaltdigital.com/wp-content/uploads/2024/02/About-Timecodesv1.0.pdf">Cobalt Digital, About Timecodes v1.0</a></span>. Les notes de recherche situent ATC_LTC en HANC et ATC_VITC en VANC ; l'audio embedded voyageant lui aussi en HANC, tout embedder réécrit le HANC à un degré ou à un autre, et le risque se concentre donc sur ATC_LTC (inférence des notes). Une sortie auxiliaire de mélangeur est, elle, une sortie traitée : le passage de l'ancillaire n'y est documenté en détail que chez Ross <span class="cite"><a target="_blank" rel="noopener" href="https://help.rossvideo.com/ultra/Topics/Setup/Video/Anc.html">Ross Carbonite Ultra, Ancillary Data</a></span>.</p>
+<p>Le cahier des charges se décompose ainsi en trois essences que la matrice doit traiter séparément : la vidéo et son ancillaire, qui suivent la source ; le son international, fixe ; les trois LTC, fixes. La capacité n'est pas une contrainte (inférence des notes) : les passerelles dont la fonction est documentée (Lawo .edge, GV IQUCP25, Nevion Virtuoso, Sony avec NXLL-AM50) embeddent 16 canaux par sortie SDI, la granularité n'étant pas précisée pour Evertz 570IPG, Imagine SNP et Riedel <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/DataSheets/modular/iq/iqucp25/IQUCP25_DS-PUB-3-0675A-EN.pdf">GV IQUCP25, datasheet</a> ; <a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">Nevion Virtuoso SDI-IP-H25</a></span>.</p>
+<h2 id="s3">3. Comment la réaliser : trois architectures, puis le suivi du programme</h2>
+<h3 id="s3-1">3.1 Matrice hybride baseband : une route mono vers une sortie embedder</h3>
+<p>Le mécanisme est identique chez tous les constructeurs. Chez Evertz, la carte de-embedder extrait les 16 canaux de chacune de ses entrées vidéo vers le TDM, le crosspoint ADMX route « down to the mono channel level », et la carte embedder insère 16 canaux par sortie provenant « from any AES, analog, or MADI input module » <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">Evertz EMX3-FR, manuel p. 115</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/products/EMR-ADMX">Evertz EMR-ADMX</a></span>. Sur la NVISION 8500 Hybrid, la logique de la matrice choisit, pour chacun des 16 canaux de chaque sortie, entre le canal correspondant de la vidéo présente sur cette sortie (drapeau « pass-through »), un silence généré (« null ») ou une source audio venue de la matrice TDM <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">GV NV8500, manuel p. 69</a></span>. Sur la Sirius 800, les modules AHP 5919 (entrée) et 5949 (sortie) assurent de-embedding, Channel Swap, mix 16 canaux et embedding, et tout audio entrant (embedded, AES, MADI) peut être routé par le crosspoint audio puis embeddé <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/sirius_800/Sirius_800_User_Manual_Iss6_Rev6.pdf">GV Sirius 800, manuel Iss6 Rev6</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1407598/Sam-Sirius-840.html?page=143">SAM Sirius 840, manuel p. 143</a></span>. Imagine Platinum IP3 multiplexe jusqu'à 16 canaux dans chaque sortie par ses modules de sortie Mux et annonce un « full mono breakaway routing » ; Utah alimente chaque sortie embedder en 16 canaux depuis son sous-routeur audio TDM <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Imagine Platinum IP3</a> ; <a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2022/09/Utah-400-Series-2_2025-1.pdf">Utah-400 Series 2, brochure 2025</a></span>.</p>
+<p>Le composite EKO est donc un cas d'école pour ces embedders : sur NV8500, drapeau pass-through sur les canaux conservés et source TDM sur les canaux 14 à 16 ; ailleurs, une route mono du crosspoint audio vers les 16 entrées d'embedder d'une sortie (inférence des notes). La contrainte pratique est la disponibilité, non la capacité : les sorties embedder sont un sous-ensemble des sorties. Chez Imagine, le nom des modules indique des sorties mux par blocs de 8 (inférence tirée de la nomenclature « PX-HSR8CMX8C ») ; sur NV8500, le Dynamic Hybrid Path-finding vise explicitement une architecture « mostly standard cards with a few hybrid cards » ; sur Sirius, le traitement audio et vidéo est licencié par module <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Imagine Platinum IP3</a> ; <a target="_blank" rel="noopener" href="https://grassvalley.com/docs/Release_Notes/routers/nvision_8500/TN0027-08_NV8500_Pre-Installation_Guide.pdf">GV TN0027-08</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1407598/Sam-Sirius-840.html?page=143">SAM Sirius 840, manuel p. 143</a></span>. Dans un car chargé, ces sorties sont souvent toutes allouées (inférence des notes, non documentée).</p>
+<p>La configuration relève de l'ingénierie du car et non de l'exploitation courante. Les constructeurs présentent le shuffle comme faisable depuis les panneaux normaux — « Any NVISION control panel can manage channel shuffling and break-away », dial-up de routage de pistes et softpanels chez Snell — mais créer une destination dédiée avec une carte de 16 canaux sur mesure est un travail de base de données (MAGNUM, Workbench, MRC et NV9000-SE, Magellan, Ucon), typiquement mémorisé en salvo ou en destination virtuelle (inférence des notes à partir de <a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/miranda-ships-next-generation-nvision-8500-hybrid-embedded-audio-routers-integrated-au">Miranda, communiqué NVISION 8500</a>, <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2013/08/22/snell-sirius-router-adds-audio-control-functions/">SVG, 22 août 2013</a> et <a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=122">Evertz EMR, User's Guide rev 1.8</a>). Sur Ross Ultrix, le seul mode opératoire trouvé vient d'un intégrateur : panneau « Audio-SDI », sélection de la sortie, puis des canaux, « all 16 channels route independently », avec capture en salvo <span class="cite"><a target="_blank" rel="noopener" href="https://kb.ct-group.com/basic-configuration-and-operation-of-ultrix/">CT Group KB, Ultrix</a></span>.</p>
+<h3 id="s3-2">3.2 Car ST 2110 : la sortie SDI est reconstruite dans la passerelle</h3>
+<p>Dans un cœur ST 2110, la sortie SDI n'est plus celle d'un châssis de matrice, même si certains cars IP gardent une matrice SDI à côté du cœur IP (SS8 de NEP, GTX-21 de F&amp;F, tableau 7.6) : elle est recomposée par la passerelle à partir d'un récepteur 2110-20 pour la vidéo, de plusieurs récepteurs 2110-30/-31 alimentant un shuffler mono par sortie, et d'un récepteur 2110-40 pour l'ancillaire, chacun routé indépendamment par le système de contrôle. La norme précise que les paquets d'audio embedded « should not be transmitted using this method » dans le flux -40 <span class="cite"><a target="_blank" rel="noopener" href="https://pub.smpte.org/pub/st2110-40/st2110-40-2023.pdf">SMPTE ST 2110-40:2023</a></span>. Le modèle recommandé par John Mailhot (Imagine) associe des flux multicanaux, un routage au niveau canal dans l'équipement, IS-05 pour les récepteurs de flux et IS-08 pour le mapping audio, avec une matrice audio « helper » pour les équipements qui en ont besoin ; son exemple est précisément une passerelle SDI recevant 16 canaux en deux flux 2110-30 de 8 canaux <span class="cite"><a target="_blank" rel="noopener" href="https://potato.vsf.tv/events_archive/2022-04_NABShow2022/IPS-NAB2022-monoAudio-tuesday-1030-mailhot-v1.pdf">VSF IP Showcase NAB 2022, Mailhot</a> ; <a target="_blank" rel="noopener" href="https://specs.amwa.tv/is-08/v1.0.x/docs/Overview.html">AMWA IS-08</a></span>.</p>
+<p>Les passerelles dont la fonction est documentée offrent cette composition, la granularité n'étant pas précisée pour Evertz 570IPG, Imagine SNP et Riedel : chez Lawo .edge, « each SDI output on a blade has an Audio Shuffler that can select any mono channel from its 4 IP receivers and embed it into one SDI output » ; l'IQUCP25 de Grass Valley embedde jusqu'à 4 flux audio par canal avec un bloc « 16x16 Audio Shuffle » ; le Nevion Virtuoso accepte jusqu'à 16 flux audio IP avec routage, shuffling, délai et gain par canal <span class="cite"><a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/20797/lawos-.edge-receives-audio-supercharge-and-provides-color-correction">The Broadcast Bridge, Lawo .edge</a> ; <a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/DataSheets/modular/iq/iqucp25/IQUCP25_DS-PUB-3-0675A-EN.pdf">GV IQUCP25, datasheet</a> ; <a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">Nevion Virtuoso SDI-IP-H25</a></span>. Le détail par produit figure dans le troisième tableau de la section 5.</p>
+<p>La sortie « PGM Follow » se projette naturellement sur une telle sortie de passerelle : le récepteur vidéo -20 et le récepteur ANC -40 sont commutés ensemble vers l'émetteur de la caméra ou du serveur à l'antenne, et le shuffler audio reste patché statiquement sur le son international et les trois LTC. C'est un breakaway standard au niveau flux, non une fonction exotique (inférence des notes). Le point à vérifier par constructeur est que le récepteur -40 suive bien le récepteur vidéo, car l'ATC de la source vit dans son flux -40 et non dans son flux vidéo ; une passerelle qui ne commute que le -20, ou qui traite le -40 comme des « metadata associated with SMPTE ST 2110-20 video stream » selon le libellé de Grass Valley, peut se comporter différemment (inférence des notes à partir de <a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/DataSheets/modular/iq/iqucp25/IQUCP25_DS-PUB-3-0675A-EN.pdf">GV IQUCP25, datasheet</a>). Le texte de ST 2110-40 lui-même ne nomme ni le timecode ni ST 12-2 ; le timecode « Embedded in the 2110 Ancillary stream » est attesté en pratique par Pixotope pour les cartes Matrox <span class="cite"><a target="_blank" rel="noopener" href="https://pub.smpte.org/pub/st2110-40/st2110-40-2023.pdf">SMPTE ST 2110-40:2023</a> ; <a target="_blank" rel="noopener" href="https://help.pixotope.com/phc/25.2/configure-timecode-ltc">Pixotope 25.2, Configure timecode</a></span>.</p>
+<p>Deux conséquences pratiques. D'abord, les trois LTC doivent exister comme canaux d'un flux 2110-30 avant d'atteindre la passerelle (section 4). Ensuite, deux exemples documentés suggèrent que les cars IP gardent des bords SDI abondants (inférence des notes) : Bravo et Columbia de Game Creek exposent une passerelle SDI de 432 × 528, les jumeaux RTBF 32 sorties baseband <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=169619">SVG, 25 septembre 2019</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-belgium-and-broadcast-solutions-complete-new-rtbf-ob-truck-through-the-coronavirus-lockdown/">SVG Europe, RTBF</a></span>.</p>
+<h3 id="s3-3">3.3 Matrice transparente : un embedder externe devant EKO</h3>
+<p>Les Videohub 12G sont de simples crosspoints SDI avec reclocking : aucune fonction d'embedding, de de-embedding ou de shuffling ne figure dans les spécifications du constructeur <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/blackmagicvideohub/techspecs/W-VHS-23">Blackmagic Videohub, spécifications</a></span>. Les AJA KUMO sont décrits par AJA, cité par les revendeurs, comme des matrices qui « Passes all SDI embedded ancillary data including audio » <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-kumo-323212g/aja-kumo-3232-12g-compact-32x32-12g-sdi-router-for-4k-ultra-hd">Markertek, AJA KUMO 3232-12G</a></span>. Le schéma est alors : sortie dédiée de la matrice, embedder externe qui insère les trois LTC, puis EKO. Le PGM de diffusion n'est pas concerné, puisque l'embedder n'est que dans le chemin d'entrée d'EKO (inférence des notes).</p>
+<p>Seuls deux embedders du relevé sont documentés comme laissant choisir où l'audio analogique atterrit tout en conservant le reste : l'AJA 3G-AMA, dont l'embedding est « user selectable, on a channel pair basis », et le Lynx Yellobrik PDM 1383, à sélection de groupe par roues codeuses <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek, AJA 3G-AMA</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/lnx-pdm-1383/lynx-technik-yellobrik-pdm-1383-analog-audio-embedder-de-embedder">Markertek, Lynx PDM 1383</a></span>. Pour le Blackmagic Mini Converter Audio to SDI, ni les canaux écrits ni la conservation de l'audio embedded entrant ne sont précisés sur les pages lues : <strong>non confirmé</strong>, à valider sur table avant toute recommandation. Ce modèle est en outre limité au 3G-SDI ; un PGM 12G demanderait le Teranex Mini Audio to SDI 12G, qui n'a que deux entrées analogiques, ou un modèle d'une autre marque : l'AJA 12G-AMA (« 12G-SDI Mini Converter with 4-Channel Audio Embed/Disembed », quatre canaux analogiques selon la lecture des notes, prix non relevé) ou le Lynx PDM 1484 D (12G, AES et analogique sur D-sub, 1 340,00 £ HT chez Canford UK, vu le 2026-10-11) <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmdctmcbausdi/blackmagic-design-convntrm-cb-ausdi-teranex-mini-converter-audio-to-sdi-12g">Markertek, Blackmagic Teranex Mini Audio to SDI 12G</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-12g-ama-r-st/aja-12g-ama-r-st-12g-sdi-mini-converter-with-4-channel-audio-embed-disembed-st-fiber-receiver">Markertek, AJA 12G-AMA-R-ST</a> ; <a target="_blank" rel="noopener" href="https://canford.co.uk/LYNX-YELLOBRIK-AUDIO-EMBEDDERS-AND-DE-EMBEDDERS">Canford UK</a></span>. Avec une matrice transparente, l'ATC et l'audio de la source atteignent la sortie dédiée sans altération, et tout le risque de perte se déplace sur l'embedder externe (inférence des notes).</p>
+<h3 id="s3-4">3.4 PGM Follow par le système de contrôle : des règles, pas une fonction nommée</h3>
+<p>Dans la documentation publique atteinte, aucun système de contrôle ne commercialise de fonction « PGM follow » en un clic ; les briques, elles, sont documentées. Dans Lawo VSM, un crosspoint peut servir de déclencheur dans la logique GPO, un GPO peut positionner un crosspoint, la fenêtre « Crosspoint as secondary GPI command » définit une Condition et une Action, et les options « Increment Source » et « Increment Target » génèrent la série lors d'une copie ; l'exemple documenté enchaîne crosspoint A, GPO, crosspoint B <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-gpio">Lawo VSM, GPIO</a></span>. Dans TSL TallyMan, « vision mixers are treated exactly as though they are routers », et le « Virtual Tally Router » route vers sa destination unique la première source en tally, avec repli sur la Source 1 si aucune ne l'est ; l'exemple « A 2 x 1 Emergency C/O Router » applique ce principe, selon la lecture des notes, à une matrice physique <span class="cite"><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1328/05-tallies-set-up.pdf">TSL TallyMan, manuel 05</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1324/02-router-set-up.pdf">TSL TallyMan, manuel 02</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1347/20-examples.pdf">TSL TallyMan, manuel 20</a></span>.</p>
+<p>La recette générique disponible dans tout système qui lit l'état des bus du mélangeur est donc « N règles » : pour chacune des N sources susceptibles d'apparaître sur le bus PGM, SI (crosspoint du bus PGM = source n) ALORS router (source matrice n vers destination « EKO PGM Follow ») sur le seul niveau vidéo et ANC. C'est une inférence des notes de recherche, littéralement exprimable dans VSM avec la chaîne condition, GPO, action documentée. L'audio fixe pendant que la vidéo suit relève d'une restriction de niveau ou de couche de cette règle : colonnes de Pseudo Device et « Breakaway detection » dans VSM, logical levels avec règles de shuffle dans GV Orbit ; chez TSL, le masque de niveaux filtre les canaux de tally et non les niveaux audio et vidéo, de sorte que la restriction à la vidéo n'y est pas documentée <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-pseudo-devices">Lawo VSM, Pseudo Devices</a> ; <a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/gv_orbit/13-03082-160_AG_GV_Orbit_Control_User_Guide_v1.6.0.pdf">GV Orbit Control, User Guide v1.6.0</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1324/02-router-set-up.pdf">TSL TallyMan, manuel 02</a></span>. Une limite documentée dans VSM : les règles de Pseudo Device ne prennent pas en charge les chemins passant par des tie-lines <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-pseudo-devices">Lawo VSM, Pseudo Devices</a></span>.</p>
+<p>La règle doit être pilotée par l'état de bus (quel index d'entrée est sur le bus PGM), non par le tally dérivé, qui peut allumer plusieurs sources pendant un mix ou avec des keys et exige alors une règle de priorité ; et le système doit traduire « bus PGM = entrée 7 » en « source matrice CAM 7 » par les tables d'association déjà utilisées pour le tally et les UMD (inférences des notes). Les protocoles qui exposent cet état sont détaillés en section 6.</p>
+<h3 id="s3-5">3.5 Suivi dans le mélangeur : serré en timing, incertain sur l'ancillaire</h3>
+<p>Le suivi de bus interne est une fonction documentée des principaux mélangeurs de car. Le manuel K-Frame v11.0 comporte les sections « Bus Linking Menu », « Linking Busses one-to-one », « Creating Parallel Bus Links », « Bus Linking Source Substitution Tables » et « Router Control of Aux Buses » ; seuls les titres ont pu être lus, pas les procédures <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/docs/Manuals/switchers/kayenne/071-8963-01-AB_Kayenne_Karrera_GV_Korona_K-Frame_User_v11.0.pdf">GV K-Frame, manuel v11.0</a></span>. Chez Sony, d'après un rapport de formation de PTS (Taïwan) lu en traduction et non recoupé avec un manuel Sony, les fonctions de lien héritées de la série MVS sont Internal Bus Link, ME Link et Key Transition Link, avec l'exemple d'une sortie 1 du M/E 1 liée à l'Aux 1 <span class="cite"><a target="_blank" rel="noopener" href="https://info-material.pts.org.tw/staff_paper/2024/2024_003.pdf">PTS, staff paper 2024_003</a></span>. Chez Ross Acuity, « Auto Follow » permet à un bus Aux entier de suivre un autre bus, avec une limite explicite : « Auto follow actions only echo commands, and do not echo the state » <span class="cite"><a target="_blank" rel="noopener" href="https://help.rossvideo.com/acuity/Topics/Setup/Personality/Auto-Follow.html">Ross Acuity, Auto Follow</a></span>.</p>
+<p>Un lien interne donne le timing le plus serré et ne demande aucun système de contrôle (inférence des notes), mais une sortie Aux est une sortie traitée. Le passage de l'ancillaire n'est documenté que chez Ross : sur Carbonite Ultra, « The switcher can be configured to strip or pass this data » (Ancillary Mode : Strip ou Pass), toute conversion de format supprime l'ancillaire, et les frame synchronizers suppriment l'audio embedded <span class="cite"><a target="_blank" rel="noopener" href="https://help.rossvideo.com/ultra/Topics/Setup/Video/Anc.html">Ross Carbonite Ultra, Ancillary Data</a></span>. Pour K-Frame, Sony XVS/MVS, Kahuna, DYVI et FOR-A, la préservation du HANC/VANC de la source sur une sortie Aux est <strong>non confirmée</strong>. En mode Pass, l'ATC et l'audio embedded de la source traverseraient ensemble : un embedder aval resterait nécessaire pour écraser les canaux avec le son international et les LTC (inférence des notes).</p>
+<p>Ross offre une option structurellement différente : sur les mélangeurs intégrés à Ultrix (HyperMax sur lame SDPE, Ultrix Acuity), « Aux bus routing is done virtually within the router… The video does not pass through the switcher » <span class="cite"><a target="_blank" rel="noopener" href="https://help.rossvideo.com/hypermax/Topics/Setup/Ultrix/Ultrix-Aux.html">Ross HyperMax, Aux Bus Router Sources</a></span>. Un Aux qui suit le PGM y délivre donc la source de la matrice non traitée, ancillaire compris (inférence des notes).</p>
+<h2 id="s4">4. La chaîne LTC : la source EVS pèse plus que le convertisseur</h2>
+<h3 id="s4-1">4.1 Ce que sortent les serveurs EVS : un LTC « that corresponds to PGM1 »</h3>
+<p>Le seul énoncé de manuel trouvé sur la sortie LTC analogique figure dans le XT3 Hardware Technical Reference 12.05 : les connecteurs Timecode permettent au serveur de recevoir le LTC de référence et de « send the LTC timecode that corresponds to PGM1 » (citation restituée en deux fragments par l'outil de lecture ; ni brochage, ni niveau, ni type de connecteur visibles) <span class="cite"><a target="_blank" rel="noopener" href="https://manualzilla.com/doc/5929487/369-m__hardware-technical-reference?page=67">EVS XT3, Hardware Technical Reference 12.05</a></span>. Lecteur et générateur LTC sont portés par la carte MTPC, d'après un manuel XT Series de 2005 <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/3411441/Evs-Xt-Series.html">EVS XT Series, Technical Reference</a></span>. La sortie n'est donc pas par canal de lecture : trois serveurs LSM donnent exactement trois signaux LTC, chacun décrivant le PGM1 de son serveur et lui seul ; un serveur avec deux opérateurs, ou avec PGM2/PGM3 à l'antenne, n'a pas de LTC analogique pour ces sorties (inférence des notes). À titre de comparaison, le Grass Valley K2 Summit fournit une sortie LTC « 1 per video output » <span class="cite"><a target="_blank" rel="noopener" href="https://wwwapps.grassvalley.com/manuals/k2_summit_v10.1.3/core/x-cc/content/topic/k2/spec/r_LTCSpec.html">GV K2 Summit, spécification LTC</a></span>.</p>
+<p>Côté SDI, les manuels de configuration XT3 11.00 documentent une gestion des timecodes « VITC or ANC timecodes on a channel-by-channel basis », avec en HD les valeurs LTC, HANC LTC ou HANC VITC pour le User TC, et une table LTC qui reçoit automatiquement le LTC <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualsdir.com/manuals/254317/evs-xt3-version-1100-configuration-manual.html?page=135">EVS XT3 11.00, Configuration Manual p. 135</a> ; <a target="_blank" rel="noopener" href="https://www.manualsdir.com/manuals/254317/evs-xt3-version-1100-configuration-manual.html?page=134">EVS XT3 11.00, Configuration Manual p. 134</a></span>. L'ATC sur chaque sortie SDI est donc une classe de capacité documentée sur les logiciels de l'ère XT2/XT3 ; quelle table (LTC ou User) est insérée sur un canal de lecture n'a pas pu être lu (inférence des notes, valeurs OUT <strong>non confirmées</strong>).</p>
+<p>Quatre points restent <strong>non confirmés</strong> et pèsent directement sur la conception :</p>
+<ul>
+<li>l'existence, le connecteur, le niveau et le rattachement au seul PGM1 d'une sortie LTC analogique sur XT-VIA, XS-VIA et XT-GO : les manuels Multicam 20.1 existent sur la zone de téléchargement EVS mais n'ont pas pu être ouverts <span class="cite"><a target="_blank" rel="noopener" href="https://download-area.evs.com/en/download-area-version/3628">EVS download area, Multicam 20.1.39</a></span> ;</li>
+<li>le comportement de la sortie LTC en ralenti, jog, marche arrière et arrêt sur image, alors que les clips se relisent « at any speed between -400 and + 400% » <span class="cite"><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Multicam_(LSM)">Wikipedia, Multicam (LSM)</a></span> ;</li>
+<li>les valeurs exactes des « Timecode Insertion Settings » pour les canaux OUT ;</li>
+<li>tout réglage EVS qui sortirait le LTC en audio sur un canal embedded : rien de tel n'apparaît dans aucun titre ni texte lu.</li>
+</ul>
+<p>Reboucler la sortie LTC sur une entrée audio analogique du serveur n'est physiquement possible que sur les châssis qui en ont : le XT3 dispose de « Analog audio: 4 multi-pin DA-15 connectors (2 in and 2 out) », absents du châssis 4U du XT3 6U, et la documentation XT4K ne décrit aucune E/S audio analogique <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/3607735/Evs-Xt-3.html">EVS XT3, Technical Reference 16.6</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/3478061/Evs-Xt4k.html">EVS XT4K, Technical Reference 15.2</a></span>. Même là où c'est possible, une entrée audio alimente les trains d'enregistrement ; aucune source ne montre un passage direct entrée vers sortie qui placerait le LTC en direct sur un canal embedded d'une sortie de lecture (inférence des notes).</p>
+<h3 id="s4-2">4.2 Limites du signal LTC : illisible à l'arrêt, fragile en vitesse lente</h3>
+<p>Le LTC est un signal biphase-mark de 80 bits par image, soit 2 000 bit/s à 25 i/s (fondamentale de 1,0 à 2,0 kHz) et 2 400 bit/s à 30 i/s (1,2 à 2,4 kHz) <span class="cite"><a target="_blank" rel="noopener" href="https://www.philrees.co.uk/articles/timecode.htm">Philip Rees, Timecode</a> ; <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linear_timecode">Wikipedia, Linear timecode</a></span>. Les niveaux usuels vont de 0,5 à 2 V crête à crête : sortie Evertz 5010 « Adjustable, 0.5Vp-p - 2Vp-p », sortie K2 « 2.0 V peak-to-peak differential », Evertz 7800TM2-3G « 1V p-p nominal » <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/evz-5010/evertz-5010-time-code-generator-and-full-speed-reader-with-video-character-generator-smpte-12-1-standard">Markertek, Evertz 5010</a> ; <a target="_blank" rel="noopener" href="https://wwwapps.grassvalley.com/manuals/k2_summit_v10.1.3/core/x-cc/content/topic/k2/spec/r_LTCSpec.html">GV K2 Summit, spécification LTC</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=84">Evertz 7800TM2-3G, manuel</a></span>. Le temps de montée fait l'objet de sources contradictoires : 25 µs ± 5 µs selon Philip Rees, 40 µs ± 10 µs selon la documentation libltc et la fiche Evertz 5010 ; le texte de SMPTE ST 12-1 n'a pas été consulté <span class="cite"><a target="_blank" rel="noopener" href="https://www.philrees.co.uk/articles/timecode.htm">Philip Rees, Timecode</a> ; <a target="_blank" rel="noopener" href="https://www.mankier.com/3/ltc.h">libltc</a></span>.</p>
+<p>Les lecteurs suivent typiquement de 1/30 à 70–100 fois la vitesse nominale : « between 1/30 and 80 times the nominal rate » pour le K2, « 1/30th to 70x play speed » pour l'Evertz 5010, 1/30 à 100 fois pour l'Horita VLR-100 <span class="cite"><a target="_blank" rel="noopener" href="https://wwwapps.grassvalley.com/manuals/k2_summit_v10.1.3/core/x-cc/content/topic/k2/spec/r_LTCSpec.html">GV K2 Summit, spécification LTC</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/evz-5010/evertz-5010-time-code-generator-and-full-speed-reader-with-video-character-generator-smpte-12-1-standard">Markertek, Evertz 5010</a> ; <a target="_blank" rel="noopener" href="https://markertek.com/Attachments/Manuals/Horita/VLR-100-Manual.pdf">Horita VLR-100, manuel</a></span>. Le LTC ne se lit pas à l'arrêt ; le glossaire EVS le dit lui-même : « It can only be read if the tape is playing » <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/850166/Evs-Multicam-Lsm.html?page=182">EVS Multicam LSM, Operating Manual p. 182</a></span>. C'est la raison d'être du VITC, lisible « down to still frame and pause », et de ses successeurs SDI ATC_VITC et ATC_LTC <span class="cite"><a target="_blank" rel="noopener" href="https://markertek.com/Attachments/Manuals/Horita/VLR-100-Manual.pdf">Horita VLR-100, manuel</a> ; <a target="_blank" rel="noopener" href="https://cobaltdigital.com/wp-content/uploads/2024/02/About-Timecodesv1.0.pdf">Cobalt Digital, About Timecodes v1.0</a></span>.</p>
+<p>Un équipement qui génère un LTC « suivant » une lecture n'a que trois comportements possibles en ralenti (inférence des notes) : (a) mettre à l'échelle le débit binaire avec la vitesse — à 33 % la fondamentale tombe vers 330–660 Hz, sous 1/30 de vitesse les lecteurs décrochent, à l'arrêt il n'y a plus aucune transition ; (b) garder un LTC à débit nominal en répétant ou en sautant des numéros d'image ; (c) s'arrêter ou se taire. Le comportement (a) casse exactement là où EKO en a le plus besoin ; le (b) est décodable à toute vitesse. Un seul exemple documenté de traducteur VITC vers LTC a été trouvé, et il ne suit pas la vitesse : « The LTC output of the VLR-100 in translation mode is always at play speed », et si le VITC n'est pas à vitesse nominale l'appareil ne commence pas à incrémenter son timecode <span class="cite"><a target="_blank" rel="noopener" href="https://markertek.com/Attachments/Manuals/Horita/VLR-100-Manual.pdf">Horita VLR-100, manuel</a></span>. Lequel de ces comportements un serveur EVS adopte n'est documenté dans aucun texte lu : c'est le point unique le plus important à mesurer sur un serveur réel.</p>
+<h3 id="s4-3">4.3 LTC en audio PCM : fiable s'il reste linéaire, non traité et co-retardé</h3>
+<p>Le transport du LTC sur un canal audio ordinaire est une pratique explicitement prise en charge par des constructeurs. Cobalt écrit que ce timecode « uses a spare analog or digital audio channel as its transport », que « The data is sufficiently slow enough to be reliably carried over balanced audio », et donne l'exemple « LTC Encoder is selected as the source for Emb Ch 7 » <span class="cite"><a target="_blank" rel="noopener" href="https://cobaltdigital.com/wp-content/uploads/2024/02/About-Timecodesv1.0.pdf">Cobalt Digital, About Timecodes v1.0</a></span>. Son option +LTC reçoit un LTC audio sur une entrée analogique symétrique, embedded ou AES et l'émet sur un canal embedded ou AES <span class="cite"><a target="_blank" rel="noopener" href="https://www.cobaltdigital.com/sites/default/files/downloads/OPT-SW-F3GLTC-MS%28V1.0%29.pdf">Cobalt Digital, supplément +LTC</a></span>. Lawo indique pour V__matrix +tc_gen que « LTC can also be output as a digital audio signal », et le module Evertz MIO-AES-LTC-D4 peut « de-embed up to 4x AES or a single LTC channel from an SDI source » <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/equipment/lawo-updates-v_matrix-ip-platform">TV Technology, Lawo V__matrix</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/products/HD9010TM">Evertz HD9010TM</a></span>. Aucun document EBU, SMPTE ou EVS ne décrit en revanche « LTC sur un canal embedded SDI » comme pratique de production, et aucun constructeur ne décrit la chaîne complète « trois LTC EVS, stagebox, 2110-30, canaux embedded 14/15/16 » comme design de référence : la faisabilité sur chaque plate-forme est une inférence d'ingénierie, non une pratique documentée.</p>
+<p>À 48 kHz, une cellule de bit LTC occupe 24 échantillons à 25 i/s : la forme d'onde est confortablement suréchantillonnée, et un canal PCM linéaire 48 kHz (AES3, SDI embedded, MADI, AES67 ou Dante) la passe de façon transparente tant qu'il reste linéaire et non traité (inférence des notes). Le Nevion Virtuoso transporte l'audio embedded en « 24-bit linear PCM at 48 kHz », et la NVISION 8500 documente un transport PCM 24 bits avec bits C, U et V préservés <span class="cite"><a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">Nevion Virtuoso SDI-IP-H25</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">GV NV8500, manuel p. 69</a></span>. Les règles de manipulation sont connues : niveau moyen, ni réduction de bruit, ni égalisation, ni compression, et éloignement de l'audio programme pour la diaphonie ; le LTC « does usually not survive compressed codecs » <span class="cite"><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linear_timecode">Wikipedia, Linear timecode</a> ; <a target="_blank" rel="noopener" href="https://kb.pomfort.com/silverstack/hands-on/editing-metadata/extracting-ltc/">Pomfort, Extracting LTC</a></span>. Cobalt signale un piège d'entrée : « Card audio inputs will not center inputs with DC offset » <span class="cite"><a target="_blank" rel="noopener" href="https://www.cobaltdigital.com/sites/default/files/downloads/OPT-SW-F3GLTC-MS%28V1.0%29.pdf">Cobalt Digital, supplément +LTC</a></span>.</p>
+<p>Les éléments dangereux sont ceux qu'un car applique par défaut à l'audio programme : compresseurs et limiteurs, processeurs de loudness, gain automatique, noise gates, filtres passe-haut, Dolby E ou tout codec de contribution avec pertes, et tout shuffling ou mix-down qui sommerait le canal LTC avec d'autres ; les canaux LTC doivent être patchés « bruts », en patch d'E/S direct et non à travers un chemin DSP de console (inférences des notes). L'exemple d'Ultrimix-MXR est parlant : chaque entrée de mixeur y porte noise gate, compresseur-limiteur et égaliseur paramétrique quatre bandes <span class="cite"><a target="_blank" rel="noopener" href="https://documentation.rossvideo.com/files/Manuals/Routers/Ultrix/UItriMix-MXR%20Direct%20Output%20Applications.pdf">Ross, UltriMix-MXR Direct Output Applications</a></span>. Côté niveau, un LTC carré de 2 V crête à crête vaut environ +2 dBu RMS, soit une crête vers −25 dBFS sur un convertisseur aligné 0 dBFS = +24 dBu et vers −19 dBFS à +18 dBu (calcul des notes à partir des niveaux cités) ; un témoignage de forum situe le minimum utile des lecteurs vers −30 dB <span class="cite"><a target="_blank" rel="noopener" href="https://groups.google.com/g/qlab/c/tK5bG7hDyDE">QLab, groupe Google</a></span>.</p>
+<p>La contrainte liante pour EKO est le retard relatif entre le chemin audio du LTC et la vidéo qu'il décrit (inférence des notes). L'embedder lui-même coûte environ 1 ms : AJA 3G-AMA, 1 500 µs avec SRC ou 400 µs sans selon Markertek, environ 1 100 µs selon Full Compass — chiffres contradictoires, tous de l'ordre de la milliseconde <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek, AJA 3G-AMA</a> ; <a target="_blank" rel="noopener" href="https://fullcompass.com/prod/280894-aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Full Compass, AJA 3G-AMA</a></span>. Un cas de terrain montre l'effet d'un retard vidéo : un enregistreur recevant le LTC en direct et la vidéo par une sortie SDI retardée de caméra enregistrait un timecode décalé d'environ 3 images <span class="cite"><a target="_blank" rel="noopener" href="https://www.dvxuser.com/threads/discrepancy-w-odyssey7q-ltc-timecode-input.329305/">DVXuser, 2014</a></span>.</p>
+<h3 id="s4-4">4.4 Options de conversion et prix relevés</h3>
+<p>L'entrée du LTC dans la couche audio d'un car suit trois voies : une entrée ligne analogique existante (console, stagebox, carte analogique de matrice), une conversion externe vers AES3, MADI ou Dante, ou un embedder analogique inséré dans le signal SDI. Les stageboxes Lawo A__stage offrent des « switchable Mic/Line inputs » (A__stage 80 : 32 entrées mic/ligne), et l'AoIP d'un car réel mélange Dante, AES67 et 2110-30, comme sur TVM OB10 <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2019/02/27/bve-2019-lawo-debuts-three-new-a__stage-devices-introduces-dual-fader-bay-in-mc%c2%b256-production-consoles/">SVG, Lawo au BVE 2019</a> ; <a target="_blank" rel="noopener" href="https://evs.com/resources/case-studies/tvm-rolls-out-ob10-evs-ip-live-production-backbone">EVS, étude de cas TVM OB10</a></span>. Le nombre d'entrées ligne libres dans un car type n'a pu être documenté par aucune source : c'est une hypothèse de travail à vérifier avec les chefs de car.</p>
+<p>Réponse directe à la question de prix : <strong>aucun prix, ni aucune donnée de disponibilité, n'a été trouvé pour les modules d'entrée audio analogique des matrices et routeurs audio (Evertz EMR, Grass Valley Sirius, Riedel MediorNet, Ross Ultrix, Lawo, Calrec, Stagetec), ni aucune comparaison avec leurs entrées MADI ou AES. Le soupçon qu'une entrée analogique de matrice coûte nettement plus cher qu'une entrée numérique n'est ni confirmé ni réfuté par cette recherche.</strong> Ce que les listes d'E/S montrent structurellement est exposé en section 5 : aucune entrée analogique en châssis trouvée sur Sirius 800 ni sur NVISION 8500 ; chez Evertz, une carte par bloc de 48 paires stéréo dans un châssis EMR séparé ; chez Utah et Imagine, des cartes de 12 et 16 paires qui consomment un slot. Pour trois signaux, une carte analogique en matrice se justifie donc rarement si elle n'est pas déjà installée (inférence des notes).</p>
+<p>Côté conversion externe, l'entrée de gamme relevée est de 229,00 $ pour un adaptateur Dante AVIO à deux entrées analogiques (Markertek, vu le 2026-10-11) et de 275,00 $ ou 249 € TTC pour un embedder SDI à quatre entrées analogiques (Blackmagic Mini Converter Audio to SDI, Markertek et Thomann France, vus le 2026-10-11) ; un convertisseur analogique vers AES3 de classe broadcast à deux canaux est relevé à 779,95 £ HT (Sonifex RB-ADDA, HHB UK, vu le 2026-10-11) <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-adpdai-au2x0/audinate-adp-dai-au-2x0-dante-avio-analog-input-adapter-with-rj45-and-2-xlr-female-2-channel-version">Markertek, AVIO 2x0</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek, Blackmagic CONVMCAUDS2</a> ; <a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann France</a> ; <a target="_blank" rel="noopener" href="https://www.hhb.co.uk/prod/sonifex/redbox-rb-adda/">HHB UK</a></span>. Les convertisseurs les moins chers du marché (Behringer, ART) n'ont pas pu être chiffrés.</p>
+<p>Les prix ci-dessous ont été lus sur les pages des revendeurs le 2026-10-11, dans la devise de l'annonce ; aucune conversion de change n'a été faite.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Catégorie</th>
+<th>Produit</th>
+<th>Entrées et fonction</th>
+<th>Prix, vendeur (vu le 2026-10-11)</th>
+<th>Remarque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Blackmagic Mini Converter Audio to SDI (CONVMCAUDS2)</td>
+<td>4 canaux analogiques symétriques ou 8 canaux AES/EBU ; SD/HD/3G</td>
+<td>275,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek</a> ; 249 € TTC <a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann France</a> ; 184,00 £ HT <a target="_blank" rel="noopener" href="https://proav.co.uk/live-production/blackmagic-design-mini-converter-audio-to-sdi">ProAV UK</a></td>
+<td>Canaux cibles et conservation de l'audio entrant non confirmés</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Blackmagic Mini Converter Audio to SDI 4K</td>
+<td>4 analogiques ou 8 AES</td>
+<td>367 € <a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann France</a> ; kit 539,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>Prix Thomann lu dans une liste de produits associés, sur la fiche du modèle non 4K</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Blackmagic Teranex Mini Audio to SDI 12G</td>
+<td>2 analogiques ou 4 AES ; 12G</td>
+<td>665,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmdctmcbausdi/blackmagic-design-convntrm-cb-ausdi-teranex-mini-converter-audio-to-sdi-12g">Markertek</a></td>
+<td>Deux entrées analogiques seulement ; XLR droite configurable en timecode</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>AJA 3G-AMA</td>
+<td>4 entrées et 4 sorties analogiques ; embedding par paire, pass ou embed</td>
+<td>1 118,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek</a> et <a target="_blank" rel="noopener" href="https://fullcompass.com/prod/280894-aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Full Compass</a> ; 1 023,97 € HT <a target="_blank" rel="noopener" href="https://en.vocas.nl/aja-3g-ama-3g-sdi-analog-audio-embed-disembed.html">Vocas NL</a></td>
+<td>Placement par paire documenté</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>AJA OG-3G-AMA (carte openGear)</td>
+<td>Embedder analogique 8 canaux</td>
+<td>1 118,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>Châssis openGear en sus</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Lynx Yellobrik PDM 1383</td>
+<td>4 entrées et sorties analogiques ; groupe sélectionnable</td>
+<td>885,40 $ (catalogue 932,00 $) <a target="_blank" rel="noopener" href="https://www.markertek.com/product/lnx-pdm-1383/lynx-technik-yellobrik-pdm-1383-analog-audio-embedder-de-embedder">Markertek</a> ; 760,00 £ HT <a target="_blank" rel="noopener" href="https://canford.co.uk/LYNX-YELLOBRIK-AUDIO-EMBEDDERS-AND-DE-EMBEDDERS">Canford UK</a></td>
+<td>Placement par groupe documenté</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Cobalt BBG-EM-AA</td>
+<td>8 canaux analogiques, autonome</td>
+<td>874,94 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Cobalt 9933-EMDE-ADDA (carte openGear)</td>
+<td>16 canaux AES et 8 analogiques</td>
+<td>1 205,00 $ ; module arrière 229,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>Châssis openGear en sus</td>
+</tr>
+<tr>
+<td>Embedder SDI analogique</td>
+<td>Datavideo DAC-91</td>
+<td>2 canaux analogiques vers CH1 et CH2</td>
+<td>425,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a> ; 315,00 £ / 378,00 £ (HT et TTC non libellés) <a target="_blank" rel="noopener" href="https://proav.co.uk/live-production/datavideo-dac-91-audio-embedder">ProAV UK</a></td>
+<td>Inadapté tel que décrit (2 entrées, canaux 1 et 2)</td>
+</tr>
+<tr>
+<td>Embedder AES</td>
+<td>AJA 12G-AM</td>
+<td>8 canaux AES ; 12G</td>
+<td>1 399,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>Suppose une conversion analogique vers AES en amont</td>
+</tr>
+<tr>
+<td>Analogique vers AES3</td>
+<td>Sonifex Redbox RB-ADDA</td>
+<td>2 canaux A/N et N/A</td>
+<td>779,95 £ HT <a target="_blank" rel="noopener" href="https://www.hhb.co.uk/prod/sonifex/redbox-rb-adda/">HHB UK</a></td>
+<td>Deux unités pour trois LTC</td>
+</tr>
+<tr>
+<td>Analogique vers AES3</td>
+<td>Sonifex Redbox RB-ADDA2</td>
+<td>Stéréo, jusqu'à 192 kHz</td>
+<td>1 808,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/product/son-rb-adda2/sonifex-rb-adda2-redbox-combined-a-d-and-d-a-converter-24-bit-192khz-capable-1ru">Markertek</a></td>
+<td>En rupture, 5 à 14 jours</td>
+</tr>
+<tr>
+<td>Analogique vers Dante</td>
+<td>Audinate Dante AVIO Analog Input 2x0</td>
+<td>2 canaux, PoE</td>
+<td>229,00 $ (catalogue 259,00 $) <a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-adpdai-au2x0/audinate-adp-dai-au-2x0-dante-avio-analog-input-adapter-with-rj45-and-2-xlr-female-2-channel-version">Markertek</a> et <a target="_blank" rel="noopener" href="https://bswusa.com/audinate-dante-avio-2ch-input-adapter">BSW</a></td>
+<td>Deux unités pour trois LTC</td>
+</tr>
+<tr>
+<td>Analogique vers Dante</td>
+<td>Audinate AVIO-A-4IN-EB</td>
+<td>4 canaux selon la liste de spécifications (titre de page : 2 canaux)</td>
+<td>395,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-avioa4ineb/audinate-avio-a-4in-eb-2-channel-dante-avio-install-analog-input-adapter-for-pro-av-setups">Markertek</a></td>
+<td>En rupture</td>
+</tr>
+<tr>
+<td>Entrée MADI ou Dante sur Ross Ultrix</td>
+<td>SFP-MADI-COAX ; SFP-MADI-1310SM ; SFP-RJ45-1GF</td>
+<td>SFP MADI 64 canaux ; SFP 1G pour Dante</td>
+<td>550,00 $ ; 621,00 $ ; 210,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/ross-ult-ns-fr1/ross-ultrix-ns-fr1-ultrix-new-style-1ru-frame-with-16x16-2-aux-ultrimix-and-ultriclean-included">Markertek</a></td>
+<td>Convertisseur analogique vers MADI ou Dante en sus ; licence Ultrimix-Dante sans prix public</td>
+</tr>
+<tr>
+<td>Hygiène LTC</td>
+<td>Denecke Dcode TC-DA</td>
+<td>Distributeur LTC 1 entrée, 4 sorties, remise en forme</td>
+<td>199,50 $ <a target="_blank" rel="noopener" href="https://www.trewaudio.com/product/denecke-dcode-tc-da-timecode-distribution-amplifier/">Trew Audio</a></td>
+<td>Un par LTC si le signal alimente déjà d'autres équipements</td>
+</tr>
+<tr>
+<td>Timecode dédié</td>
+<td>Evertz 5010 ; Evertz 5010-VITC</td>
+<td>Générateur et lecteur LTC ; traduction LTC et VITC (SD)</td>
+<td>2 260,50 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/evz-5010/evertz-5010-time-code-generator-and-full-speed-reader-with-video-character-generator-smpte-12-1-standard">Markertek</a> ; 3 327,50 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/evz-5010-vitc/evertz-5010-vitc-time-code-generator-reader-w-video-character-generator-for-longitudinal-vertical-interval-time-code">Markertek</a></td>
+<td>Ne résout pas le besoin à lui seul</td>
+</tr>
+<tr>
+<td>Timecode dédié</td>
+<td>Brainstorm SR-112 ; Horita VLR-100</td>
+<td>Distributeur et analyseur LTC ; traducteur VITC vers LTC (vidéo SD analogique)</td>
+<td>1 949,00 $ ; 636,95 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/ese-hd-488e/ese-hd-488e-hd-sdi-time-code-generator-reader-inserter-1-3-4in-rack-mount">Markertek</a></td>
+<td>Ne résout pas le besoin à lui seul ; prix lus dans un encart « produits similaires », non sur la fiche du produit</td>
+</tr>
+<tr>
+<td>Timecode dédié</td>
+<td>Cobalt 9950-EMDE-ANC</td>
+<td>Carte embedder et de-embedder de données ancillaires</td>
+<td>2 415,00 $ <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+<td>Prix de la licence +LTC non trouvé</td>
+</tr>
+<tr>
+<td>Timecode dédié</td>
+<td>Rosendahl MIF4</td>
+<td>Lecteur et régénérateur LTC/MTC</td>
+<td>650,00 £ HT, « no longer available » <a target="_blank" rel="noopener" href="https://www.hhb.co.uk/prod/rosendahl/mif4/">HHB UK</a></td>
+<td>Indisponible chez ce revendeur</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les transcodeurs LTC vers ATC existent comme classe de produits — l'Evertz 7800TM2-3G « Reads LTC and transcodes it to D-VITC (SDI only) and/or ATC onto 3G/HD/SD-SDI video » — mais sans prix public ; l'ESE HD-488E (LTC vers RP-188 et inversement) et le décodeur ESE HD-492/SD (RP-188 ou D-VITC vers LTC) ne sont plus disponibles <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=84">Evertz 7800TM2-3G, manuel</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/ese-hd-488e/ese-hd-488e-hd-sdi-time-code-generator-reader-inserter-1-3-4in-rack-mount">Markertek, ESE HD-488E</a> ; <a target="_blank" rel="noopener" href="https://markertek.com/product/ese-hd-492-sd/ese-hd-492-sd-hd-sd-sdi-time-code-decoder-ltc-generator-ntp-server">Markertek, ESE HD-492/SD</a></span>. Evertz dispose par ailleurs d'une carte dédiée dans son routeur audio, « The EMR-IP96 (48)-LTC is a time code input card for the EMR » ; qu'une telle source puisse être routée comme audio vers un canal d'embedder EQX est <strong>non confirmé</strong> <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=122">Evertz EMR, User's Guide rev 1.8</a></span>.</p>
+<h3 id="s4-5">4.5 Classement des options pour trois LTC</h3>
+<p>Le classement suivant est celui des notes de recherche ; les totaux sont une arithmétique sur les prix unitaires relevés le 2026-10-11, hors câblage, épanouis DB-25 ou jack, alimentation et main-d'œuvre. Les appréciations de complexité et de risque sont des inférences.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Rang</th>
+<th>Option</th>
+<th>Matériel pour 3 LTC</th>
+<th>Total approximatif</th>
+<th>Complexité et risque (inférence)</th>
+<th>Sources des prix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Entrées ligne analogiques libres sur la console ou le routeur audio du car, puis MADI vers l'embedder de la matrice</td>
+<td>Aucun</td>
+<td>0</td>
+<td>Gratuit seulement si les entrées existent (non vérifié) ; dépend du service son, du patch par car, du retard du chemin console, du risque de traitement</td>
+<td>Hypothèse de travail sans source</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Un embedder SDI analogique 4 entrées devant EKO (Blackmagic)</td>
+<td>1 unité</td>
+<td>Environ 275 $ ou 249 €</td>
+<td>Le plus simple, identique dans chaque car ; placement sur 14 à 16 et conservation de l'audio existant à vérifier sur table</td>
+<td><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek</a> ; <a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann France</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Idem avec un distributeur de remise en forme par LTC</td>
+<td>1 embedder et 3 distributeurs</td>
+<td>Environ 875 $</td>
+<td>Ajoute isolation et fronts propres quand le LTC du LSM alimente déjà d'autres équipements</td>
+<td><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek</a> ; <a target="_blank" rel="noopener" href="https://www.trewaudio.com/product/denecke-dcode-tc-da-timecode-distribution-amplifier/">Trew Audio</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Embedder à sélection de groupe ou de paire documentée (Lynx PDM 1383, AJA 3G-AMA), ou Cobalt BBG-EM-AA, dont la sélection de canaux n'est pas documentée</td>
+<td>1 unité</td>
+<td>Environ 875 à 1 118 $ (760 £ HT ; environ 1 024 € HT)</td>
+<td>Même simplicité, classe broadcast, contrôle explicite des canaux écrasés</td>
+<td><a target="_blank" rel="noopener" href="https://www.markertek.com/product/lnx-pdm-1383/lynx-technik-yellobrik-pdm-1383-analog-audio-embedder-de-embedder">Markertek Lynx</a> ; <a target="_blank" rel="noopener" href="https://canford.co.uk/LYNX-YELLOBRIK-AUDIO-EMBEDDERS-AND-DE-EMBEDDERS">Canford</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek AJA</a> ; <a target="_blank" rel="noopener" href="https://en.vocas.nl/aja-3g-ama-3g-sdi-analog-audio-embed-disembed.html">Vocas</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Dante : entrées AVIO sur le réseau Dante ou AES67 du car, puis passerelle existante vers MADI ou embedder</td>
+<td>2 unités 2 canaux ou 1 unité 4 canaux (nombre de canaux à confirmer, en rupture)</td>
+<td>Environ 395 à 458 $</td>
+<td>Bon marché seulement si le car relie déjà Dante à la matrice ; dépendance réseau et latence réseau fixe</td>
+<td><a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-adpdai-au2x0/audinate-adp-dai-au-2x0-dante-avio-analog-input-adapter-with-rj45-and-2-xlr-female-2-channel-version">Markertek AVIO 2x0</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-avioa4ineb/audinate-avio-a-4in-eb-2-channel-dante-avio-install-analog-input-adapter-for-pro-av-setups">Markertek AVIO-A-4IN-EB</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Analogique vers AES3, puis embedder AES ou entrée AES de matrice</td>
+<td>2 Sonifex et 1 embedder AES</td>
+<td>Environ 1 560 £ et 1 399 $</td>
+<td>Deux étages de conversion ; justifié seulement si des entrées AES de matrice sont libres (alors environ 1 560 £)</td>
+<td><a target="_blank" rel="noopener" href="https://www.hhb.co.uk/prod/sonifex/redbox-rb-adda/">HHB</a> ; <a target="_blank" rel="noopener" href="https://markertek.com/Routers-Switchers-DA's/Audio-Embedders-Disembedders.xhtml">Markertek</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Module d'entrée analogique ajouté à la matrice vidéo ou audio</td>
+<td>Inconnu</td>
+<td>Non trouvé</td>
+<td>Prix non établi ; propre à chaque constructeur ; probablement le moins souple pour un équipement de passage</td>
+<td>Aucun prix public trouvé</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Éviter l'audio : inséreur LTC vers ATC par départ LSM, ou s'appuyer sur l'ATC déjà inséré par le serveur sur chaque sortie</td>
+<td>1 appareil par LSM</td>
+<td>Non trouvé (classe modulaire Evertz ou Cobalt)</td>
+<td>Change l'architecture : un chemin SDI par LSM au lieu d'une entrée PGM Follow avec trois canaux LTC audio</td>
+<td><a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=84">Evertz 7800TM2-3G</a> ; <a target="_blank" rel="noopener" href="https://www.cobaltdigital.com/sites/default/files/downloads/OPT-SW-F3GLTC-MS%28V1.0%29.pdf">Cobalt +LTC</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Si EKO doit posséder la solution et la livrer avec la machine, les options 2 à 4 sont les seules qui ne dépendent pas du car ; l'écart de prix entre le Blackmagic et la classe Lynx ou AJA est d'environ 600 à 850 $ par installation (inférence des notes). Quelle que soit l'option, l'inconnue décisive reste la source : si le LTC EVS est mis à l'échelle de la vitesse, aucun convertisseur ne le rendra décodable à l'arrêt, et l'ATC propre du serveur sur ses sorties SDI est alors le seul timecode qui survit (inférence des notes).</p>
+<h2 id="s5">5. Le marché des matrices : la capacité existe partout, rarement sur toutes les sorties</h2>
+<p>Dans chaque famille hybride, l'embedding par sortie et le shuffling mono existent et portent sur 16 canaux par sortie SDI, mais ils exigent des cartes de sortie de traitement (ou des sous-modules) et le plus souvent une licence. La question décisive sur site est donc « y a-t-il une destination embedder libre ? », non « la matrice sait-elle le faire ? » (inférence des notes). Dans les tableaux qui suivent, « non confirmé » signifie : recherché, non trouvé dans une source qui a pu être ouverte ; cela ne signifie pas « impossible ».</p>
+<h3 id="s5-1">5.1 Grandes matrices hybrides</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Famille</th>
+<th>Châssis et débit</th>
+<th>Embedding par sortie et shuffling mono</th>
+<th>Carte ou licence</th>
+<th>Entrées audio externes (analogique ?)</th>
+<th>Transparence ANC et ATC</th>
+<th>Prix public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Evertz EQX avec routeur audio EMR / ADMX</td>
+<td>EQX26 : 576 × 576 en 26 RU, 1 152 × 1 152 en multi-châssis, 3G et UHD/4K ; EQXUHD-10 : 160 × 160 12G en 10 RU <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQX1152">EQX26</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/products/EQXUHD">EQXUHD</a></span></td>
+<td>Oui : 16 canaux par sortie ; le shuffle se fait dans le crosspoint audio ADMX, au niveau mono <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">EMX3-FR, manuel p. 115</a></span></td>
+<td>Optionnel : EQX-S-OP18 avec licence « +TDM » ; EQX-H-OP18 (ex EQX-OP18AE) ; EQX-OP16AE-3G-2TDM ; clé EQXUHD-FK-TDM <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQX-IO">EQX-IO</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/products/EQX-OP18-IPG">EQX-H-OP18</a></span></td>
+<td>MADI (EMR-IP16-MADI), AES (EMR-IP96 (48)-AESU) et <strong>analogique : oui</strong>, EMR-IP48-AA, 48 paires stéréo sur D50, dans un châssis EMX séparé ; carte timecode EMR-IP96 (48)-LTC <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EMR-AA">EMR-AA</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=122">EMR, User's Guide</a></span></td>
+<td>Non confirmé : non mentionné sur les pages lues ; options CleanSwitch et frame sync sur les sorties <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQX-OP18-IPG">EQX-H-OP18</a></span></td>
+<td>Aucun pour EQX ni EMR</td>
+</tr>
+<tr>
+<td>Evertz NEXX</td>
+<td>NEXX-FR-5RU, 12 slots, 384 × 384 12G embedded ; SD à 12G <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/NEXX-IO-R1">NEXX-IO-R1</a></span></td>
+<td>Oui : « Audio Embedding and De-embedding on every port », crosspoint audio indépendant NEXX-XC1 de 10K × 10K, shuffling mono <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/NEXX-IO-R1">NEXX-IO-R1</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/products/NEXX">NEXX</a></span></td>
+<td>Aucune licence audio nommée sur les pages lues ; caractère « standard » non confirmé <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/nexx-5-32x32pkg1/evertz-nexx-5ru-modular-12-slot-sdi-ip-routing-platform-base-package-1-w-long-ears-32x32-io-module-xpt-engine">Markertek, NEXX</a></span></td>
+<td>2 × 2 MADI par SFP et 2 × 2 TDM par NEXX-IO-R1 ; analogique direct non confirmé (via module SCORPION ou EMR en TDM) <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/NEXX-IO-R1">NEXX-IO-R1</a></span></td>
+<td>Non confirmé</td>
+<td>46 585,00 $ le pack NEXX-5-32X32PKG1, <a target="_blank" rel="noopener" href="https://www.markertek.com/product/nexx-5-32x32pkg1/evertz-nexx-5ru-modular-12-slot-sdi-ip-routing-platform-base-package-1-w-long-ears-32x32-io-module-xpt-engine">Markertek</a>, relevé en octobre 2026</td>
+</tr>
+<tr>
+<td>Grass Valley Sirius 800 (ex Snell / SAM)</td>
+<td>830 : 288 × 288 ; 840 : 576 × 576 ; 850 : 576 × 1 152, 1 152 × 1 152 en double châssis ; 12G <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/products/sirius_800_series/">Sirius 800</a></span></td>
+<td>Oui là où des modules AHP sont montés : de-embed, track swap, gain, délai, mix 16 canaux, embed <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/me1g2siz/sirius-800_ds-pub-3-0711c-en.pdf">datasheet</a></span></td>
+<td>Modules 5919 (entrée AHP) et 5949 (sortie AHP) ; licences S8AHP-VA, S8AHP-VD, S8AHP-VE, S8AHP-VF ; licence par module <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/products/sirius_800_series/">Sirius 800</a> ; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1407598/Sam-Sirius-840.html?page=143">manuel Sirius 840 p. 143</a> ; <a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/me1g2siz/sirius-800_ds-pub-3-0711c-en.pdf">datasheet</a> ; <a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/sirius_800/Sirius_800_User_Manual_Iss6_Rev6.pdf">manuel Iss6 Rev6</a></span></td>
+<td>AES et MADI seulement : 4915 (120 paires AES ou 12 MADI) ; <strong>analogique : aucun module trouvé</strong> <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/sirius_800/Sirius_800_User_Manual_Iss6_Rev6.pdf">manuel Iss6 Rev6</a></span></td>
+<td>Non confirmé : non décrit dans la datasheet, la page produit ni le sommaire du manuel <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/me1g2siz/sirius-800_ds-pub-3-0711c-en.pdf">datasheet</a></span></td>
+<td>« POA » chez <a target="_blank" rel="noopener" href="https://www.gravitymedia.com/product/grass-valley-sirius-840-576x576-frame-27ru-routers-with-audio-processing/">Gravity Media</a></td>
+</tr>
+<tr>
+<td>Grass Valley NVISION 8500 Hybrid (ex Miranda)</td>
+<td>NV8144 : 144 × 144 en 8 RU ; NV8280 : 288 × 576 ; NV8576 : 576 × 1 152 ; NV8576-Plus : 1 152 × 1 152 ; 3G, 12G non confirmé <span class="cite"><a target="_blank" rel="noopener" href="https://grassvalley.com/docs/Release_Notes/routers/nvision_8500/TN0027-08_NV8500_Pre-Installation_Guide.pdf">TN0027-08</a></span></td>
+<td>Oui : carte embedder de 16 sorties, 16 canaux chacune, choix par canal entre pass-through, null et source TDM <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">manuel p. 69</a></span></td>
+<td>Cartes hybrides disembedder et embedder, références non confirmées ; Dynamic Hybrid Path-finding <span class="cite"><a target="_blank" rel="noopener" href="https://grassvalley.com/docs/Release_Notes/routers/nvision_8500/TN0027-08_NV8500_Pre-Installation_Guide.pdf">TN0027-08</a></span></td>
+<td>MADI sur les cartes hybrides (1 MADI par carte d'entrée de 8 vidéos, 2 MADI par carte de sortie) ; <strong>analogique : non commuté directement</strong>, convertisseurs externes NV8900 dont la disponibilité diffère selon les deux documents <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/nvision_8500/UG0034-11_NV8500_Users_Guide_v3.6.pdf">User's Guide v3.6</a> ; <a target="_blank" rel="noopener" href="https://grassvalley.com/docs/Release_Notes/routers/nvision_8500/TN0027-08_NV8500_Pre-Installation_Guide.pdf">TN0027-08</a></span></td>
+<td>Non confirmé pour l'ancillaire ; PCM 24 bits avec bits C, U, V préservés ; retard annoncé d'une ou deux lignes <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/937182/Grass-Valley-Nv8500-Series.html?page=69">manuel p. 69</a> ; <a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/miranda-ships-next-generation-nvision-8500-hybrid-embedded-audio-routers-integrated-au">communiqué Miranda</a></span></td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Imagine Platinum IP3</td>
+<td>28 RU jusqu'à 576 × 1 024 ; 15 RU jusqu'à 288 × 512 ; 3G, modules 12G dédiés <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Platinum IP3</a></span></td>
+<td>Oui : 16 canaux multiplexés par sortie, « full mono breakaway routing » <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Platinum IP3</a></span></td>
+<td>Modules de sortie Mux PX-HSRMX8C2D-OBG, PX-HSR8CMX8C-OBG et variantes ; crosspoint TDM PX-ATDM64-X28 ; noms de licence audio non confirmés <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Platinum IP3</a></span></td>
+<td>MADI (PT-MADI4C-IBG), AES (PT-AECT-IB, PT-AEBT-IB) et <strong>analogique : oui</strong>, PT-ADCT-IB, 16 entrées stéréo converties en AES <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Platinum IP3</a></span></td>
+<td>Non confirmé : ancillaire non mentionné <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-ip3-router">Platinum IP3</a></span></td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Utah Scientific UTAH-400 Series 2</td>
+<td>72 × 72 à 1 056 × 1 056 ; 3G ; 12G « card-based » selon le guide de juin 2026, non cohérent avec le catalogue 2024 <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2026/06/Utah-Scientific_SDI-Router-Selection-Guide-edit.pdf">guide de sélection</a> ; <a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2024/04/US-Catalog-2405-web.pdf">catalogue 2024-05</a></span></td>
+<td>Oui : chaque sortie embedder reçoit jusqu'à 16 canaux du sous-routeur audio, avec shuffling <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2022/09/Utah-400-Series-2_2025-1.pdf">brochure 2025</a></span></td>
+<td>HO3E-400/12S ; AHO-400/12S avec sous-modules SDIMOD-400S ; sous-routeur TDM optionnel 3K × 3K <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2024/04/US-Catalog-2405-web.pdf">catalogue 2024-05</a></span></td>
+<td><strong>Analogique : oui</strong>, ADC-400A/12S, 12 entrées stéréo ; AES AI-400/12S ; MADI MI3-400/12S ; Dante, carte non confirmée <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2024/04/US-Catalog-2405-web.pdf">catalogue 2024-05</a> ; <a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2026/06/Utah-Scientific_SDI-Router-Selection-Guide-edit.pdf">guide de sélection</a></span></td>
+<td>Non confirmé ; les sorties clean-quiet sont reconstruites et resérialisées <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/product/aho-400-12/">AHO-400-12</a></span></td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Utah Scientific UHD-12G</td>
+<td>32 × 32 à 288 × 288, 12G natif <span class="cite"><a target="_blank" rel="noopener" href="https://utahscientific.com/wp-content/uploads/2026/06/Utah-Scientific_SDI-Router-Selection-Guide-edit.pdf">guide de sélection</a></span></td>
+<td>Non confirmé : la ligne audio du tableau comparatif est ambiguë</td>
+<td>Non confirmé</td>
+<td>Non confirmé</td>
+<td>Non confirmé</td>
+<td>Aucun</td>
+</tr>
+</tbody>
+</table></div>
+<p>Trois remarques complètent ce tableau. Aucune page constructeur ouverte ne porte de notice de fin de vie ; le statut « ancien mais installé » de la NVISION 8500, de Trinix et de Xenon est une inférence tirée des dates de documentation et de leur présence dans le Gearbase SVG 2025, non une déclaration de constructeur <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/wp-content/uploads/2025/01/25GearbaseFile_FNL.pdf">SVG Gearbase 2025</a></span>. Les capacités audio de Trinix NXT et les spécifications de Xenon sont non confirmées ; seuls des noms de modèles Xenon à variantes audio analogique (« -AA ») et AES ont été relevés <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/Xenon">Evertz, page Xenon</a></span>. Enfin, Lawo ne vend pas de matrice SDI à crosspoint classique et aucune grande matrice SDI de marque Sony n'a été trouvée (les Nevion Sublime et VikinX n'ont pas été étudiés) : leurs produits « de type matrice » décrits ici sont des passerelles (tableau 5.3) <span class="cite"><a target="_blank" rel="noopener" href="https://lawo.com/products/edge">Lawo .edge</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/news-roundup/nevion-extends-virtuoso-audio-and-video-processing-functionality/">SVG Europe, 19 mars 2024</a></span>.</p>
+<h3 id="s5-2">5.2 Matrices moyennes et compactes</h3>
+<p>Tous les prix de ce tableau ont été vus le 2026-10-11, sauf mention contraire. Aucun prix en euros n'a été trouvé pour ces matrices.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Famille</th>
+<th>Châssis et débit</th>
+<th>Embedding par sortie et shuffling mono</th>
+<th>Carte ou licence</th>
+<th>Entrées audio externes (analogique ?)</th>
+<th>Transparence ANC et ATC</th>
+<th>Prix public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ross Ultrix (FR1, FR2, FR5, FR12, FR30)</td>
+<td>36 E/S en 1 RU jusqu'à 576 × 576 12G en 30 RU ; matrice audio de 768 × 768 à 12 288 × 12 288 <span class="cite"><a target="_blank" rel="noopener" href="https://rossvideo.com/infrastructure/routing-systems/ultrix/">Ross Ultrix</a></span></td>
+<td>Oui : Ultrimix embedde et dé-embedde sur toutes les entrées et sorties ; les 16 canaux d'une sortie se routent indépendamment <span class="cite"><a target="_blank" rel="noopener" href="https://www.rossvideo.com/company/media/news-releases/ross-video-launches-ultrix-the-ultimate-connectivity-platform">communiqué 2015</a> ; <a target="_blank" rel="noopener" href="https://kb.ct-group.com/basic-configuration-and-operation-of-ultrix/">CT Group KB</a></span></td>
+<td>Licence Ultrimix, incluse dans les châssis « New Style » ; statut sur les châssis antérieurs non confirmé ; Ultrimix-MXR inutile ici <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/ross-ult-ns-fr1/ross-ultrix-ns-fr1-ultrix-new-style-1ru-frame-with-16x16-2-aux-ultrimix-and-ultriclean-included">Markertek, ULTRIX-NS-FR1</a></span></td>
+<td>MADI 64 canaux par SFP sur ports AUX A et B ; Dante par licence Ultrimix-Dante (une par carte) ; <strong>analogique et AES : aucune carte listée</strong> <span class="cite"><a target="_blank" rel="noopener" href="https://www.rossvideo.com/infrastructure/routing-systems/ultrix/io-cards">cartes d'E/S</a> ; <a target="_blank" rel="noopener" href="https://documentation.rossvideo.com/files/Brochures/Routers/Ultrix/Ultrimix-Dante-Brochure.pdf">brochure Ultrimix-Dante</a></span></td>
+<td>Non confirmé : aucune page Ross atteinte ne le dit</td>
+<td>Pack FR1 16 × 16 : 16 995,00 $ <a target="_blank" rel="noopener" href="https://shop.ear.net/products/rss-ultrixfr1uhd1">EAR</a> ; pack FR2 32 × 32 : 33 995,00 $ <a target="_blank" rel="noopener" href="https://shop.ear.net/products/rss-ultrixfr2uhd1">EAR</a> ; carte ULTRIX-HDX-IO : 18 125,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/ross-ultrixhdxio/ross-ultrix-hdx-io-16x16-advanced-connectivity-i-o-card-with-2x-aux-i-o">Markertek</a></td>
+</tr>
+<tr>
+<td>Riedel MediorNet MicroN et MicroN UHD</td>
+<td>MicroN : 12 entrées et 12 sorties 3G ; MicroN UHD : 8 + 8 en 12G, 8 + 8 en 3G, 16 ports 3G commutables <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">datasheet MicroN</a> ; <a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/RIEDEL_MediorNet_Family_Brochure_2026-05_JP.pdf">brochure famille 2026</a></span></td>
+<td>Embedder et de-embedder 16 canaux sur chaque port ; granularité mono non confirmée dans les documents publics <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">datasheet MicroN</a></span></td>
+<td>Standard sur tous les ports selon la brochure coréenne 2023 ; fonctions par apps <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/20240416_RIEDEL_MediorNet_brochure_KR_2023-10_web.pdf">brochure KR 2023-10</a></span></td>
+<td>2 ports MADI sur SFP ; <strong>analogique et AES3 non listés</strong> <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/800-downloads/02-Brochures/EN/MicroN_Brochure.pdf">brochure MicroN</a></span></td>
+<td>Non confirmé ; frame synchronizer et framestore sur toutes les sorties vidéo <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">datasheet MicroN</a></span></td>
+<td>Aucun : Riedel ne publie pas de prix</td>
+</tr>
+<tr>
+<td>FOR-A MFR-3100EX</td>
+<td>4 RU, jusqu'à 64 × 72 ; 3G, 12G par cartes gearbox <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/">MFR-3100EX</a></span></td>
+<td>« Audio MUX/DEMUX function » ; remapping mono libre par sortie non confirmé <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/">MFR-3100EX</a></span></td>
+<td>Cartes de sortie MFR-8SDODL et MFR-8MADIPO (laquelle embedde : ambigu dans le texte extrait) ; option MFR-31DNT pour Dante <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">fiche de spécifications</a></span></td>
+<td><strong>Analogique : oui</strong>, MFR-8AAI, 16 canaux sur D-sub 25 ; AES MFR-8AESI ; MADI ; Dante 64 canaux <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">fiche de spécifications</a></span></td>
+<td><strong>Documenté</strong> sur MFR-8SDODL : Quiet Switch OFF passe tout l'ANC ; Quiet Switch ON ne passe que des ANC précis, dont ST 352 et ST 299-1 <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">fiche de spécifications</a></span></td>
+<td>13 209,00 $ (catalogue 15 540,00 $) ; carte MFR-8SDI 595,00 $, <a target="_blank" rel="noopener" href="https://www.markertek.com/product/fora-mfr-3100ex/for-a-mfr-3100ex-all-in-one-video-production-center-routing-switcher-video-switcher-multi-viewer-downstream-keyer">Markertek</a></td>
+</tr>
+<tr>
+<td>FOR-A MFR-5000 et MFR-8000</td>
+<td>128 × 128 et 256 × 256 <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr8000/items/MFR-5000-8000_E_E14R6_E9R3_240815.pdf">brochure 2024</a></span></td>
+<td>Cartes AESPO-16MFR et MADIPO-16MFR décrites avec « audio remapping » (extraction du PDF altérée) <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr8000/items/MFR-5000-8000_E_E14R6_E9R3_240815.pdf">brochure 2024</a></span></td>
+<td>Rôles des cartes en partie déduits par le lecteur du PDF</td>
+<td><strong>Analogique : oui</strong>, AAI-16MFR, 32 canaux ; AES ; MADI <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr8000/items/MFR-5000-8000_E_E14R6_E9R3_240815.pdf">brochure 2024</a></span></td>
+<td>Non confirmé</td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>FOR-A MFR-4100</td>
+<td>7 RU 12G, jusqu'à 72 × 72 <span class="cite"><a target="_blank" rel="noopener" href="https://fullcompass.com/prod/610150-for-a-corporation-mfr-4100-12g-sdi-7ru-routing-switcher">Full Compass</a></span></td>
+<td>Aucune fonction audio listée par le revendeur (inférence faible)</td>
+<td>—</td>
+<td>—</td>
+<td>Non confirmé</td>
+<td>« Call for price »</td>
+</tr>
+<tr>
+<td>Evertz EQT-1616-3G-C</td>
+<td>1 RU, 16 × 16, jusqu'à 12G avec licence EQT-FK-12G <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQT-16xx">EQT-16xx</a></span></td>
+<td>Oui : « embedding/de-embedding, mono shuffling, and MADI I/O » <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQT-16xx">EQT-16xx</a></span></td>
+<td>Licences EQT-FK-MADI et EQT-FK-CS <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EQT-16xx">EQT-16xx</a></span></td>
+<td>MADI 64 canaux ; analogique non mentionné</td>
+<td>Non confirmé</td>
+<td>11 979,00 $ catalogue, <a target="_blank" rel="noopener" href="https://www.markertek.com/product/evz-eqt-1616-3gc/evertz-eqt-1616-3g-c-1ru-12g-3g-hd-video-router-with-redundant-psu-processing-capabilities">Markertek</a>, relevé en octobre 2026 ; licences non listées</td>
+</tr>
+<tr>
+<td>Grass Valley Vega</td>
+<td>2 RU 48 × 48 ; 4 RU 96 × 96 ; 7 RU 216 × 216 ; 3G, pas de 12G <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">datasheet Vega</a></span></td>
+<td>Oui : embedding depuis toute entrée audio, 16 canaux par vidéo, shuffling de pistes <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">datasheet Vega</a></span></td>
+<td>Modules de traitement VG-RMO9PR (sortie) et VG-RMI9PR (entrée)</td>
+<td>MADI VG-RM6MADI (6 entrées, 6 sorties) ; AES ; analogique non mentionné <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">datasheet Vega</a></span></td>
+<td><strong>Documenté transparent</strong> : « transparent to all ancillary data, both HANC and VANC », réinséré sur la même ligne <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">datasheet Vega</a></span></td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Imagine Platinum MX</td>
+<td>5 RU jusqu'à 72 × 64 ; 9 RU jusqu'à 128 × 128 ; 3G <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-mx">Platinum MX</a></span></td>
+<td>Oui : « Full mono breakaway audio routing support » <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-mx">Platinum MX</a></span></td>
+<td>Modules de sortie mux PT-HSRMX8C-OBG ; crosspoints TDM PM-ATDM9-X5 et PM-ATDM16-X9</td>
+<td>Mêmes modules MADI, AES et analogique PT-ADCT-IB que l'IP3 <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-mx">Platinum MX</a></span></td>
+<td>Non confirmé</td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Imagine Platinum VX</td>
+<td>1 RU 16 × 16 à 8 RU 288 × 288 ; 3G <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/platinum-vx">Platinum VX</a></span></td>
+<td>Aucun mux, demux, MADI ni AES mentionné dans la datasheet</td>
+<td>—</td>
+<td>—</td>
+<td>Non confirmé</td>
+<td>Aucun</td>
+</tr>
+<tr>
+<td>Blackmagic Videohub 12G</td>
+<td>10 × 10 à 120 × 120 <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/blackmagicvideohub/techspecs/W-VHS-23">spécifications</a></span></td>
+<td>Non : aucune fonction listée</td>
+<td>—</td>
+<td>—</td>
+<td>Reclocking ; seule l'identification de charge utile SMPTE 352M est citée ; transparence déduite de l'absence de fonction, déclaration explicite non trouvée</td>
+<td>1 575 $ (10 × 10), 2 769 $ (20 × 20), 4 445 $ (40 × 40), 11 405 $ (80 × 80), 14 425 $ (120 × 120), prix catalogue US à la date vue, non recoupés, <a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/blackmagicvideohub/techspecs/W-VHS-23">site Blackmagic US</a></td>
+</tr>
+<tr>
+<td>AJA KUMO 12G</td>
+<td>16 × 16, 32 × 32, 64 × 64</td>
+<td>Non</td>
+<td>—</td>
+<td>—</td>
+<td><strong>Documenté pass-through</strong> : « Passes all SDI embedded ancillary data including audio » <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-kumo-323212g/aja-kumo-3232-12g-compact-32x32-12g-sdi-router-for-4k-ultra-hd">Markertek</a></span></td>
+<td>KUMO 1616-12G : 3 581,00 $ <a target="_blank" rel="noopener" href="https://www.fullcompass.com/prod/547384-aja-kumo-1616-12g-kumo-1616-12g">Full Compass</a> ; KUMO 3232-12G : 5 687,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-kumo-323212g/aja-kumo-3232-12g-compact-32x32-12g-sdi-router-for-4k-ultra-hd">Markertek</a> ; KUMO 6464-12G : 11 995,00 $ <a target="_blank" rel="noopener" href="https://www.markertek.com/brand/aja-video?Display=50">Markertek</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Lynx Technik, Nevion Sublime/VikinX, Kramer, Lightware, Datavideo et Sierra Video n'ont pas été étudiés ; aucune affirmation n'est faite à leur sujet. Sur un car Ultrix existant, le surcoût est surtout celui de l'entrée audio : un SFP MADI (550 à 621 $) et un convertisseur analogique vers MADI tiers, ou une licence Ultrimix-Dante (sans prix public), un SFP-RJ45-1GF (210 $) et un boîtier d'entrée analogique Dante, à condition qu'un port AUX soit libre (inférence des notes à partir de <a target="_blank" rel="noopener" href="https://www.markertek.com/product/ross-ult-ns-fr1/ross-ultrix-ns-fr1-ultrix-new-style-1ru-frame-with-16x16-2-aux-ultrimix-and-ultriclean-included">Markertek, ULTRIX-NS-FR1</a>). La base de données d'un intégrateur présente des sources « analogue » (AA-IPxx) dans Ultrix ; il s'agit presque certainement de convertisseurs A/N externes alimentant le MADI, Ross ne listant aucune E/S analogique (inférence des notes à partir de <a target="_blank" rel="noopener" href="https://kb.ct-group.com/basic-configuration-and-operation-of-ultrix/">CT Group KB</a>).</p>
+<h3 id="s5-3">5.3 Passerelles IP (ST 2110 vers SDI)</h3>
+<p>Aucun prix public n'a été trouvé pour ces passerelles.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Passerelle</th>
+<th>Composition audio par sortie SDI</th>
+<th>Licence ou option</th>
+<th>Entrée audio externe (analogique ?)</th>
+<th>ANC et ATC par ST 2110-40</th>
+<th>Contrôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grass Valley IQUCP25</td>
+<td>Jusqu'à 16 SDI par module ; flux 2110-30 en 1 × 16, 2 × 8 ou 4 × 4 ; embed et de-embed de 4 flux audio par canal ; bloc « 16x16 Audio Shuffle » <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/DataSheets/modular/iq/iqucp25/IQUCP25_DS-PUB-3-0675A-EN.pdf">datasheet</a></span></td>
+<td>IQUCP-EP (traitement d'essences SDI et IP) ; IQUCP-MD (MADI et IP)</td>
+<td>MADI par IQUCP-MD ; analogique non mentionné</td>
+<td>« ANC Insert » et « ANC Extract » ; -40 « associated with » le flux -20 ; ATC non nommé : non confirmé</td>
+<td>GV Orbit ; NMOS IS-04 et IS-05 ; IS-08 et 2110-31 non mentionnés</td>
+</tr>
+<tr>
+<td>Lawo .edge</td>
+<td>Audio Shuffler par sortie SDI : tout canal mono de ses 4 récepteurs IP, jusqu'à 32 canaux en 1080p <span class="cite"><a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/20797/lawos-.edge-receives-audio-supercharge-and-provides-color-correction">The Broadcast Bridge</a></span></td>
+<td>Standard ; licence .amshuff : 128 récepteurs, 64 émetteurs, matrice 8 192 × 4 096 <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2024/09/11/ibc-2024-lawos-edge-receives-audio-supercharge-and-provides-color-correction/">SVG, 11 septembre 2024</a></span></td>
+<td>Flux 2110-30 et -31 uniquement ; MADI en « Licensable option — future product development » ; <strong>ni analogique ni AES3</strong> <span class="cite"><a target="_blank" rel="noopener" href="https://lawo.com/products/edge">Lawo .edge</a></span></td>
+<td>ANC traité comme essence 2110-40 séparée de l'audio <span class="cite"><a target="_blank" rel="noopener" href="https://lawo.com/products/edge">Lawo .edge</a></span></td>
+<td>HOME, VSM, Ember+, REST</td>
+</tr>
+<tr>
+<td>Lawo V__matrix C100 (vm_udx)</td>
+<td>Moteur de downmix à 2 048 entrées équivalent mono <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/equipment/lawo-updates-v_matrix-ip-platform">TV Technology</a></span></td>
+<td>+tc_gen : génération de timecode depuis PTP, « LTC can also be output as a digital audio signal »</td>
+<td>Non précisé</td>
+<td><strong>ATC explicite</strong> : ANC géré en 2110-40, 2022-6 et SDI, filtrage par DID/SDID ; ATC généré (VITC1, VITC2, LTC) embeddable dans les sorties TX et SDI <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/equipment/lawo-updates-v_matrix-ip-platform">TV Technology</a></span></td>
+<td>Pilotes VSM dédiés <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsm-interface-driver-and-application-details/driver-supported-protocol-driver">pilotes VSM</a></span></td>
+</tr>
+<tr>
+<td>Evertz 570IPG-X19-10G</td>
+<td>4 groupes audio (4 canaux mono par adresse multicast) ; shuffling mono non décrit <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/570IPG-X19-10G">570IPG</a></span></td>
+<td>Non précisé</td>
+<td>Non précisé</td>
+<td>« Full VANC carriage » en 2110-40 ; que ce libellé couvre l'ATC_LTC en HANC n'est pas dit : non confirmé</td>
+<td>MAGNUM, VistaLINK</td>
+</tr>
+<tr>
+<td>Imagine SNP</td>
+<td>32 passerelles HD ou 8 UHD par unité ; 2110-30 et -31 ; granularité de shuffle non précisée <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/content/uploads/2025/01/App-Note-SNP-IP-Gateway_R2.pdf">note d'application SNP</a> ; <a target="_blank" rel="noopener" href="https://imaginecommunications.com/product/selenio-network-processor-snp/">SNP</a></span></td>
+<td>Non précisé</td>
+<td>« MADI to ST 2110-30 Audio Bridge »</td>
+<td>« ST 2110-40 data » ; ATC non nommé : non confirmé</td>
+<td>Magellan (« Destination &gt; Source &gt; Take ») ; NMOS IS-04 et IS-05</td>
+</tr>
+<tr>
+<td>Nevion Virtuoso SDI-IP-H25 (Sony)</td>
+<td>Jusqu'à 16 flux audio IP de 1 à 8 canaux ; 16 canaux par SDI ; routage, shuffling, délai et gain par canal <span class="cite"><a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">datasheet</a></span></td>
+<td>Media function</td>
+<td>Carte AES3 16 BNC ou XLR, MADI ; interface RPRO 2024 « mixed digital and analogue audio » <span class="cite"><a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/03/Virtuoso-Audio-Functionality-FINAL-20220203.pdf">Nevion 2022</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/news-roundup/nevion-extends-virtuoso-audio-and-video-processing-functionality/">SVG Europe, 19 mars 2024</a></span></td>
+<td>« Pass-through SDI to/from SMPTE ST 2110-40 » ; timecode non mentionné : non confirmé</td>
+<td>VideoIPath ; NMOS IS-04, IS-05 et IS-08</td>
+</tr>
+<tr>
+<td>Sony NXLK-IP51Y</td>
+<td>Avec NXLL-AM50, audio 2110-30 embeddé et jeu de 16 canaux réassignable ; délai audio 0 à 250 ms <span class="cite"><a target="_blank" rel="noopener" href="https://pro.sony/ue_US/products/ip-live-products/nxlk-ip51y">Sony NXLK-IP51Y</a></span></td>
+<td>Option NXLL-AM50</td>
+<td>Non précisé</td>
+<td>Non détaillé : non confirmé</td>
+<td>Live Element Orchestrator ; NMOS IS-04 et IS-05</td>
+</tr>
+<tr>
+<td>Riedel MediorNet HorizoN, FusioN, MuoN</td>
+<td>Passerelles ST 2110 par apps ; granularité audio, nombre de flux -30 et traitement -40 non précisés <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/202604_MediorNet_Family_Brochure_2026.pdf">brochure famille 2026</a></span></td>
+<td>Apps et add-ons</td>
+<td>Non précisé</td>
+<td>Non confirmé</td>
+<td>Ember+ et NMOS</td>
+</tr>
+<tr>
+<td>EVS Neuron Shuffle (matrice audio « helper »)</td>
+<td>Matrice audio IP 8 192 × 8 192, jusqu'à 64 canaux par flux, 2110-30/-31 et AES67 <span class="cite"><a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2024-05/Neuron%20SHUFFLE_PD.pdf">datasheet Neuron Shuffle</a></span></td>
+<td>Option 4 × MADI 64 canaux</td>
+<td>MADI en option</td>
+<td>Sans objet</td>
+<td>SW-P-08 ; Cerebrum</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s5-4">5.4 Ce que l'on trouve dans les cars, en ordre de grandeur</h3>
+<p>Dans la flotte nord-américaine recensée par le Gearbase SVG 2025, un décompte manuel approximatif d'environ 160 lignes nommant une marque de matrice donne Evertz autour de 89 lignes, Grass Valley (Trinix, NVision, Sirius) autour de 22, Lawo/Arista IP autour de 10, PESA autour de 10, Imagine et Utah autour de 7 chacun, Ross autour de 6 ; ce sont des ordres de grandeur extraits d'un tableau PDF dense, à recompter avant toute citation chiffrée <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/wp-content/uploads/2025/01/25GearbaseFile_FNL.pdf">SVG Gearbase 2025</a></span>. Le libellé type y est « Evertz EQX 3G Video Evertz EMR Audio ». Aucun recensement équivalent n'a été trouvé pour l'Europe. Un constat de 2012 éclaire la différence régionale : en Europe, un routeur audio séparé intégré à la console est « more dominant in European remote trucks », relié à la vidéo par des systèmes de contrôle comme VSM ou BFE KSC, alors qu'aux États-Unis l'intégration de l'audio dans la matrice vidéo centrale gagnait du terrain <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2012/04/26/routers-evolve-in-two-directions/">SVG, 26 avril 2012</a></span>. Dans un car européen, la réponse à « la matrice vidéo peut-elle le faire seule ? » est donc plus souvent « la matrice embedde, mais la source audio arrive en MADI depuis la console » (inférence des notes).</p>
+<h2 id="s6">6. Systèmes de contrôle et protocoles mélangeur</h2>
+<h3 id="s6-1">6.1 Systèmes de contrôle : briques documentées, fonction nommée absente</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Système</th>
+<th>Briques documentées utiles au suivi</th>
+<th>Fonction « follow » nommée</th>
+<th>Interfaces mélangeur citées</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lawo VSM</td>
+<td>Logique GPIO : crosspoint comme déclencheur, GPO qui positionne un crosspoint, Condition et Action, « Increment Source / Target » ; Pseudo Devices (« Audio-follow-Video », « Breakaway detection », couches) ; gestion du tally avec GPO d'urgence <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-gpio">GPIO</a> ; <a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-pseudo-devices">Pseudo Devices</a> ; <a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-tally-management">Tally</a></span></td>
+<td>Non confirmée dans les pages vsmStudio lues</td>
+<td>« GrassValley K-FrameX » par la bibliothèque GV « CPL », TCP 6040 ; SW-P-08 générique ; Ember+ ; NMOS ; pas de page de pilote Sony XVS, Ross ou Kahuna dans la liste publique, qui peut être incomplète <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsm-interface-driver-and-application-details/driver-supported-protocol-driver">liste des pilotes</a> ; <a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsm-interface-driver-and-application-details/driver-supported-protocol-driver/grassvalley-k-framex">pilote K-FrameX</a></span></td>
+</tr>
+<tr>
+<td>TSL TallyMan (TM1-MK3+, TM1-Tally)</td>
+<td>Mélangeurs « treated exactly as though they are routers » ; « Virtual Tally Router » à priorité, repli sur Source 1, masque de niveaux ; routeur d'urgence 2 × 1 commuté par tally <span class="cite"><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1328/05-tallies-set-up.pdf">manuel 05</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1324/02-router-set-up.pdf">manuel 02</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1347/20-examples.pdf">manuel 20</a></span></td>
+<td>Non confirmée ; le « Router Mimic » n'est qu'une vue de surveillance <span class="cite"><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1325/03-mixerset-up.pdf">manuel 03</a></span></td>
+<td>« GVG K-Frame ETP », TCP 2012, crosspoints du mélangeur vers TallyMan ; K360 Tally Protocol V4 ; Grass Valley, SAM, Ross, FOR-A, Sony, Panasonic et autres <span class="cite"><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/2321/k-frame-cut-sheet.pdf">fiche K-Frame</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/4312/tm1-tally-datasheet.pdf">fiche TM1-Tally</a></span></td>
+</tr>
+<tr>
+<td>EVS Cerebrum (ex Axon)</td>
+<td>Licences CRBM-Router, CRBM-TL (tie-lines), CRBM-Tally, CRBM-Salvos, CRBM-IPAud (shuffle audio automatique) ; « multilevel Router » <span class="cite"><a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2026-08/Cerebrum%20-%20product%20Sheet%20%2B%20protocol%20list%20V2.9.pdf">Cerebrum V2.9</a></span></td>
+<td>Non confirmée : les mots « follow », « mimic », « logic », « conditions », « breakaway » n'apparaissent pas dans la fiche V2.9 ; manuel utilisateur non accessible</td>
+<td>« Grass Valley K-Frame CPL », « K-Frame Ethernet Tally », « Sony XVS Serial Tally », « Ross Combined RossTalk and TSLv5 », « Snell Kahuna K360 Tally Protocol », « EVS DYVI PixTally », « For-A HVS Tally », « Panasonic Kairos Automation API » <span class="cite"><a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2024-07/Cerebrum%20-%20product%20Sheet%20%2B%20protocol%20list%20V2.6.pdf">Cerebrum V2.6</a></span></td>
+</tr>
+<tr>
+<td>Evertz MAGNUM-OS</td>
+<td>MAGNUM-Tally : « Virtual Tally Pin Grid », « Visual indication of trigger status and behaviors », reprise manuelle des déclencheurs ; moteur MAGNUM Reflex <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/MAGNUM-Tally">MAGNUM-Tally</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/solutions/magnum/">MAGNUM</a></span></td>
+<td>Non confirmée : l'effet des « triggers » n'est pas décrit publiquement</td>
+<td>Interfaçage mélangeur et matrice par 7700PTX et 7700R-SC-BRC (« Contact Factory »)</td>
+</tr>
+<tr>
+<td>Grass Valley GV Orbit et CommandCenter</td>
+<td>Logical levels avec règles de shuffle, « Virtual Crosspoints (XPTs) », salvos, chapitre « Configuring a K-Frame Production Switcher » (titre seul) ; CommandCenter : « conditional logic control of tallies » <span class="cite"><a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/gv_orbit/13-03082-160_AG_GV_Orbit_Control_User_Guide_v1.6.0.pdf">GV Orbit Control v1.6.0</a> ; <a target="_blank" rel="noopener" href="https://wwwapps.grassvalley.com/manuals/commandcenter/core/sub/topic/cc/c_tally_management_option.html">CommandCenter, Tally Management</a></span></td>
+<td>Non confirmée</td>
+<td>Protocoles natifs des mélangeurs</td>
+</tr>
+<tr>
+<td>Sony / Nevion VideoIPath</td>
+<td>Depuis mars 2022 : distribution de tally, salvos, groupement d'endpoints, NS-BUS, gestion de connexion des XVS et des NXLK-IP51Y <span class="cite"><a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/03/VideoIPath-adds-broadcast-control-functionality-FINAL-20220330.pdf">Nevion, 30 mars 2022</a></span></td>
+<td>Non confirmée</td>
+<td>NS-BUS, panneaux MKS-R</td>
+</tr>
+<tr>
+<td>Ross Ultricore BCS, Ultrix, DashBoard</td>
+<td>Bus Aux du mélangeur routés virtuellement dans la matrice (HyperMax, Ultrix Acuity) ; Ultricore Tally ; mode de tally « Routed » <span class="cite"><a target="_blank" rel="noopener" href="https://help.rossvideo.com/hypermax/Topics/Setup/Ultrix/Ultrix-Aux.html">HyperMax, Aux</a> ; <a target="_blank" rel="noopener" href="https://documentation.rossvideo.com/files/Manuals/Tally%20Systems/Ultricore%20Tally/UltriCore_Tally_SolutionBrief.pdf">Ultricore Tally</a></span></td>
+<td>Non confirmée dans Ultricore ; l'Aux comme destination de matrice est en revanche documenté</td>
+<td>TSL versions 3, 4 et 5 des mélangeurs Ross vers Ultrix <span class="cite"><a target="_blank" rel="noopener" href="https://support.rossvideo.com/hc/en-us/articles/360045344771-Routers-Ultrix-Tally-with-Ross-Switchers">support Ross</a></span></td>
+</tr>
+<tr>
+<td>Imagine Magellan</td>
+<td>« Comprehensive TALLY and UMD support » ; PathView avec « audio levels/breakaway » <span class="cite"><a target="_blank" rel="noopener" href="https://imaginecommunications.com/product/magellan-control-system/">Magellan</a></span></td>
+<td>Non confirmée</td>
+<td>Non précisé</td>
+</tr>
+<tr>
+<td>BFE KSC</td>
+<td>Contrôle multi-constructeur ; 500 signaux vidéo et 4 000 canaux audio dans le car RTS HD2 avec un Sony MVS-7000X <span class="cite"><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/rts-%E2%80%93-ob-van-hd-2-produces-latest-ksc-control-system">Live-Production, RTS OB Van HD 2</a></span></td>
+<td>Non confirmée</td>
+<td>Non précisé</td>
+</tr>
+<tr>
+<td>hi human interface (Broadcast Solutions, racheté par Riedel en septembre 2025)</td>
+<td>Couche opérationnelle intégrant consoles, mélangeurs, serveurs de replay et déclencheurs GPI ; presets à action unique <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/03/27/cs-live-equips-new-ob-van-with-riedel-mediornet-hi-control-system-and-artist-intercom/">SVG, CS live</a> ; <a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/21455/riedel-communications-acquires-hi-human-interface">The Broadcast Bridge</a> ; <a target="_blank" rel="noopener" href="https://broadcast-solutions.de/en/news/article/hi-human-interface-transforms-media-control-1/">Broadcast Solutions, 23 août 2023</a></span></td>
+<td>Non confirmée</td>
+<td>Non précisé</td>
+</tr>
+<tr>
+<td>NEP TFC (Total Facility Control)</td>
+<td>Couche propriétaire « control, routing, and orchestration » <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/02/08/neps-tfc-infrastructure-and-ss71-ibc-style-core-power-a-progressive-super-bowl-lx-infrastructure-for-nbc-sports/">SVG, 8 février 2026</a></span></td>
+<td>Non confirmée ; aucune interface tierce documentée dans les sources lues</td>
+<td>Non précisé</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pour EVS Cerebrum, Evertz MAGNUM, Imagine Magellan, BFE KSC, hi et Sony LEO/VideoIPath, aucun manuel utilisateur public n'a pu être atteint, et le guide GV Orbit n'a été lu que sur ses premiers chapitres : l'absence de fonction nommée est une absence de preuve seulement. Aucune étude de cas de la presse professionnelle décrivant une destination de matrice qui suit le bus PGM pour un équipement de replay ou de traitement n'a été trouvée. Skyline DataMiner, cité dans le car UHD de tpc, y est documenté comme outil de surveillance et d'analyse, non comme contrôleur de routage <span class="cite"><a target="_blank" rel="noopener" href="https://www.worldteleport.org/news/394068/TPC-Switzerland-AG-selects-Skylines-DataMiner-for-its-new-all-IP-UHD-OB-truck-.htm">World Teleport Association</a></span>.</p>
+<h3 id="s6-2">6.2 Protocoles : l'état de bus n'est pas le tally</h3>
+<p>Le TSL UMD (v3.1, v4, v5) ne transporte que des bits de tally et du texte par afficheur : aucune version ne porte d'état de crosspoint ou de bus, et aucune cadence de rafraîchissement n'est spécifiée <span class="cite"><a target="_blank" rel="noopener" href="https://tslproducts.com/wp-content/uploads/TSL-UMD-protocol.pdf">TSL, protocole UMD</a></span>. Un vrai suivi de bus demande l'interface d'état native du mélangeur. SW-P-08 est la lingua franca côté matrice (Connect, Interrogate, Tally Dump, Connected, jusqu'à 16 couches par port dans le pilote Lawo), non un protocole d'état de mélangeur, et NMOS IS-04/05 n'expose aucun état de bus <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsm-interface-driver-and-application-details/driver-supported-protocol-driver/driver-pro-bel-sw-p-08-generic">Lawo, pilote SW-P-08</a> ; <a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2024-07/Cerebrum%20-%20product%20Sheet%20%2B%20protocol%20list%20V2.6.pdf">Cerebrum V2.6</a></span>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mélangeur</th>
+<th>Interface d'état</th>
+<th>Ce qu'elle expose</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grass Valley K-Frame (Kayenne, Karrera, GV Korona)</td>
+<td>K-Frame Ethernet Tally ; SDK « available to approved vendors » ; côté TallyMan « GVG K-Frame ETP », TCP 2012 ; côté VSM bibliothèque « CPL », port 6040</td>
+<td>« all of the switcher status information required to calculate the Tally state » ; crosspoints du mélangeur vers TallyMan ; jeu de messages et cadence non publics</td>
+<td><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/docs/Manuals/switchers/kayenne/071-8963-01-AB_Kayenne_Karrera_GV_Korona_K-Frame_User_v11.0.pdf">Manuel K-Frame v11.0</a> ; <a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/2321/k-frame-cut-sheet.pdf">TSL, fiche K-Frame</a> ; <a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsm-interface-driver-and-application-details/driver-supported-protocol-driver/grassvalley-k-framex">Lawo, pilote K-FrameX</a></td>
+</tr>
+<tr>
+<td>Sony XVS et MVS</td>
+<td>Tally parallèle ; tally série sur RS-422 et Ethernet ; S-BUS ; NS-BUS</td>
+<td>Le système de tally « seamlessly integrates the switcher and router tally functions » ; exposition des crosspoints de bus à des tiers par NS-BUS : non confirmée</td>
+<td><a target="_blank" rel="noopener" href="https://manualmachine.com/sony/xvs9000/17890602-user-guide/">Brochure Sony XVS</a> ; <a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/03/VideoIPath-adds-broadcast-control-functionality-FINAL-20220330.pdf">Nevion, 30 mars 2022</a></td>
+</tr>
+<tr>
+<td>Ross Acuity et Carbonite</td>
+<td>« GV Contribution Serial Tally » (RS-422, 115 200 bauds) ; « TSL UMD v5.0 Output » ; RossTalk</td>
+<td>Table de sorties : Aux 1 à 6, ME Program, Preview, Clean Feed ; table d'entrées distinguant les sources internes (ré-entrées ME, Black, Global-Store, ME-Store)</td>
+<td><a target="_blank" rel="noopener" href="https://help.rossvideo.com/acuity-device/Topics/Devices/Serial-Tally/GVG.html">Ross Acuity, GV Contribution Serial Tally</a></td>
+</tr>
+<tr>
+<td>GV / Snell Kahuna et Kula</td>
+<td>« K360 Tally Protocol V4 », TCP 50009</td>
+<td>Quatre niveaux de tally ; « Source Tally » (tally) et « Bus Tally » (« Sends crosspoint information ») à activer tous deux</td>
+<td><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/2005/tallyman-cut-sheet-sam-kula.pdf">TSL, fiche SAM Kula</a></td>
+</tr>
+<tr>
+<td>EVS DYVI ; FOR-A ; Panasonic</td>
+<td>« EVS DYVI PixTally » et Ember+ ; « For-A HVS Tally » ; « Panasonic Kairos Automation API »</td>
+<td>Contenu non documenté publiquement</td>
+<td><a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2024-07/Cerebrum%20-%20product%20Sheet%20%2B%20protocol%20list%20V2.6.pdf">Cerebrum V2.6</a></td>
+</tr>
+<tr>
+<td>GV DD35 (ancien)</td>
+<td>Protocole ACOS</td>
+<td>Sources par bus, mais ni tallies dérivés ni contributions Key/ME ; les mélangeurs à tally parallèle seul « have no router status »</td>
+<td><a target="_blank" rel="noopener" href="https://www.tslproducts.com/media/1325/03-mixerset-up.pdf">TSL TallyMan, manuel 03</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Un crochet de tally par GPI seul ou par TSL UMD seul peut encore piloter un suivi, à raison d'un bit par source, mais seulement avec une règle de priorité ou de verrouillage et sans connaissance des sources internes (inférence des notes).</p>
+<h2 id="s7">7. Ce que les prestataires ont dans leurs cars</h2>
+<p>Les tableaux reprennent uniquement des faits sourcés ; « n. p. » signifie non publié dans les sources consultées. La plupart des sources sont des articles de lancement : une matrice ou un contrôle a pu être remplacé depuis, et le maintien en service en octobre 2026 n'a généralement pas été vérifié. L'année est celle du lancement, ou celle de l'article (« art. ») à défaut.</p>
+<h3 id="s7-1">7.1 France</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AMP Visual TV</td>
+<td>Millenium Signature 12</td>
+<td>2016</td>
+<td>Riedel MediorNet décentralisé remplaçant une matrice classique : 68 MicroN, 8 MetroN, 3 Compact Pro, 2 châssis Modular ; signaux SDI</td>
+<td>n. p.</td>
+<td>Sony XVS 8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2016/07/25/amp-visual-tv-outfits-new-flagship-millenium-signature-12-with-riedel-mediornet-infrastructure/">SVG, 25 juillet 2016</a> ; <a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/131-millenium-signature.html">AMP Visual TV</a></td>
+</tr>
+<tr>
+<td>AMP Visual TV</td>
+<td>Millenium 3 et Millenium 4</td>
+<td>2021</td>
+<td>Riedel MediorNet, « fully decentralized », « hybrid » ; composition n. p.</td>
+<td>n. p.</td>
+<td>Sony XVS 8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2021/07/06/extensive-riedel-setup-chosen-for-new-amp-visual-uhd-ob-vans/">SVG, 6 juillet 2021</a> ; <a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/132-millenium.html">AMP Visual TV</a></td>
+</tr>
+<tr>
+<td>AMP Visual TV</td>
+<td>Millenium 6</td>
+<td>n. p. (avant 2021)</td>
+<td>Riedel MediorNet (cité comme projet Riedel antérieur)</td>
+<td>n. p.</td>
+<td>Sony XVS 8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/riedel-mediornet-artist-and-bolero-drive-video-and-comms-networks-board-amp-visual-tv">Live-Production</a></td>
+</tr>
+<tr>
+<td>AMP Visual TV</td>
+<td>Millenium Signature 10 et 11 ; Millenium 1, 2, 5, 8, 16 ; Extender 1 ; Optimum 1, 6, 9</td>
+<td>n. p. (unités plus anciennes)</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>GV Kayenne XL, GV Karrera, Sony MVS 7000X, MVS 8000G, MVS 6530 ou MVS 6000 selon l'unité</td>
+<td><a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/131-millenium-signature.html">AMP, Millenium Signature</a> ; <a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/132-millenium.html">AMP, Millenium</a> ; <a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/133-extender.html">AMP, Extender</a> ; <a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/134-optimum.html">AMP, Optimum</a></td>
+</tr>
+<tr>
+<td>EMG (Euromedia France, groupe Gravity Media)</td>
+<td>Nova 103 et Nova 104</td>
+<td>2020</td>
+<td>GV Sirius 840 (taille n. p.) ; vidéo SDI, audio et intercom en ST 2110</td>
+<td>EVS Cerebrum</td>
+<td>GV Kayenne K-Frame (K-Frame X)</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/twin-top-end-emg-uhd-trucks-settle-in-to-life-on-the-road-in-europe/?print=1">SVG Europe, octobre 2020</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/uefa-uses-new-emg-truck-for-host-broadcast-production-of-super-cup-in-budapest/">SVG Europe, septembre 2020</a></td>
+</tr>
+<tr>
+<td>EMG</td>
+<td>diPloy (modules IP en flight-cases, aussi montés en car)</td>
+<td>2020</td>
+<td>ST 2110 sur commutateurs Arista et Netgear ; passerelles Imagine SNP</td>
+<td>SDNsquare (réseau) et EVS Cerebrum (broadcast controller)</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/euro-media-group-unveils-preconfigured-ip-remote-production-technology/">SVG Europe, septembre 2020</a> ; <a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/euro-media-group-standardizes-on-selenio-network-processor-for-unique-large-scale-modular-live-production-architecture/">Imagine</a></td>
+</tr>
+<tr>
+<td>France Télévisions (La Fabrique), intégrateur BCE France</td>
+<td>UM1</td>
+<td>2022</td>
+<td>« hybrid SDI/IP architecture » ; matrice et commutateurs n. p. ; 10 Imagine SNP à bord à Paris 2024</td>
+<td>n. p.</td>
+<td>Sony XVS-9000 (4 M/E)</td>
+<td><a target="_blank" rel="noopener" href="https://feedmagazine.tv/archives/sony-on-the-road/">FEED magazine</a> ; <a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/france-tv/">Imagine, décembre 2024</a></td>
+</tr>
+<tr>
+<td>France Télévisions</td>
+<td>UM2</td>
+<td>En service en 2024</td>
+<td>« hybrid SDI/2110 truck » ; matrice n. p. ; 7 Imagine SNP</td>
+<td>n. p.</td>
+<td>Sony XVS</td>
+<td><a target="_blank" rel="noopener" href="https://imaginecommunications.com/insights-and-resources/france-tv/">Imagine, décembre 2024</a> ; <a target="_blank" rel="noopener" href="https://www.francetelevisions.fr/et-vous/le-lab/en/tech/france-televisions-deploys-ip-production-technologies-37623">France Télévisions Lab</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Les cars UHD d'AMP n'ont pas de matrice centrale classique ; aucune source ne nomme le système de contrôle d'AMP ni ne montre de car ST 2110 chez AMP, et les pages publiques d'AMP paraissent anciennes (entrées en double, serveurs XT-3), de sorte qu'elles ne décrivent pas nécessairement la flotte d'octobre 2026 (inférence des notes). France Télévisions avait en mai 2026 des SNP dans « two OB trucks » et a commandé 60 SNP-XS pour ses stations régionales <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/05/05/france-televisions-becomes-first-broadcaster-to-deploy-imagine-communications-snp-xs/">SVG, 5 mai 2026</a></span>. Boîte à Outils Broadcast, Atlantic Media et les prestataires liés à TF1 n'ont pas été étudiés.</p>
+<h3 id="s7-2">7.2 Belgique et Pays-Bas</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTBF (location NEP Belgium, 8 ans)</td>
+<td>Deux cars full-IP identiques</td>
+<td>2020</td>
+<td>ST 2110 ; cœur Arista 100G ; Lawo V__matrix C100 en traitement et pont SDI-IP ; 32 entrées et 32 sorties baseband</td>
+<td>Lawo VSM</td>
+<td>Sony XVS-8000 (IP)</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-belgium-and-broadcast-solutions-complete-new-rtbf-ob-truck-through-the-coronavirus-lockdown/">SVG Europe</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2020/04/28/lawo-helps-belgiums-rtbf-usher-in-new-era-with-two-full-ip-ob-trucks/">SVG, 28 avril 2020</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 18 (Streamline S8L)</td>
+<td>2018</td>
+<td>Sources en conflit : cœur IP Lawo V__matrix selon la presse de 2018 ; « Imagine Platinum MX Router » 256 × 208 selon la page de l'unité chez NEP</td>
+<td>Lawo VSM</td>
+<td>Sony XVS-6000</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/lawo-matrices-form-core-of-new-nep-belgium-s8l-hd-uhd-ob-truck/">SVG Europe, 2018</a> ; <a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-18">NEP Belgium, Unit 18</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 15</td>
+<td>n. p.</td>
+<td>« Miranda Hybrid Router » 288 × 504 avec embedders, de-embedders et E/S MADI</td>
+<td>Lawo VSM</td>
+<td>Sony XVS 7000</td>
+<td><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-15">NEP Belgium, Unit 15</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 14</td>
+<td>n. p.</td>
+<td>« Imagine IP3 Router » 288 × 208</td>
+<td>Lawo VSM</td>
+<td>Sony MVS7000</td>
+<td><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-14">NEP Belgium, Unit 14</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 16</td>
+<td>n. p.</td>
+<td>Marque n. p., 144 × 234</td>
+<td>Lawo VSM</td>
+<td>Sony MVS-7000</td>
+<td><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-16">NEP Belgium, Unit 16</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 17 (6 caméras)</td>
+<td>n. p.</td>
+<td>AJA Kumo 64 × 64</td>
+<td>Lawo VSM</td>
+<td>Panasonic AV-HS6000</td>
+<td><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-17">NEP Belgium, Unit 17</a></td>
+</tr>
+<tr>
+<td>NEP Belgium</td>
+<td>Unit 3 (petite unité ancienne)</td>
+<td>n. p.</td>
+<td>Leitch Panacea 16 × 8</td>
+<td>n. p.</td>
+<td>GVG Kayak HD250</td>
+<td><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-3">NEP Belgium, Unit 3</a></td>
+</tr>
+<tr>
+<td>DB Video</td>
+<td>Unit 10</td>
+<td>2016</td>
+<td>Riedel MediorNet décentralisé : 18 MicroN 80G, 2 MetroN, 4 stageboxes</td>
+<td>Lawo VSM, intégré à MediorNet pour le tally</td>
+<td>GV Karrera 3 M/E</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/db-video-builds-flexible-new-belgian-ob-truck-around-mediornet-matrix/">SVG Europe</a> ; <a target="_blank" rel="noopener" href="https://www.tvtechnology.com/the-wire-blog/6183-506183">TV Technology</a></td>
+</tr>
+<tr>
+<td>NEP The Netherlands</td>
+<td>UHD 2</td>
+<td>2019</td>
+<td>Matrice centrale n. p. ; Riedel MicroN pour la commutation vidéo, le multiviewer et le glue</td>
+<td>n. p.</td>
+<td>GV Karrera</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvbeurope.com/?p=100971">TVBEurope</a> ; <a target="_blank" rel="noopener" href="https://tvtechnology.com/news/broadcast-solutions-nep-netherlands-team-on-uhd-ob-truck">TV Technology, 28 mai 2019</a></td>
+</tr>
+<tr>
+<td>NEP The Netherlands</td>
+<td>Investissement société (studios et flotte, unités non nommées)</td>
+<td>art. octobre 2020</td>
+<td>GV Sirius 850 et infrastructure IQ modulaire</td>
+<td>n. p.</td>
+<td>GV Kahuna</td>
+<td><a target="_blank" rel="noopener" href="https://www.grassvalley.com/case-studies/nep-the-netherlands-migration-to-ip/">Grass Valley, étude de cas</a></td>
+</tr>
+<tr>
+<td>EMG Netherlands (United)</td>
+<td>OB 16</td>
+<td>n. p. (ère HD)</td>
+<td>Matrice Grass Valley (modèle n. p.)</td>
+<td>L-S-B (Lawo) VSM</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/vsm-integrated-control-system-united%E2%80%99s-ob-16">Live-Production</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>La Belgique est le marché le mieux documenté : chaque unité NEP Belgium dont le contrôle est nommé utilise Lawo VSM. Les nœuds MicroN de DB Video ont tous du MADI, et leurs E/S prennent en charge embedding, de-embedding et insertion de timecode <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/the-wire-blog/6183-506183">TV Technology</a></span>. VRT, Videohouse/EMG Belgium et les cars NEP Belgium postérieurs à 2020 n'ont pas été étudiés ; quels cars Mediapro utilise en Belgique n'a pas été trouvé.</p>
+<h3 id="s7-3">7.3 Allemagne, Autriche et Suisse</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZDF</td>
+<td>MP-6 (construit par BFE)</td>
+<td>n. p. (ère HD)</td>
+<td>Miranda NVision 8500, 387 × 612</td>
+<td>L-S-B VSM redondant</td>
+<td>Snell Kahuna</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/zdf-puts-new-ob-truck-mp-6-vsm-control-system-operation.html">Live-Production, VSM</a> ; <a target="_blank" rel="noopener" href="https://www.live-production.tv/node/19697">Live-Production, BFE</a></td>
+</tr>
+<tr>
+<td>ZDF</td>
+<td>MP4, MP5</td>
+<td>art. 2012</td>
+<td>n. p. (seules les consoles Lawo mc²66 sont citées)</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/be-blogs/7994">TV Technology</a></td>
+</tr>
+<tr>
+<td>Bayerischer Rundfunk</td>
+<td>FÜ HD1</td>
+<td>art. 2012</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/be-blogs/7994">TV Technology</a></td>
+</tr>
+<tr>
+<td>Radiodiffuseur public allemand non nommé (construction Broadcast Solutions)</td>
+<td>n. p.</td>
+<td>2026</td>
+<td>« Riedel real-time media fabric »</td>
+<td>n. p.</td>
+<td>Sony</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/news-roundup/ibc2026-broadcast-solutions-to-demonstrate-breadth-of-group-capabilities/">SVG Europe, août 2026</a></td>
+</tr>
+<tr>
+<td>TVN Live Production</td>
+<td>TVN-Ü8UHD / OB8</td>
+<td>2024</td>
+<td>Evertz NEXX 12G-SDI, 704 × 704 en 17 RU ; SDI choisi délibérément</td>
+<td>Lawo VSM</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://evertz.com/solutions/nexx/case-studies/tvn-ob8/">Evertz, étude de cas</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=270410">SVG, octobre 2024</a></td>
+</tr>
+<tr>
+<td>TVN</td>
+<td>TVN-Ü6</td>
+<td>art. 2019</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>2 × Sony XVS-8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/4k-8k-arising/sony-and-tvn-set-live-production-milestone-new-4k-hdr-ob-truck.html">Live-Production</a></td>
+</tr>
+<tr>
+<td>TVN</td>
+<td>TVN-Ü2HD</td>
+<td>2012</td>
+<td>Miranda NVision 8208 et pré-matrices Riedel MediorNet</td>
+<td>L-S-B VSM</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvbeurope.com/?p=32606">TVBEurope</a></td>
+</tr>
+<tr>
+<td>TV Skyline</td>
+<td>Ü7</td>
+<td>2014</td>
+<td>Snell Sirius 840 hybride</td>
+<td>L-S-B VSM</td>
+<td>Kahuna 360</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=67958">SVG</a></td>
+</tr>
+<tr>
+<td>TV Skyline</td>
+<td>Ü8</td>
+<td>2015</td>
+<td>Matrice centrale n. p.</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/tv-skyline-u8-truck-sports-extensive-lawo-spec/">SVG Europe</a></td>
+</tr>
+<tr>
+<td>Studio Berlin</td>
+<td>Ü10</td>
+<td>2021</td>
+<td>Riedel MediorNet décentralisé (38 MicroN UHD)</td>
+<td>Lawo VSM</td>
+<td>GV K-Frame XP Compact 12G</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=212371">SVG, octobre 2021</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/riedel-mediornet-micron-uhd-provides-decentralised-signal-routing-in-studio-berlins-new-u10-truck/">SVG Europe, 25 janvier 2022</a></td>
+</tr>
+<tr>
+<td>Studio Berlin</td>
+<td>Ü2</td>
+<td>Refonte 2025</td>
+<td>Workflow 3G-SDI conservé (matrice n. p.)</td>
+<td>Lawo VSM</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2025/03/10/studio-berlin-upgrades-ob-truck-u2-with-lawo-aoip-technology-for-berlinale-2025-film-festival/">SVG, 10 mars 2025</a></td>
+</tr>
+<tr>
+<td>HD Broadcast</td>
+<td>UHD 2</td>
+<td>2020</td>
+<td>Matrice Grass Valley Sirius, SDI</td>
+<td>Lawo VSM</td>
+<td>Sony XVS-9000</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/hd-broadcast-uhd-2-ob-begins-working-life-with-dfb-pokal-and-bundesliga/">SVG Europe</a></td>
+</tr>
+<tr>
+<td>Media Mobil</td>
+<td>UHD1</td>
+<td>2020–2021</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.fast-and-wide.com/faw-news/fast-news/16680-germany-s-media-mobil">Fast-and-Wide</a></td>
+</tr>
+<tr>
+<td>NEP Switzerland / NEP Germany</td>
+<td>UHD-41 / HD34K</td>
+<td>2016</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>Grass Valley (modèle n. p.)</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-europe-ramps-up-ultra-hd-and-2si-production-with-grass-valley/">SVG Europe, 12 septembre 2016</a></td>
+</tr>
+<tr>
+<td>tpc / SRG SSR</td>
+<td>UHD1</td>
+<td>2018</td>
+<td>ST 2110 non compressé ; Arista 7504R redondants ; 44 passerelles Imagine SNP</td>
+<td>Imagine Magellan SDN Orchestrator (connexions) et Lawo VSM (contrôle global)</td>
+<td>Sony XVS 8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/ready-for-primetime-on-the-road-with-tpcs-flagship-uhd1-ip-based-ob-truck/">SVG Europe, mars 2019</a> ; <a target="_blank" rel="noopener" href="https://www.imaginecommunications.com/app/uploads/2020/09/TechSummary-tpc_UHD.pdf">Imagine, synthèse technique</a></td>
+</tr>
+<tr>
+<td>brutal güet</td>
+<td>Nouveau car (Streamline)</td>
+<td>2025</td>
+<td>Cœur vidéo n. p. ; ST 2110, AES67 et RAVENNA natifs</td>
+<td>Lawo HOME et hi human interface</td>
+<td>Sony MLS-1</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2025/10/30/lawo-provides-audio-and-ip-infrastructure-for-new-brutal-guet-ob-truck/">SVG, 30 octobre 2025</a></td>
+</tr>
+<tr>
+<td>ORF (intégrateur BFE)</td>
+<td>FÜ22 selon AIMS, « FÜ01 » selon FKTG</td>
+<td>2019–2020</td>
+<td>ST 2110 ; deux routeurs IP redondants 1:1 ; convertisseurs SDI-IP ; produits n. p.</td>
+<td>« Broadcast SDN controller » (produit n. p.)</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://fktg.org/ip-ue-wagen-fuer-sportproduktionen">FKTG</a> ; <a target="_blank" rel="noopener" href="https://aimsalliance.org/document/building-a-large-ob-truck-using-smpte-st-2110/index.html">AIMS</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>ZDF n'est documenté que par un car de l'ère HD</strong> (MP-6, NVision 8500 sous VSM) ; ses cars actuels, ceux de WDR, SWR, NDR et MDR, TopVision, NEP Germany et les équipements propres à Sportcast n'ont pas pu être étudiés. TVN a choisi une matrice SDI pour son vaisseau amiral de 2024 parce qu'il « needed to exchange many 1080i-to-UHD 12G SDI signals directly at the truck's patch panel with other broadcasters » <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvbeurope.com/live-production/evertz-provides-tvn-ob-truck-with-biggest-ever-12g-uhd-single-link-router">TVBEurope</a></span>.</p>
+<h3 id="s7-4">7.4 Espagne, Italie et cars software-defined</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mediapro</td>
+<td>OB52 (construit en Espagne, déployé à Abu Dhabi)</td>
+<td>art. novembre 2019</td>
+<td>Matrice SAM Sirius 830 (taille n. p.)</td>
+<td>Lawo VSM</td>
+<td>GV Kayenne</td>
+<td><a target="_blank" rel="noopener" href="https://broadcastprome.com/news/4k-on-wheels-mediapros-ob-van-in-abu-dhabi-to-produce-live-sporting-events">BroadcastPro ME</a></td>
+</tr>
+<tr>
+<td>Mediapro</td>
+<td>OB90 (construit par Eumovil)</td>
+<td>2022</td>
+<td>n. p. (traitement audio annoncé en IP)</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/2022/03/14/mediapro-unidad-movil-uhd-mfw">Panorama Audiovisual</a> ; <a target="_blank" rel="noopener" href="https://www.tvbeurope.com/live-production/mediapro-showcases-4k-uhd-hdr-at-madrid-fashion-week">TVBEurope</a></td>
+</tr>
+<tr>
+<td>Mediapro</td>
+<td>OB39, OB33, OB40 (LaLiga UHD)</td>
+<td>2016</td>
+<td>n. p. (serveurs EVS XT4K)</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2016/09/08/ibc-2016-mediapro-enhances-la-liga-uhd-coverage-with-evs-xt4k-investment/">SVG, 8 septembre 2016</a></td>
+</tr>
+<tr>
+<td>RTVE (intégrateur Unitecnic)</td>
+<td>Quatre unités « PEL »</td>
+<td>2020</td>
+<td>Riedel MediorNet, matrice et multiviewer distribués (taille n. p.)</td>
+<td>n. p.</td>
+<td>Grass Valley 2 M/E (modèle non vérifié)</td>
+<td><a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/2020/11/25/rtve-estrena-cuatro-unidades-moviles-hd-sdi/">Panorama Audiovisual</a></td>
+</tr>
+<tr>
+<td>RTVE</td>
+<td>Unité mobile principale</td>
+<td>art. 2023</td>
+<td>n. p.</td>
+<td>hi human interface (d'après un titre d'article seulement)</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/tag/unitecnic">Panorama, liste Unitecnic</a></td>
+</tr>
+<tr>
+<td>EITB (intégrateur Unitecnic)</td>
+<td>Première unité UHD</td>
+<td>2024</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/tag/unitecnic">Panorama, liste Unitecnic</a></td>
+</tr>
+<tr>
+<td>NVP</td>
+<td>OB4 UHD HDR</td>
+<td>2017</td>
+<td>SAM Sirius 840 et glue IQ modulaire</td>
+<td>Lawo VSM</td>
+<td>2 × SAM Kahuna UHD 4K Maverik</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/mobile-production/ob-trucks/nvp-ob6-4k.html">Live-Production, fiche</a> ; <a target="_blank" rel="noopener" href="https://www.fast-and-wide.com/faw-news/fast-news/9909-nvp-puts-ob-4-on-the-road-with-lawo-infrastructure">Fast-and-Wide</a></td>
+</tr>
+<tr>
+<td>NVP</td>
+<td>OB7</td>
+<td>2021</td>
+<td>GV Sirius 800 hybride (taille n. p.)</td>
+<td>n. p.</td>
+<td>GV Kahuna</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/video-progetti-unveils-nvps-uhd-and-hdr-ready-ob7-van/">SVG Europe</a></td>
+</tr>
+<tr>
+<td>NVP (Global Football Production, avec HBS)</td>
+<td>Huit vans compacts REM-OB et centre de Madrid, pour LaLiga</td>
+<td>2025</td>
+<td>Grass Valley AMPP ; « Sirius routing infrastructure » ; passerelles IP</td>
+<td>GV Orbit sur AMPP OS</td>
+<td>Maverik X (logiciel) et GV Karrera</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nvp-deploys-unified-production-environment-for-laliga-built-on-grass-valley-ampp/">SVG Europe, septembre 2026</a></td>
+</tr>
+<tr>
+<td>ARET (remorque de démonstration avec Lawo)</td>
+<td>Remorque UHD/HDR 14 m</td>
+<td>2025</td>
+<td>« hybrid 12G-SDI/IP » ; matrice n. p.</td>
+<td>Lawo VSM, avec Lawo HOME pour l'infrastructure</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2025/08/07/ibc-2025-aret-and-lawo-set-to-unveil-ultra-advanced-uhd-hdr-ob-trailer/">SVG, 7 août 2025</a></td>
+</tr>
+<tr>
+<td>DMC Production (construction Broadcast Solutions)</td>
+<td>Deux cars « reverse remote » software-defined</td>
+<td>2026</td>
+<td>Grass Valley AMPP sur une paire de serveurs ; routeurs Cisco redondants</td>
+<td>Depuis la régie centrale (produit n. p.)</td>
+<td>AMPP (logiciel)</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/broadcast-solutions-delivers-industry-first-software-defined-outside-broadcast-trucks-for-dmc/">SVG Europe, juillet 2026</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Un seul car Mediapro a une matrice et un contrôle publiés : OB52 (Sirius 830 sous VSM), vraisemblablement baseband, la source ne précisant pas SDI ou IP (inférence des notes). Pour les unités UHD espagnoles (OB33, OB39, OB40, OB90), matrice et contrôle ne sont pas publiés, et l'existence d'un car ST 2110 chez Mediapro est inconnue. La production de LaLiga est assurée depuis 2025/26, pour cinq ans, par Global Football Production, coentreprise de HBS et NVP selon SVG Europe ; un titre de Panorama Audiovisual d'avril 2025 nomme « HBS and TSA », partenaire différent, corps d'article non ouvert <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/spectacular-content-laliga-on-the-global-football-production-jv-and-bringing-in-new-audiences/">SVG Europe, septembre 2026</a> ; <a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/tag/mediapro/page/2">Panorama, liste Mediapro</a></span>. Un autre titre de Panorama, d'août 2025, indique que Grup Mediapro renouvelle la production de la ligue belge avec DAZN, corps d'article non ouvert <span class="cite"><a target="_blank" rel="noopener" href="https://www.panoramaaudiovisual.com/en/tag/mediapro/page/2">Panorama, liste Mediapro</a></span>. RAI, les prestataires de Sky Italia, Gravity Media Italy, Overon, TSA et les pays nordiques n'ont pas été étudiés.</p>
+<h3 id="s7-5">7.5 Royaume-Uni et Irlande</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEP UK</td>
+<td>Pacific, Aurora, Caspian, Sargasso</td>
+<td>2016</td>
+<td>Imagine Platinum IP3 hybride IP et baseband (taille n. p.) ; Imagine SNP ajoutés en 2021 aux quatre plus grands cars</td>
+<td>n. p.</td>
+<td>SAM Kahuna 9600</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/4k-8k-arising/nep-uk-presents-four-new-uhd-outside-broadcast-trucks.html">Live-Production</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-uk-installs-imagine-snps-in-largest-ob-trucks/">SVG Europe, 11 novembre 2021</a></td>
+</tr>
+<tr>
+<td>NEP UK</td>
+<td>Venus, Ceres</td>
+<td>2018</td>
+<td>ST 2110 ; Arista 7504 ; passerelles GV IQ UCP 25GbE ; pas de matrice baseband nommée</td>
+<td>Axon Cerebrum (aujourd'hui EVS)</td>
+<td>GV Kahuna et GV Kayenne</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2018/05/11/nep-uk-unveils-worlds-first-smpte-st-2110-compliant-ip-based-broadcast-vehicles/">SVG, 11 mai 2018</a></td>
+</tr>
+<tr>
+<td>Gravity Media</td>
+<td>MT501</td>
+<td>Juillet 2026</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.advanced-television.com/2026/07/28/gravity-media-unveils-mt501-ob-trucks/">Advanced Television, 28 juillet 2026</a></td>
+</tr>
+<tr>
+<td>Gravity Media</td>
+<td>Pictor</td>
+<td>n. p. (brochure 2022)</td>
+<td>SAM Sirius 600, 128 × 128, 3G</td>
+<td>n. p.</td>
+<td>SAM Kula 3 M/E</td>
+<td><a target="_blank" rel="noopener" href="https://www.gravitymedia.com/wp-content/uploads/2022/05/Pictor-Brochure_Website.pdf">Brochure Pictor</a></td>
+</tr>
+<tr>
+<td>Gravity Media (EMG UK, ex CTV OB)</td>
+<td>OB12A (OB12B en cours d'équipement)</td>
+<td>2020</td>
+<td>« Fully IP end to end » sur diPloy</td>
+<td>n. p. pour ce car (plate-forme diPloy : SDNsquare et Cerebrum)</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/twin-top-end-emg-uhd-trucks-settle-in-to-life-on-the-road-in-europe/">SVG Europe, 7 octobre 2020</a></td>
+</tr>
+<tr>
+<td>Gravity Media (EMG UK)</td>
+<td>NOVA 51, 52, 53, 54</td>
+<td>2023</td>
+<td>« single router » gérant multiviewers, embedders, de-embedders et MADI (marque n. p.)</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.mediaproductionshow.com/exhibitor-news/emg-launches-four-sustainable-obs">Media Production Show, 22 juin 2023</a></td>
+</tr>
+<tr>
+<td>Gravity Media (EMG UK, ex Telegenic)</td>
+<td>T25 UHD</td>
+<td>n. p.</td>
+<td>Matrice NVISION (taille n. p.)</td>
+<td>Lawo VSM</td>
+<td>SAM Kahuna 9600</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/mobile-production/ob-trucks/telegenic-t25-uhd">Live-Production, fiche T25</a></td>
+</tr>
+<tr>
+<td>Arena Television</td>
+<td>OBX, OBY, OBZ</td>
+<td>2016–2017</td>
+<td>IP SMPTE 2022-6 (pré-2110) ; Cisco Nexus et 10 GV Node</td>
+<td>Lawo VSM</td>
+<td>GV Kayenne K-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/7341/arena-tv-strengthens-ip-enabled-4k-ob-van-with-vsm-control-system">The Broadcast Bridge, 1er décembre 2016</a> ; <a target="_blank" rel="noopener" href="https://www.live-production.tv/node/37331">Live-Production, fiche OBZ</a></td>
+</tr>
+<tr>
+<td>Timeline TV</td>
+<td>UHD1</td>
+<td>2015</td>
+<td>SDI ; matrice n. p.</td>
+<td>n. p.</td>
+<td>SAM Kahuna 9600</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/sporttech-2017-timeline-for-ip-as-new-uhd2-truck-is-unveiled-and-explained/">SVG Europe, 9 juin 2017</a></td>
+</tr>
+<tr>
+<td>Timeline TV</td>
+<td>UHD2</td>
+<td>2017</td>
+<td>ST 2110 ; Arista 7504R, 144 ports 100G</td>
+<td>Sources divergentes : Axon Cerebrum (fiche), « SAM controller » (SVG Europe 2017), GV Orbit pour le lien UHD2 et UHD3 (2020)</td>
+<td>2 × SAM Kahuna (IP)</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/mobile-production/ob-trucks/timelinetv-uhd2.html">Live-Production, fiche UHD2</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/sporttech-2017-timeline-for-ip-as-new-uhd2-truck-is-unveiled-and-explained/">SVG Europe, 9 juin 2017</a></td>
+</tr>
+<tr>
+<td>Timeline TV</td>
+<td>UHD3</td>
+<td>2020</td>
+<td>ST 2110 ; Arista 100G et passerelles GV IQUCP25</td>
+<td>GV Orbit (deux contrôleurs)</td>
+<td>GV Kahuna 9600 IP</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2020/09/29/grass-valley-holds-heavy-tech-footprint-in-timeline-televisions-new-4k-ip-truck/">SVG, 29 septembre 2020</a> ; <a target="_blank" rel="noopener" href="https://www.tvbeurope.com/ip-migration/timeline-television-adds-to-its-4k-ip-truck-fleet">TVBEurope, 29 septembre 2020</a></td>
+</tr>
+<tr>
+<td>Cloudbass</td>
+<td>OB9</td>
+<td>2019</td>
+<td>ST 2110 multi-constructeur ; matrice n. p. ; 21 Axon Neuron</td>
+<td>Axon Cerebrum</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/the-wire-blog/axon-technology-powers-cloudbass-first-fully-ip-4k-ob-truck">TV Technology, 12 décembre 2019</a></td>
+</tr>
+<tr>
+<td>Cloudbass</td>
+<td>OB20, OB21 (construits par dB Broadcast)</td>
+<td>2025–2026</td>
+<td>ST 2110 ; arkona BLADE//runner AT300 pour toutes les fonctions de passerelle SDI</td>
+<td>n. p.</td>
+<td>GV K-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.tvbeurope.com/live-production/arkona-and-manifold-drive-two-new-cloudbass-ip-ob-trucks">TVBEurope, 21 mai 2025</a> ; <a target="_blank" rel="noopener" href="https://www.mixonline.com/the-wire/calrec-argo-m-powers-cloudbass-next-generation-ob-fleet">Mix, 2 septembre 2026</a></td>
+</tr>
+<tr>
+<td>TVM (Irlande)</td>
+<td>OB10</td>
+<td>2021–2022 selon l'étude de cas EVS ; 2024 selon SVG Europe (dates divergentes)</td>
+<td>UHD ST 2110 ; Arista 7500R et 7020TR ; 21 passerelles EVS Neuron</td>
+<td>EVS Cerebrum, qui pilote le K-Frame, selon l'étude de cas EVS</td>
+<td>GV K-Frame X</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/tvm-opts-for-arista-networks-switches-in-new-ob10-truck/">SVG Europe</a> ; <a target="_blank" rel="noopener" href="https://evs.com/resources/case-studies/tvm-rolls-out-ob10-evs-ip-live-production-backbone">EVS, étude de cas</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s7-6">7.6 Amérique du Nord</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEP US</td>
+<td>SS24</td>
+<td>2016 (refonte IP)</td>
+<td>« An Evertz IP router is at the core of the truck » (modèle n. p.)</td>
+<td>n. p.</td>
+<td>GV Kayenne Elite</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2016/02/19/nep-brings-ss24-unit-into-ip-age-for-nba-all-star-weekend/">SVG, 19 février 2016</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>M15</td>
+<td>n. p.</td>
+<td>Lawo V__matrix (taille n. p.)</td>
+<td>Lawo VSM</td>
+<td>Kayenne X-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.live-production.tv/node/40251">Live-Production</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS8</td>
+<td>2019</td>
+<td>« Lawo routing infrastructure » sur Arista ; la fiche liste aussi une matrice Evertz EQX-3G (hybride)</td>
+<td>n. p.</td>
+<td>Kayenne X-Frame 128 × 64</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2019/10/31/nep-ss8-embraces-ip-creature-comforts/">SVG, 31 octobre 2019</a> ; <a target="_blank" rel="noopener" href="https://www.live-production.tv/mobile-production/ob-trucks/nep-supershooters-ss8.html">Live-Production, fiche SS8</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS9</td>
+<td>Février 2020</td>
+<td>Lawo V_matrix et commutateur Arista</td>
+<td>Lawo VSM</td>
+<td>GV Kayenne X-Frame 128 × 96, 9 M/E</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2020/09/10/nep-group-rolls-out-ip-based-supershooter-4-supershooter-9-production-units/">SVG, 10 septembre 2020</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS4 (A/B/C)</td>
+<td>2020 ; TFC en 2022</td>
+<td>IP ; marque n. p.</td>
+<td>TFC depuis 2022</td>
+<td>GV Kayenne X-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2020/09/10/nep-group-rolls-out-ip-based-supershooter-4-supershooter-9-production-units/">SVG, 10 septembre 2020</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2023/04/15/nep-u-s-broadcast-services-meets-demand-for-new-mobile-unit-connected-production-solutions/">SVG, 15 avril 2023</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS5</td>
+<td>2021</td>
+<td>IP ; marque n. p.</td>
+<td>TFC (premier car full-IP sous TFC)</td>
+<td>GV Kayenne X-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/news-roundup/nep-releases-next-generation-supershooter-5-mobile-unit/">SVG Europe, 5 mai 2021</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS6</td>
+<td>2022</td>
+<td>« Lawo IP router » (modèle n. p.)</td>
+<td>TFC</td>
+<td>GV Kayenne X-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2022/05/18/nep-supershooter-6-hits-the-road-in-support-of-nhl-playoffs/">SVG, 18 mai 2022</a></td>
+</tr>
+<tr>
+<td>NEP US</td>
+<td>SS7, SS62, Supershooter CBS, EN1 ; SS71, SS54, ND1, ND2 (Super Bowl LX)</td>
+<td>2022–2026</td>
+<td>SS7, SS62 et Supershooter CBS : IP, marque n. p. ; EN1 : n. p. ; environnement ST 2110 à l'échelle du compound au Super Bowl LX, cœur n. p. par car</td>
+<td>TFC (SS7, SS62, Supershooter CBS, EN1 ; SS71 comme hub TFC)</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2023/04/15/nep-u-s-broadcast-services-meets-demand-for-new-mobile-unit-connected-production-solutions/">SVG, 15 avril 2023</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/02/08/neps-tfc-infrastructure-and-ss71-ibc-style-core-power-a-progressive-super-bowl-lx-infrastructure-for-nbc-sports/">SVG, 8 février 2026</a></td>
+</tr>
+<tr>
+<td>Game Creek Video</td>
+<td>Encore (A/B/C)</td>
+<td>2015</td>
+<td>Evertz EXE (SDVN, vidéo IP pré-2110)</td>
+<td>Evertz MAGNUM</td>
+<td>GV K-Frame 9 M/E</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2015/03/13/game-creek-video-launches-first-ip-based-routing-system-in-a-remote-production-facility/">SVG, 13 mars 2015</a></td>
+</tr>
+<tr>
+<td>Game Creek Video</td>
+<td>Peacock</td>
+<td>En service en février 2020</td>
+<td>« two Evertz EQX routers », presque saturés</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=175767">SVG, 2 février 2020</a></td>
+</tr>
+<tr>
+<td>Game Creek Video</td>
+<td>Bravo, Columbia ; Gridiron (même design)</td>
+<td>2019–2020</td>
+<td>ST 2110 ; Lawo V__matrix, 83 lames C100 par car, passerelle SDI 432 × 528 ; Arista 7508</td>
+<td>Lawo VSM</td>
+<td>GV K-Frame X (ST 2110)</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=169619">SVG, 25 septembre 2019</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=170939">SVG, 18 octobre 2019</a></td>
+</tr>
+<tr>
+<td>Game Creek Video</td>
+<td>79 (A/B) ; Varsity, Gameday, Moonshine</td>
+<td>Vers 2019 ; 2023</td>
+<td>79 : « Evertz infrastructure » IP ; les trois cars de 2023 : « Lawo/Arista routing cores »</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2024/02/26/svg-sit-down-game-creek-videos-jason-taubman-goes-inside-latest-truck-builds-tech-refurbs-evolution-of-gcv-anywhere/">SVG, 26 février 2024</a></td>
+</tr>
+<tr>
+<td>Game Creek Video</td>
+<td>Flagship (A/B/C)</td>
+<td>2025</td>
+<td>ST 2110 ; Arista 7512 et 7504 ; Lawo</td>
+<td>Lawo VSM avec Lawo HOME et .edge</td>
+<td>GV K-Frame SXP 192 × 96, entièrement IP</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=281946">SVG, 14 mai 2025</a></td>
+</tr>
+<tr>
+<td>Mobile TV Group</td>
+<td>44 FLEX (et 43 FLEX)</td>
+<td>2018</td>
+<td>Matrice Evertz 3G, 378 × 802 (baseband)</td>
+<td>n. p.</td>
+<td>GV Kayenne K-Frame X</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=150124">SVG, 28 novembre 2018</a></td>
+</tr>
+<tr>
+<td>Mobile TV Group</td>
+<td>45, 46 et 47 FLEX</td>
+<td>2019–2020</td>
+<td>ST 2110 ; routeur IP Evertz EXE 2.0, 384 ports</td>
+<td>Evertz Magnum</td>
+<td>GV Kayenne K-Frame X IP</td>
+<td><a target="_blank" rel="noopener" href="https://tvtechnology.com/show-news/mtvgs-45flex-demonstrates-the-meaning-of-end-to-end-ip-native">TV Technology, 26 avril 2019</a> ; <a target="_blank" rel="noopener" href="https://www.mixonline.com/the-wire/mobile-tv-group-launches-third-flex-ob-truck-with-calrec-artemis-and-ip-gateway-audio-over-ip-capabilities">Mix, 27 octobre 2020</a></td>
+</tr>
+<tr>
+<td>F&amp;F Productions</td>
+<td>GTX-18</td>
+<td>2017</td>
+<td>Evertz EQX 26, 560 × 1 134 SDI ; routeur audio EMR 192 × 192</td>
+<td>Evertz MAGNUM</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2017/08/30/ff-productions-launches-4k-hdr-capable-production-truck-with-evertz-infrastructure/">SVG, 30 août 2017</a></td>
+</tr>
+<tr>
+<td>F&amp;F Productions</td>
+<td>GTX-21 (A/B/C)</td>
+<td>2025</td>
+<td>ST 2110 ; cœur Cisco spine-leaf ; Grass Valley (Sirius 800 cité pour SDI, MADI et 12G)</td>
+<td>GV Orbit</td>
+<td>GV Kayenne</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2025/03/27/grass-valley-technology-allow-ffs-gtx-21-truck-to-make-leap-to-st-2110-ip/">SVG, 27 mars 2025</a></td>
+</tr>
+<tr>
+<td>Lyon Video</td>
+<td>Lyon 14</td>
+<td>2014</td>
+<td>Evertz EQX 3G, 460 × 902</td>
+<td>n. p.</td>
+<td>GV Kayenne Elite K-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2015/01/20/lyon-video-expands-company-bandwidth-with-lyon-14/">SVG, 20 janvier 2015</a></td>
+</tr>
+<tr>
+<td>Dome Productions (Canada)</td>
+<td>Vista</td>
+<td>2017</td>
+<td>Evertz EQX26 baseband, 558 × 576 en 3G</td>
+<td>Evertz MAGNUM</td>
+<td>GV K-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=128945">SVG, 3 novembre 2017</a></td>
+</tr>
+<tr>
+<td>Dome Productions</td>
+<td>Gateway</td>
+<td>2021</td>
+<td>ST 2110 ; routage IP Grass Valley (modèle n. p.)</td>
+<td>GV Orbit</td>
+<td>GV K-Frame X</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=195007">SVG, 8 décembre 2020</a></td>
+</tr>
+<tr>
+<td>Dome Productions</td>
+<td>Titan, Empire</td>
+<td>2023</td>
+<td>Evertz NATX, « all IP from the core »</td>
+<td>n. p.</td>
+<td>GV K-Frame XP</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2024/03/12/svg-sit-down-dome-productions-mary-ellen-carlyle-and-mike-johnson-on-new-1080p-hdr-trucks-the-promise-of-the-cloud-whats-ahead-in-2024/">SVG, 12 mars 2024</a></td>
+</tr>
+<tr>
+<td>Gravity Media (États-Unis)</td>
+<td>Aspen</td>
+<td>2023</td>
+<td>GV Sirius 840, 384 × 288, avec 12 entrées et 24 sorties MADI (baseband)</td>
+<td>n. p.</td>
+<td>GV Kayenne K-Frame X</td>
+<td><a target="_blank" rel="noopener" href="https://www.gravitymedia.com/wp-content/uploads/2023/04/Aspen-Brochure_2023.pdf">Brochure Aspen 2023</a></td>
+</tr>
+<tr>
+<td>Telegenic US (EMG)</td>
+<td>T5 « T-Wiz »</td>
+<td>Refonte 2017</td>
+<td>Riedel MediorNet décentralisé</td>
+<td>Lawo VSM</td>
+<td>SAM Kula</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/telegenic-selects-lawo-vsm-for-latest-ob-truck-upgrade/">SVG Europe, 18 août 2017</a></td>
+</tr>
+<tr>
+<td>Ross Production Services</td>
+<td>RPS9</td>
+<td>2024</td>
+<td>Ross Ultrix FR12, 288 × 288</td>
+<td>n. p.</td>
+<td>Ross Acuity (Ultrix Acuity)</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2024/02/13/ross-production-services-rps-unveils-new-ob-truck-for-larger-scale-sports-productions/">SVG, 13 février 2024</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s7-7">7.7 Australie et Moyen-Orient</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prestataire</th>
+<th>Unité</th>
+<th>Année</th>
+<th>Cœur vidéo</th>
+<th>Contrôle</th>
+<th>Mélangeur</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEP Australia</td>
+<td>HD11, HD12, HD13, HD14</td>
+<td>2015–2017</td>
+<td>Imagine IP3 hybride vidéo et audio (HD11 : 502 × 824)</td>
+<td>Lawo VSM et écran tactile conçu par NEP</td>
+<td>Sony MVS-8000X / XVS-8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-unveils-first-purpose-built-4k-truck-for-australia/">SVG Europe, 21 août 2015</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nep-australia-adopts-lawo-audio-and-control-across-four-new-ob-trucks/">SVG Europe, 25 octobre 2016</a></td>
+</tr>
+<tr>
+<td>NEP Australia</td>
+<td>Andrews Hubs (production centralisée, non un car)</td>
+<td>2018 ; extension 2023</td>
+<td>ST 2110 ; Lawo V_matrix sur deux Arista 7508R</td>
+<td>Lawo VSM au lancement ; TFC nommé en 2023</td>
+<td>Sony XVS8000</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2017/04/21/nep-australia-to-open-remi-hubs-in-sydney-melbourne-lawo-to-play-key-role/">SVG, 21 avril 2017</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=249612">SVG, 9 novembre 2023</a></td>
+</tr>
+<tr>
+<td>Gravity Media</td>
+<td>Centre de l'Open d'Australie (fly-away, non un car)</td>
+<td>Janvier 2026</td>
+<td>ST 2110 ; spine-leaf Cisco 9K ; pont SDI par processeurs Imagine Selenio</td>
+<td>n. p.</td>
+<td>GV Kahuna et K-Frame</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2026/01/28/how-gravity-media-supports-tennis-australias-ao-effort/">SVG, 28 janvier 2026</a></td>
+</tr>
+<tr>
+<td>Thoroughbred Racing Productions</td>
+<td>HDOB1</td>
+<td>2020</td>
+<td>Riedel MediorNet : MetroN et 21 MicroN</td>
+<td>n. p.</td>
+<td>n. p.</td>
+<td><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=192308">SVG, 8 octobre 2020</a></td>
+</tr>
+<tr>
+<td>Qatar Cultural and Heritage Events Center</td>
+<td>Van 4K-UHD de 9 m</td>
+<td>2020</td>
+<td>Ross Ultrix 12G</td>
+<td>Ross DashBoard et panneaux Ultritouch</td>
+<td>Ross Acuity</td>
+<td><a target="_blank" rel="noopener" href="https://broadcastprome.com/news/new-4k-uhd-ob-van-in-qatar-uses-ross-technology-to-streamline-workflow">BroadcastPro ME, 4 août 2020</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s7-8">7.8 Les tendances : IP en vitrine anglo-saxonne, baseband et MediorNet sur le continent</h3>
+<p><strong>Répartition SDI et IP.</strong> Dans l'inventaire NEP, Gravity, États-Unis, Canada et Royaume-Uni, sur les 53 lignes dont le type de cœur est identifiable, 33 sont IP (dont deux installations fixes ou fly-away et trois cœurs IP antérieurs à ST 2110), 3 hybrides IP et SDI, 14 baseband et 3 sur plate-forme distribuée ou intégrée (MediorNet, Ultrix) ; chaque ligne baseband date de 2018 ou avant, est une unité moyenne, ou est d'Europe continentale. Ce décompte porte sur des lignes de tableau, non sur des cars (il est fait sur le tableau de 62 lignes des notes de recherche, dont les tableaux ci-dessus sont une version regroupée), et sur un échantillon biaisé vers les vaisseaux amiraux médiatisés : il se présente comme « environ 60 % IP, 25 % baseband dans cet échantillon », non comme une statistique de marché, et la base installée contient certainement une part plus forte de cars baseband (inférence des notes). Dome déclare d'ailleurs exploiter encore beaucoup de cars HD SDI et s'attendre à ce que le SDI reste longtemps en usage <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2024/03/12/svg-sit-down-dome-productions-mary-ellen-carlyle-and-mike-johnson-on-new-1080p-hdr-trucks-the-promise-of-the-cloud-whats-ahead-in-2024/">SVG, 12 mars 2024</a></span>. En Europe continentale, les cars au cœur connu sont tous baseband ou MediorNet TDM de 2012 à 2017, mixtes de 2018 à 2021 (ST 2110 chez tpc, RTBF, ORF et dans diPloy ; baseband ou MediorNet chez Mediapro, EMG Nova, HD Broadcast, AMP, NVP et Studio Berlin), puis hybrides, 12G-SDI, MediorNet ou software-defined de 2022 à 2026 ; les cœurs vidéo entièrement ST 2110 se concentrent chez les radiodiffuseurs publics et dans diPloy (sources ligne par ligne dans les tableaux 7.1 à 7.4).</p>
+<p><strong>Matrices dominantes.</strong> Dans l'échantillon anglo-saxon, Evertz (EQX baseband, EXE et NATX en IP, NEXX 12G) et Lawo V__matrix sont les deux cœurs les plus fréquents, et Arista est le commutateur ST 2110 quasi universel, Cisco apparaissant chez Arena, F&amp;F GTX-21 et Gravity Media. Sur le continent, les cœurs se partagent en trois : matrices baseband classiques, famille Sirius le plus souvent (Mediapro OB52, Nova 103/104, NVP OB4 et OB7, TV Skyline Ü7, HD Broadcast UHD 2) ; réseaux décentralisés Riedel MediorNet (AMP MS12 et Millenium 3, 4, 6, DB Video Unit 10, Studio Berlin Ü10, les quatre unités RTVE) ; fabriques ST 2110 Arista avec bords Imagine SNP ou Lawo V__matrix. Aucun car Ross Ultrix, Nevion Virtuoso en cœur, Sony IP Live ou Evertz EXE sous Magnum n'est apparu dans l'échantillon continental ; c'est une absence de preuve due à une recherche tronquée, non une preuve d'absence.</p>
+<p><strong>Contrôle dominant.</strong> Lawo VSM est le système de contrôle tiers le plus fréquent des deux échantillons : 19 des 25 lignes continentales où le contrôleur est nommé, et NEP M15 et SS9, NEP Australia, NEP Belgium, Game Creek depuis 2019, Arena et Telegenic côté anglo-saxon. EVS Cerebrum est le standard du groupe EMG (Nova 103/104, diPloy) et apparaît chez NEP UK, Timeline UHD2 et Cloudbass OB9 ; Evertz Magnum équipe Mobile TV Group, Encore, F&amp;F GTX-18 et Dome Vista ; GV Orbit équipe Timeline UHD3, Dome Gateway, F&amp;F GTX-21 et l'environnement NVP pour LaLiga ; NEP fait évoluer son contrôle de VSM (États-Unis, Australie, Belgique) et de Cerebrum (Royaume-Uni) vers sa plate-forme TFC, montée sur chaque nouveau car américain depuis 2021, sans que son déploiement au Royaume-Uni soit documenté (sources ligne par ligne dans les tableaux ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2023/04/15/nep-u-s-broadcast-services-meets-demand-for-new-mobile-unit-connected-production-solutions/">SVG, 15 avril 2023</a>). Imagine Magellan SDN Orchestrator et SDNsquare n'apparaissent que comme contrôleurs de la couche réseau, sous VSM chez tpc ou sous Cerebrum chez EMG.</p>
+<p><strong>Mélangeurs.</strong> Grass Valley Kayenne ou K-Frame équipe chaque car NEP US, Game Creek, MTVG, Lyon, Dome et F&amp;F documenté ; les cars britanniques utilisent bien plus souvent des Kahuna (NEP UK, Timeline, Telegenic T25) ; Sony XVS domine chez NEP Australia, NEP Belgium, RTBF, AMP, France Télévisions et tpc. Un suivi du bus programme doit donc traiter au minimum K-Frame, Kahuna et Sony XVS (inférence des notes). Dans l'inventaire anglo-saxon, EVS est nommé dans toutes les lignes où un serveur de replay est publié, sauf le car Ross (Mira+) et le van qatari (Abekas) ; sur le continent, les environnements AMPP utilisent LiveTouch X (NVP) ou le replay AMPP (DMC).</p>
+<p><strong>Groupe EMG et Gravity Media.</strong> EMG et Gravity Media ont annoncé le 11 janvier 2024 la finalisation de leur accord de rapprochement, et le groupe s'est rebaptisé sous le logo Gravity Media selon un article du 23 juillet 2025, EMG restant une sous-marque ; il annonce 100 cars dans 11 pays <span class="cite"><a target="_blank" rel="noopener" href="https://www.gravitymedia.com/?p=26139">Gravity Media, 11 janvier 2024</a> ; <a target="_blank" rel="noopener" href="https://ibc.org/production/news/emg-gravity-media-rebrands-under-gravity-media-logo/22052">IBC, 23 juillet 2025</a></span>. NEP ne fait pas partie d'EMG : « United » était EMG Netherlands, NEP The Netherlands est une société distincte du groupe NEP (inférence des notes).</p>
+<h2 id="s8">8. Est-ce à la portée d'un car ? Grille par type de car</h2>
+<p>La grille croise les faits des sections 3 à 7 ; les appréciations de la dernière colonne sont des inférences, aucune source ne décrivant le transport du LTC EVS en canal audio embedded sur une sortie de matrice.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type de car</th>
+<th>Construction de la sortie EKO</th>
+<th>Entrée des trois LTC</th>
+<th>PGM Follow</th>
+<th>ATC sur la sortie</th>
+<th>Appréciation (inférence)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Matrice hybride baseband (EQX avec EMR, Sirius 800 AHP, NVISION 8500, Platinum IP3, UTAH-400 Series 2, Ultrix)</td>
+<td>Route mono du crosspoint audio vers une sortie embedder ; fonction native, sous réserve d'une destination embedder libre et licenciée <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1276714/Evertz-Emx3-Fr.html?page=115">Evertz EMX3-FR p. 115</a> ; <a target="_blank" rel="noopener" href="https://www.grassvalley.com/products/sirius_800_series/">GV Sirius 800</a></span></td>
+<td>MADI partout, AES3 sauf sur Ultrix et dans la couche audio de la NVISION 8500 ; analogique en châssis seulement chez Evertz EMR, Utah et Imagine ; sinon conversion externe ou console <span class="cite"><a target="_blank" rel="noopener" href="https://evertz.com/products/EMR-AA">Evertz EMR-AA</a> ; <a target="_blank" rel="noopener" href="https://www.grassvalley.com/docs/Manuals/routers/sirius_800/Sirius_800_User_Manual_Iss6_Rev6.pdf">Sirius 800, manuel</a></span></td>
+<td>Règles du système de contrôle sur le niveau vidéo (VSM, TallyMan), ou lien de bus dans le mélangeur <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/vsm-ip-broadcast-control-system/vsmstudio-user-manual/vsmstudio-gpio">Lawo VSM, GPIO</a></span></td>
+<td>Non confirmé pour ces familles ; hors de cette liste, seul le GV Vega (tableau 5.2) est documenté transparent à l'ancillaire <span class="cite"><a target="_blank" rel="noopener" href="https://gvcmsumb.grassvalley.com/media/pnrpxpoz/vega_ds-pub-3-0722a-en.pdf">datasheet Vega</a></span></td>
+<td>À portée : réglage d'ingénierie fait une fois, puis rappelé ; cas le plus favorable</td>
+</tr>
+<tr>
+<td>Réseau décentralisé Riedel MediorNet (AMP, DB Video, Studio Berlin, RTVE)</td>
+<td>Sortie MicroN avec embedder 16 canaux ; granularité mono non confirmée <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">datasheet MicroN</a></span></td>
+<td>Par l'un des deux ports MADI SFP, s'il est libre, avec convertisseur analogique vers MADI ; ni analogique ni AES3 listés <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/800-downloads/02-Brochures/EN/MicroN_Brochure.pdf">brochure MicroN</a></span></td>
+<td>Par le système de contrôle ; VSM chez DB Video et Studio Berlin, inconnu chez AMP <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/db-video-builds-flexible-new-belgian-ob-truck-around-mediornet-matrix/">SVG Europe, DB Video</a></span></td>
+<td>Non confirmé ; frame synchronizer et framestore présents sur toutes les sorties, resynchronisation permanente supposée (inférence) <span class="cite"><a target="_blank" rel="noopener" href="https://www.riedel.net/fileadmin/user_upload/11-products_neu/media-networks/micron/Hardware/06-210DB00EG-A10_Datasheet_MN-MicroN-2.pdf">datasheet MicroN</a></span></td>
+<td>Plausible, à confirmer avec Riedel et avec AMP ; intégration la moins typique</td>
+</tr>
+<tr>
+<td>Car ST 2110 avec passerelles SDI (V__matrix, .edge, IQUCP, SNP, Neuron, AT300)</td>
+<td>Shuffler audio de la passerelle sur une sortie SDI, documenté sur .edge et IQUCP, non précisé pour les autres passerelles citées ; pool de sorties SDI important sur les cars 2018–2020 d'après deux exemples (inférence) <span class="cite"><a target="_blank" rel="noopener" href="https://www.thebroadcastbridge.com/content/entry/20797/lawos-.edge-receives-audio-supercharge-and-provides-color-correction">The Broadcast Bridge, .edge</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/?p=169619">SVG, 25 septembre 2019</a></span></td>
+<td>Les LTC doivent d'abord exister en 2110-30 : entrée ligne de stagebox ou de console, ou boîtier AoIP ; la lame Lawo sait émettre en audio numérique un LTC qu'elle génère elle-même depuis PTP ou une autre source de temps, et non celui des serveurs EVS <span class="cite"><a target="_blank" rel="noopener" href="https://www.tvtechnology.com/equipment/lawo-updates-v_matrix-ip-platform">TV Technology, V__matrix</a></span></td>
+<td>Récepteurs -20 et -40 re-pointés ensemble, shuffler statique ; cinq couches de contrôle possibles (VSM, Magnum, GV Orbit, Cerebrum, TFC) <span class="cite"><a target="_blank" rel="noopener" href="https://pub.smpte.org/pub/st2110-40/st2110-40-2023.pdf">ST 2110-40</a></span></td>
+<td>Explicite chez Lawo seulement ; ailleurs libellé générique « ANC pass-through », non confirmé pour l'ATC <span class="cite"><a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">Nevion Virtuoso</a></span></td>
+<td>À portée ; l'audio fixe y est natif ; disponibilité réelle de sorties de passerelle non documentée</td>
+</tr>
+<tr>
+<td>Matrice compacte transparente (Videohub, KUMO)</td>
+<td>Impossible dans la matrice ; embedder externe entre la sortie dédiée et EKO <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/blackmagicvideohub/techspecs/W-VHS-23">Blackmagic Videohub</a></span></td>
+<td>Directement sur les entrées analogiques de l'embedder : 275 à 1 118 $ selon le modèle (vus le 2026-10-11) <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek BMD</a> ; <a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek AJA</a></span></td>
+<td>Par le système de contrôle s'il existe (VSM sur l'Unit 17 de NEP Belgium à matrice KUMO) <span class="cite"><a target="_blank" rel="noopener" href="https://www.nepgroup.be/trucklocations/unit-17">NEP Belgium, Unit 17</a></span></td>
+<td>Transparent dans la matrice pour KUMO ; risque reporté sur l'embedder, non confirmé <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-kumo-323212g/aja-kumo-3232-12g-compact-32x32-12g-sdi-router-for-4k-ultra-hd">Markertek KUMO</a></span></td>
+<td>À portée pour 249 € TTC (Blackmagic, à valider sur table) à environ 1 024 € HT (AJA 3G-AMA), le Lynx étant relevé à 760 £ HT ; ajoute un boîtier et une alimentation dans le seul chemin d'EKO</td>
+</tr>
+<tr>
+<td>Production software-defined (GV AMPP : vans REM-OB de NVP, cars DMC)</td>
+<td>Pas de panneau de sorties de matrice classique ; la sortie devrait être définie dans AMPP ou livrée en flux IP <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/nvp-deploys-unified-production-environment-for-laliga-built-on-grass-valley-ampp/">SVG Europe, NVP</a> ; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/broadcast-solutions-delivers-industry-first-software-defined-outside-broadcast-trucks-for-dmc/">SVG Europe, DMC</a></span></td>
+<td>Non documenté</td>
+<td>Non documenté (GV Orbit sur AMPP OS chez NVP)</td>
+<td>Non documenté</td>
+<td>Non établi ; minorité émergente, concentrée sur les productions de second rang et le remote</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pour le marché belge (Mediapro Belgium, RTBF, NEP Belgium, DB Video), une solution pilotée par VSM avec une sortie SDI à audio embedded convient aux cars documentés sous VSM (RTBF, Units 14 à 18 de NEP Belgium, DB Video), y compris les jumeaux ST 2110 de la RTBF et leurs 32 sorties baseband (inférence des notes) ; l'Unit 17, à matrice KUMO, demande un embedder externe, l'Unit 3 n'a pas de contrôle publié, et aucun car Mediapro Belgium n'est documenté. Mediapro et AMP représentent deux cas différents : le car Mediapro documenté est le cas courant (Sirius et VSM), AMP est le cas MediorNet à contrôleur inconnu, donc celui qui demande une confirmation directe (inférence des notes). Chez NEP, TFC étant propriétaire, une intégration « suivi du programme » passerait par l'ingénierie de NEP plutôt que par une API tierce publiée (inférence des notes).</p>
+<h2 id="s9">9. Limites et points à tester</h2>
+<p><strong>Préservation de l'ATC sur une sortie ré-embeddée.</strong> Seul le GV Vega affirme par écrit la transparence à tout l'ancillaire (HANC et VANC), sans nommer l'ATC ; FOR-A documente le passage de tout l'ANC avec Quiet Switch désactivé, et, côté passerelles, seul Lawo nomme l'ATC ; pour Evertz EQX et NEXX, Sirius 800 AHP (module 5949), l'embedder NVISION 8500, les modules mux Imagine, Utah, Ross Ultrix et Riedel MediorNet, aucun document ouvert ne dit ce que l'embedder fait des paquets ancillaires non audio. Le cas FOR-A montre qu'un seul réglage de menu restreint l'ANC transmis à une liste où l'ATC n'est pas cité, de sorte que sa suppression est probable mais non écrite (inférence des notes), et un embedder modulaire SD-SDI d'Evertz, le 7720AE4, expose le nettoyage du HANC comme un mode (« Clean and embed » retire tous les paquets HANC entrants) <span class="cite"><a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">FOR-A MFR-3100EX, fiche de spécifications</a> ; <a target="_blank" rel="noopener" href="https://evertz.com/resources/manuals/?id=61">Evertz 7720AE4, manuel</a></span>. L'ATC est par ailleurs fragile en traitement vidéo : « if the SDI stream is up, down, or cross-converted, the timecode will be stripped from the output stream » <span class="cite"><a target="_blank" rel="noopener" href="https://cobaltdigital.com/wp-content/uploads/2024/02/About-Timecodesv1.0.pdf">Cobalt Digital, About Timecodes v1.0</a></span>. Essai à faire par type de matrice : router le PGM vers la destination embedder, remplacer les canaux 14 à 16, vérifier à l'analyseur la présence et l'exactitude à l'image d'ATC_LTC et d'ATC_VITC, clean ou quiet switch activé puis désactivé. Si un embedder s'avère reconstruire le HANC, les trois canaux LTC audio deviennent la référence de repli, puisqu'ils sont régénérés par l'embedder lui-même (inférence des notes).</p>
+<p><strong>Latence du suivi et comportement en transition.</strong> Aucun constructeur ne publie de chiffre pour la chaîne « cut mélangeur, système de contrôle, suivi de la matrice ». La commutation d'une matrice synchrone s'exécute au point de commutation vertical suivant défini par SMPTE RP 168 (ligne 7 en 720p et 1080p, valeurs issues d'un tableau partiellement illisible, à vérifier avant citation), et le seul chiffre de passerelle IP trouvé est celui de Nevion : « Break-before-make switching (1-2 frames additional latency) » <span class="cite"><a target="_blank" rel="noopener" href="https://pub.smpte.org/doc/rp168/20090717-pub/rp0168-2009.pdf">SMPTE RP 168-2009</a> ; <a target="_blank" rel="noopener" href="https://nevion1dev.wpengine.com/wp-content/uploads/2022/09/Nevion_Virtuoso_SDI-IP-H25_R2236.pdf">Nevion Virtuoso SDI-IP-H25</a></span>. Le budget raisonné, non mesuré, est d'une à quelques images après le cut sur SDI, sans garantie de constance d'un cut à l'autre (inférence des notes). Conséquences à prévoir pour EKO, toutes des inférences des notes : autour de chaque cut, la sortie de suivi montre la source sortante pendant quelques images ; l'ATC embedded de la source réellement reçue reste auto-cohérent, et son saut à la commutation est la signature exploitable pour détecter le cut sur l'entrée ; pendant un mix ou un volet, un suivi piloté par le crosspoint du bus PGM ne coupe qu'une fois, à la bascule du bus, alors qu'un suivi piloté par le tally dérivé voit deux sources et exige une règle de priorité ; quand le PGM est une source interne (still store, ré-entrée de M/E, noir), il n'y a pas de source de matrice à suivre et une règle de maintien ou de repli doit être définie. À tester sur le car cible : cut, mix, volet, fondu au noir, still store, ré-entrée de M/E, changements de key seuls, et le moment où le mélangeur bascule le crosspoint du bus PGM (début ou fin de transition automatique), non trouvé dans la documentation accessible.</p>
+<p><strong>Comportement du LTC EVS en ralenti, jog et arrêt sur image.</strong> C'est le point le plus important à mesurer sur un serveur réel : débit mis à l'échelle de la vitesse, débit nominal avec numéros répétés, ou silence. Le manuel XT3 12.05 dit seulement que la sortie « corresponds to PGM1 » ; la génération VIA est non confirmée <span class="cite"><a target="_blank" rel="noopener" href="https://manualzilla.com/doc/5929487/369-m__hardware-technical-reference?page=67">EVS XT3, Hardware Technical Reference 12.05</a></span>. Un décodeur logiciel sait suivre les variations de vitesse et la marche arrière — dans libltc, « the speed is tracked dynamically » et un drapeau signale une trame lue en sens inverse — mais rien ne se décode à l'arrêt <span class="cite"><a target="_blank" rel="noopener" href="https://www.mankier.com/3/ltc.h">libltc</a></span>. À relever aussi : le niveau réel de sortie, la présence d'un offset continu, et le fait que la sortie LTC alimente déjà d'autres équipements : Pixotope déconseille le chaînage du LTC d'une machine à l'autre et recommande un amplificateur de distribution <span class="cite"><a target="_blank" rel="noopener" href="https://help.pixotope.com/phc/24.2/configure-timecode-ltc">Pixotope 24.2, Configure timecode</a></span>.</p>
+<p><strong>Décalage audio contre vidéo.</strong> Les retards publiés sont rares : une ou deux lignes pour le traitement hybride NVISION 8500 selon le constructeur, 1 ms ou moins sur les cartes FOR-A MFR-8MADIPO et MFR-8AESPO, jusqu'à une demi-seconde de délai variable par canal mono avec la licence Ross Ultrisync ; aucun chiffre pour Sirius AHP, le chemin TDM EQX, Platinum, Utah ni MediorNet <span class="cite"><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/products/miranda-ships-next-generation-nvision-8500-hybrid-embedded-audio-routers-integrated-au">communiqué Miranda</a> ; <a target="_blank" rel="noopener" href="https://www.for-a.com/products/mfr3100ex/items/MFR-3100EX-E-SPEC-E1R1.pdf">FOR-A MFR-3100EX, fiche de spécifications</a> ; <a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2020/05/08/ross-video-upgrades-ultrix-routing-av-processing-tool/">SVG, 8 mai 2020</a></span>. En IP, le transit ajoute un retard fixe (temps de paquet, tampon du récepteur, délai audio éventuel de la passerelle : 0 à 250 ms chez Sony) <span class="cite"><a target="_blank" rel="noopener" href="https://pro.sony/ue_US/products/ip-live-products/nxlk-ip51y">Sony NXLK-IP51Y</a></span>. Les options de frame sync (Sirius S8AHP-VF, Evertz +FSE18, Utah SDIMOD-400S, NEXX-IO-R-FK-FSE) ajoutent jusqu'à une image de retard vidéo et doivent être désactivées sur la destination EKO ; sur MediorNet, où la resynchronisation des sorties est permanente, le décalage doit être mesuré (inférences des notes). Trois règles en découlent, également inférées : le décalage doit être constant et calibré une fois par car ; les trois canaux LTC doivent partager exactement le même retard ; aucun SRC, gain, mix, V-fade ni « quiet switch » ne doit toucher ces canaux là où c'est évitable. Le réglage A/V OFFSET signé d'EKO est l'endroit naturel de cette calibration (inférence des notes).</p>
+<p><strong>Disponibilité d'une entrée analogique.</strong> Aucune n'est documentée en châssis sur Sirius 800, NVISION 8500, Ultrix, MicroN ni .edge ; elle est documentée chez Evertz (bloc de 48 paires stéréo en châssis EMR séparé), Utah (12 paires), Imagine (16 paires) et FOR-A (16 canaux) (sources en section 5). Le nombre d'entrées ligne libres sur les consoles et stageboxes, le passage par la console (risque de traitement, de mute, de rappel de snapshot, de re-patch entre productions) et le retard du chemin console restent à constater car par car ; aucune source n'a été collectée sur ce point.</p>
+<h2 id="s10">10. Questions à poser au chef de car</h2>
+<ul>
+<li>Quelle est la matrice vidéo (marque, modèle, taille) et quel système de contrôle la pilote : VSM, Cerebrum, Magnum, GV Orbit, TFC, hi, autre ?</li>
+<li>Reste-t-il une sortie « embedder » libre (carte AHP, hybride, mux, Ultrimix, sortie de passerelle ST 2110), et la licence correspondante est-elle active sur cette sortie ?</li>
+<li>Peut-on y composer une carte de 16 canaux mono sur mesure : son international sur les premiers canaux, trois sources discrètes sur 14, 15 et 16, sans toucher au PGM de diffusion ?</li>
+<li>Par où entrent trois signaux analogiques niveau ligne : entrées ligne libres sur la console ou une stagebox, carte analogique de matrice, entrée AES ou port MADI libre, réseau Dante ou AES67 relié à la matrice ? Le chemin peut-il rester sans traitement (ni dynamique, ni filtre, ni SRC, ni mute de snapshot) ?</li>
+<li>Quels serveurs EVS (XT3, XT4K, XT-VIA, XS-VIA, XT-GO) : chacun a-t-il une sortie LTC analogique, sur quel connecteur, et alimente-t-elle déjà d'autres équipements ?</li>
+<li>Que sort ce LTC en ralenti à 33 %, en jog, en marche arrière et à l'arrêt sur image ? Suit-il le PGM1 seulement ?</li>
+<li>Les sorties SDI des serveurs portent-elles l'ATC (HANC LTC, HANC VITC), et de quelle table (LTC ou User) ?</li>
+<li>La sortie embedder conserve-t-elle l'ATC de la source ? Le clean switch, le quiet switch et le frame sync peuvent-ils être désactivés sur cette destination ?</li>
+<li>Quel est le mélangeur (K-Frame, Kahuna, Sony XVS, Ross) et le système de contrôle en lit-il l'état de bus (crosspoints du bus PGM), ou seulement le tally ?</li>
+<li>Une règle « la destination EKO suit le crosspoint du bus PGM, sur le niveau vidéo et ANC seulement » est-elle réalisable dans le contrôle du car ? Avec quel retard constaté, et quel comportement pendant un mix, un volet, et sur une source interne (still store, ré-entrée de M/E, noir) ?</li>
+<li>À défaut, un bus Aux du mélangeur peut-il être lié au bus PGM (Bus Linking, Internal Bus Link, Auto Follow), et cette sortie Aux laisse-t-elle passer l'ancillaire de la source ?</li>
+<li>Quel décalage audio contre vidéo mesure-t-on sur la destination EKO, et est-il stable d'une production à l'autre ?</li>
+</ul>
+<h2 id="s11">11. Lacunes de cette recherche</h2>
+<ul>
+<li><strong>Budget de recherche web épuisé.</strong> Le budget partagé de recherches s'est épuisé en cours de route ; plusieurs volets sont donc incomplets, et les absences ci-dessous sont des absences de recherche, non des constats.</li>
+<li><strong>Prix des modules d'entrée analogique de matrice : aucun.</strong> Aucun prix public pour les cartes analogiques, MADI, AES, hybrides, AHP ou mux ni pour les licences audio d'Evertz, Grass Valley, Imagine, Utah, Riedel, Lawo, Calrec ou Stagetec ; le soupçon de surcoût de l'analogique n'est ni confirmé ni réfuté. Aucun prix non plus pour les passerelles IP, pour les licences Ross (Ultrimix-Dante, Ultrisync), ni pour les inséreurs LTC vers ATC.</li>
+<li><strong>Convertisseurs non chiffrés.</strong> Behringer Ultramatch Pro SRC2496, ART, RME, Ferrofish, Focusrite RedNet, DirectOut, Glensound, Sonifex AVN, Decimator, Bluebell, embedders Ross openGear et Evertz, cartes Axon/EVS Synapse ; aucune annonce B&amp;H, Thomann.de, CVP ou Sweetwater n'a pu être ouverte. Aucun prix en euros pour les matrices.</li>
+<li><strong>EVS, génération actuelle.</strong> Les manuels Multicam 20.1 (XT-VIA, XS-VIA, XT-GO, LSM-VIA) n'ont pas pu être ouverts ; les énoncés EVS viennent de manuels XT Series, XT3, XT4K et Multicam de 2005 à 2021 lus sur des miroirs tiers. Sortie LTC des serveurs VIA, comportement hors vitesse nominale, valeurs d'insertion ATC en sortie : non confirmés.</li>
+<li><strong>ATC sur sorties ré-embeddées.</strong> Aucune déclaration faisant autorité pour Evertz EQX et NEXX, Sirius 800 AHP, NVISION 8500, Imagine, Utah, Ross Ultrix et Riedel MediorNet ; les sections de manuels Sirius et NV8500 qui y répondraient n'ont pu être lues au-delà du sommaire. Côté passerelles, seul Lawo nomme l'ATC.</li>
+<li><strong>Fonction de suivi.</strong> Manuels utilisateur non accessibles pour EVS Cerebrum, Evertz MAGNUM, Imagine Magellan, BFE KSC, hi, Sony LEO et VideoIPath ; manuel K-Frame et guide GV Orbit lisibles seulement sur leurs premiers chapitres ; manuels Sony XVS limités aux sommaires. Aucune mesure publiée de la latence de suivi ; jeux de messages de K-Frame Ethernet Tally, du tally série Sony et de DYVI PixTally non publics. « TSL Flex control » : aucune documentation trouvée sous ce nom.</li>
+<li><strong>Pratique audio des cars.</strong> Aucune source sur les configurations d'E/S types Calrec, Lawo, Stagetec ou Riedel en car, ni sur le nombre d'entrées ligne libres ; aucune mesure du décodage LTC après transport AES67 ou 2110-30, ni à travers processeurs de loudness ou Dolby E.</li>
+<li><strong>Prestataires non étudiés.</strong> VRT, Videohouse/EMG Belgium, RAI, prestataires de Sky Italia, Gravity Media Italy et France, Overon, TSA, NEP Nordics, Germany, Ireland et Italy, SVT, NRK, DR, YLE, prestataires polonais et tchèques, WDR, SWR, NDR, MDR, TopVision, Sportcast, Boîte à Outils Broadcast, Atlantic Media, Televideo, Program Productions, Alliance Productions, Asie, grands acteurs du Golfe. Les fiches de Game Creek Video et de Mobile TV Group sur leurs propres sites n'ont pas pu être chargées.</li>
+<li><strong>ZDF documenté par un seul car de l'ère HD.</strong> MP-6 (NVision 8500, VSM) ; rien sur les cars actuels de ZDF.</li>
+<li><strong>Mediapro et AMP.</strong> Matrice et contrôle non publiés pour OB90, OB33, OB39, OB40, pour Medialuso et Mediapro Belgium ; système de contrôle d'AMP non publié, aucun car AMP postérieur à 2021 trouvé.</li>
+<li><strong>Parts de marché.</strong> Aucune étude de parts de marché des matrices ou des systèmes de contrôle en car ; les « dominances » sont des décomptes internes à un inventaire biaisé vers les cars médiatisés, et le décompte du Gearbase SVG est une lecture approximative d'un tableau PDF. Statut en service en octobre 2026 non vérifié pour la plupart des unités antérieures à 2020.</li>
+<li><strong>Familles de matrices non étudiées.</strong> PESA, Lynx, Nevion Sublime/VikinX, Kramer, Lightware, Datavideo, Sierra Video ; FOR-A MFR-6100, MFR-5100EX et MFR-1000 ; spécifications de Trinix NXT et de Xenon ; Evertz 670IPG et SCORPION, GV IQMIX et IQAMD, Lawo HOME en tant que tel.</li>
+</ul>
+    <p class="note">Toutes les sources sont en lien dans le rapport complet. Prix relevés le 11 octobre 2026.</p>
+  </main>
+</div>
+<footer class="foot">Kreativ Labs · EKO · Document interne de R&D, non destiné à la diffusion publique. · info@kreativlabs.tv</footer>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

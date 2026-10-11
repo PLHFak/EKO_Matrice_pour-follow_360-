@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The router at EKO&#x27;s service · EKO Matrice Follow</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('eko-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah v" d="M2 1L8 5L2 9"/></marker><marker id="ah-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah a" d="M2 1L8 5L2 9"/></marker><marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah l" d="M2 1L8 5L2 9"/></marker><marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah c" d="M2 1L8 5L2 9"/></marker><marker id="ah-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah n" d="M2 1L8 5L2 9"/></marker></defs></svg>
+<div class="page summary">
+<header class="top">
+  <a class="brand" href="index.html"><span class="brand-eko">EKO</span><span class="brand-sub">Kreativ Labs</span></a>
+  <nav class="pages"><a href="index.html" aria-current="page">Summary</a><a href="report.html">Full report</a></nav>
+  <div class="tools">
+    <a class="tool lang" href="../index.html" hreflang="fr" title="Français">FR</a>
+    <button class="tool" id="theme" type="button" title="Light or dark theme" aria-label="Light or dark theme"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
+    <button class="tool" id="print" type="button" title="Print or save as PDF" aria-label="Print or save as PDF">PDF</button>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-in">
+    <p class="eyebrow">R&D dossier · v0.1 · 11 October 2026 · Internal document</p>
+    <h1>The router at EKO's service</h1>
+    <p class="lede">Getting from the truck's router one dedicated output carrying the PGM, the international sound and the LTC of the three LSMs as audio, without touching the broadcast PGM: how to do it, with which routers, at what cost and within which limits.</p>
+  </div>
+</section>
+<div class="layout">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <a class="l2" href="#p1">Key points</a>
+    <a class="l2" href="#p2">The signal requested</a>
+    <a class="l2" href="#p3">Three ways to build it</a>
+    <a class="l2" href="#p4">Following the programme bus</a>
+    <a class="l2" href="#p5">Getting the three LTCs in</a>
+    <a class="l2" href="#p6">Within reach of which truck?</a>
+    <a class="l2" href="#p7">What the providers have in their trucks</a>
+    <a class="l2" href="#p8">What to test first</a>
+    <a class="l2" href="#p9">Limits of this research</a>
+  </nav>
+  <main>
+
+<h2 id="p1">Key points</h2>
+<ul>
+<li><strong>Feasible on most documented trucks, guaranteed nowhere without a test.</strong> Embedding is done output by output: the PGM going to air is not modified.</li>
+<li><strong>Three practical conditions</strong>: a free, licensed "embedder" output, an input for three analogue LTC signals, and a follow rule if PGM Follow is wanted.</li>
+<li><strong>LTC conversion</strong>: from €249 incl. VAT to about €1,024 excl. VAT for an external embedder with four analogue inputs (prices seen on 11 October 2026).</li>
+<li><strong>Analogue input card in the router</strong>: no public price found. The suspicion that it costs more than a digital input is neither confirmed nor refuted. Sirius 800, NVISION 8500, Ultrix, MicroN and .edge have no documented analogue input.</li>
+<li><strong>To test first</strong>: whether ATC survives on the re-embedded output, what the EVS servers' LTC does away from nominal speed, and the delay of the follow.</li>
+</ul>
+<h2 id="p2">The signal requested</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 766 326" role="img"><title>The signal EKO asks for</title><desc>One dedicated router destination combines video and its ancillary data, the international sound and the LTC of the three LSMs on channels 14, 15 and 16.</desc><rect class="bx v" x="20" y="20" width="250" height="54" rx="6"/><text class="t v" x="145.0" y="37.0">Video and ancillary (ATC)</text><text class="s v" x="145.0" y="57.0">follows the on-air source</text><rect class="bx a" x="20" y="92" width="250" height="54" rx="6"/><text class="t a" x="145.0" y="109.0">International sound</text><text class="s a" x="145.0" y="129.0">fixed</text><rect class="bx l" x="20" y="164" width="250" height="54" rx="6"/><text class="t l" x="145.0" y="181.0">LTC of LSM 1, 2, 3</text><text class="s l" x="145.0" y="201.0">fixed, carried as audio</text><rect class="bx " x="350" y="92" width="260" height="54" rx="6"/><text class="t " x="480.0" y="109.0">Dedicated router destination</text><text class="s " x="480.0" y="129.0">composed on this output only</text><rect class="bx eko" x="690" y="92" width="56" height="54" rx="6"/><text class="t eko" x="718.0" y="119.0">EKO</text><path class="ln v" d="M270 47 H310 V104 H346" marker-end="url(#ah-v)"/><path class="ln a" d="M270 119 H346" marker-end="url(#ah-a)"/><path class="ln l" d="M270 191 H310 V134 H346" marker-end="url(#ah-l)"/><path class="ln n" d="M610 119 H686" marker-end="url(#ah-n)"/><text class="s lb" x="60" y="250" style="text-anchor:start">The 16 embedded audio channels of this output</text><rect class="bx cell a" x="60" y="264" width="40" height="30" rx="3"/><text class="s a" x="80" y="279">1</text><rect class="bx cell a" x="100" y="264" width="40" height="30" rx="3"/><text class="s a" x="120" y="279">2</text><rect class="bx cell " x="140" y="264" width="40" height="30" rx="3"/><text class="s " x="160" y="279">3</text><rect class="bx cell " x="180" y="264" width="40" height="30" rx="3"/><text class="s " x="200" y="279">4</text><rect class="bx cell " x="220" y="264" width="40" height="30" rx="3"/><text class="s " x="240" y="279">5</text><rect class="bx cell " x="260" y="264" width="40" height="30" rx="3"/><text class="s " x="280" y="279">6</text><rect class="bx cell " x="300" y="264" width="40" height="30" rx="3"/><text class="s " x="320" y="279">7</text><rect class="bx cell " x="340" y="264" width="40" height="30" rx="3"/><text class="s " x="360" y="279">8</text><rect class="bx cell " x="380" y="264" width="40" height="30" rx="3"/><text class="s " x="400" y="279">9</text><rect class="bx cell " x="420" y="264" width="40" height="30" rx="3"/><text class="s " x="440" y="279">10</text><rect class="bx cell " x="460" y="264" width="40" height="30" rx="3"/><text class="s " x="480" y="279">11</text><rect class="bx cell " x="500" y="264" width="40" height="30" rx="3"/><text class="s " x="520" y="279">12</text><rect class="bx cell " x="540" y="264" width="40" height="30" rx="3"/><text class="s " x="560" y="279">13</text><rect class="bx cell l" x="580" y="264" width="40" height="30" rx="3"/><text class="s l" x="600" y="279">14</text><rect class="bx cell l" x="620" y="264" width="40" height="30" rx="3"/><text class="s l" x="640" y="279">15</text><rect class="bx cell l" x="660" y="264" width="40" height="30" rx="3"/><text class="s l" x="680" y="279">16</text><text class="s lb" x="100" y="310" style="text-anchor:middle">int. sound</text><text class="s lb" x="360" y="310" style="text-anchor:middle">free or passed through</text><text class="s lb" x="640" y="310" style="text-anchor:middle">LTC 1 · 2 · 3</text></svg><figcaption>One destination, three independent essences: video follows, international sound and LTC stay fixed.</figcaption></figure>
+<p>The router handles three essences separately:</p>
+<ul>
+<li>video and its ancillary data, which follow the source;</li>
+<li>the international sound, fixed;</li>
+<li>the three LTCs, fixed, carried as ordinary PCM audio channels.</li>
+</ul>
+<p>Detail and sources: <a href="report.html#s2">report, section 2</a>.</p>
+<h2 id="p3">Three ways to build it</h2>
+<h3>Baseband hybrid router</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 364" role="img"><title>Baseband hybrid router</title><desc>The audio crosspoint routes the international sound and the three LTCs, once digitised, to an embedder output card. The broadcast PGM leaves through a standard output, unprocessed.</desc><rect class="bx v" x="20" y="20" width="170" height="54" rx="6"/><text class="t v" x="105.0" y="37.0">SDI sources</text><text class="s v" x="105.0" y="57.0">cameras, LSM</text><rect class="bx " x="400" y="20" width="180" height="54" rx="6"/><text class="t " x="490.0" y="37.0">Video crosspoint</text><text class="s " x="490.0" y="57.0">video and ancillary</text><rect class="bx " x="600" y="20" width="170" height="54" rx="6"/><text class="t " x="685.0" y="37.0">Standard output</text><text class="s " x="685.0" y="57.0">broadcast PGM, untouched</text><rect class="bx " x="600" y="120" width="170" height="54" rx="6"/><text class="t " x="685.0" y="137.0">Embedder output</text><text class="s " x="685.0" y="157.0">16 mono channels</text><rect class="bx eko" x="796" y="120" width="56" height="54" rx="6"/><text class="t eko" x="824.0" y="147.0">EKO</text><rect class="bx " x="400" y="220" width="180" height="54" rx="6"/><text class="t " x="490.0" y="237.0">Audio TDM crosspoint</text><text class="s " x="490.0" y="257.0">mono-level routing</text><rect class="bx a" x="20" y="184" width="170" height="54" rx="6"/><text class="t a" x="105.0" y="201.0">International sound</text><text class="s a" x="105.0" y="221.0">console, as MADI</text><rect class="bx l" x="20" y="262" width="170" height="54" rx="6"/><text class="t l" x="105.0" y="279.0">LTC of LSM 1, 2, 3</text><text class="s l" x="105.0" y="299.0">analogue outputs</text><rect class="bx " x="220" y="262" width="150" height="54" rx="6"/><text class="t " x="295.0" y="279.0">A/D conversion</text><text class="s " x="295.0" y="299.0">to MADI or AES</text><path class="ln v" d="M190 47 H396" marker-end="url(#ah-v)"/><path class="ln v" d="M580 47 H596" marker-end="url(#ah-v)"/><path class="ln v" d="M490 74 V147 H596" marker-end="url(#ah-v)"/><path class="ln n" d="M770 147 H792" marker-end="url(#ah-n)"/><path class="ln v" d="M770 47 H852" marker-end="url(#ah-v)"/><text class="s lb" x="812" y="32" style="text-anchor:middle">broadcast</text><path class="ln a" d="M190 211 H300 V238 H396" marker-end="url(#ah-a)"/><path class="ln l" d="M190 289 H216" marker-end="url(#ah-l)"/><path class="ln l" d="M370 289 H385 V256 H396" marker-end="url(#ah-l)"/><path class="ln a" d="M580 247 H685 V178" marker-end="url(#ah-a)"/><path class="ln v" d="M20 346 H48"/><text class="s lb" x="56" y="346" style="text-anchor:start">Video and ancillary</text><path class="ln a" d="M209 346 H237"/><text class="s lb" x="245" y="346" style="text-anchor:start">Audio</text><path class="ln l" d="M306 346 H334"/><text class="s lb" x="342" y="346" style="text-anchor:start">LTC</text></svg><figcaption>Hybrid router: the composite is built on an embedder output card; the broadcast output is unprocessed.</figcaption></figure>
+<ul>
+<li><strong>Principle</strong>: a mono route from the audio crosspoint to an embedder output card, 16 channels per output.</li>
+<li><strong>Families</strong>: Evertz EQX and NEXX, Grass Valley Sirius 800 (AHP modules) and NVISION 8500 Hybrid, Imagine Platinum IP3, Utah UTAH-400 Series 2, Ross Ultrix (Ultrimix).</li>
+<li><strong>Hard point</strong>: embedder outputs are usually a subset of the outputs, under licence. The question on site is "is there a free embedder destination?".</li>
+<li><strong>Implementation</strong>: an engineering setup done once, then stored as a salvo or a virtual destination.</li>
+</ul>
+<h3>ST 2110 truck</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 786 310" role="img"><title>ST 2110 truck</title><desc>The gateway rebuilds the SDI output from independent receivers. Control re-points video and ancillary; the audio shuffler stays fixed on the international sound and the three LTCs.</desc><rect class="bx v" x="20" y="20" width="230" height="54" rx="6"/><text class="t v" x="135.0" y="37.0">On-air source</text><text class="s v" x="135.0" y="57.0">-20 video and -40 ANC flows</text><rect class="bx a" x="20" y="114" width="230" height="54" rx="6"/><text class="t a" x="135.0" y="131.0">International sound</text><text class="s a" x="135.0" y="151.0">-30 flow</text><rect class="bx l" x="20" y="208" width="230" height="54" rx="6"/><text class="t l" x="135.0" y="225.0">LTC of LSM 1, 2, 3</text><text class="s l" x="135.0" y="245.0">line inputs, then -30 flow</text><rect class="bx " x="340" y="10" width="280" height="54" rx="6"/><text class="t " x="480.0" y="27.0">Control system</text><text class="s " x="480.0" y="47.0">re-points -20 and -40 together</text><rect class="bx " x="340" y="106" width="280" height="84" rx="6"/><text class="t " x="480.0" y="128.0">ST 2110 to SDI gateway</text><text class="s " x="480.0" y="148.0">-20, -30 and -40 receivers</text><text class="s " x="480.0" y="167.0">16-channel mono shuffler</text><rect class="bx eko" x="710" y="121" width="56" height="54" rx="6"/><text class="t eko" x="738.0" y="148.0">EKO</text><path class="ln v" d="M250 47 H295 V126 H336" marker-end="url(#ah-v)"/><path class="ln a" d="M250 141 H280 V148 H336" marker-end="url(#ah-a)"/><path class="ln l" d="M250 235 H295 V170 H336" marker-end="url(#ah-l)"/><path class="ln c" d="M480 64 V102" marker-end="url(#ah-c)"/><path class="ln n" d="M620 148 H706" marker-end="url(#ah-n)"/><path class="ln v" d="M20 292 H48"/><text class="s lb" x="56" y="292" style="text-anchor:start">Video and ancillary</text><path class="ln a" d="M209 292 H237"/><text class="s lb" x="245" y="292" style="text-anchor:start">Audio</text><path class="ln l" d="M306 292 H334"/><text class="s lb" x="342" y="292" style="text-anchor:start">LTC</text><path class="ln c" d="M389 292 H417"/><text class="s lb" x="425" y="292" style="text-anchor:start">Control</text></svg><figcaption>ST 2110: the SDI output is rebuilt in the gateway; fixed audio is a standard breakaway there.</figcaption></figure>
+<ul>
+<li><strong>Principle</strong>: the gateway rebuilds the SDI output from independent receivers. Fixed audio while video follows is a standard breakaway there.</li>
+<li><strong>Documented shuffler</strong>: Lawo .edge, Grass Valley IQUCP25, Nevion Virtuoso, Sony with the NXLL-AM50 option.</li>
+<li><strong>Hard point</strong>: the three LTCs must first exist in a 2110-30 flow, and the -40 receiver must follow the video receiver to keep the source's ATC.</li>
+</ul>
+<h3>Transparent router and external embedder</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 232" role="img"><title>Transparent router and external embedder</title><desc>The router passes signals unprocessed. An external embedder between the dedicated output and EKO inserts the three LTCs. The broadcast PGM is not involved.</desc><rect class="bx v" x="20" y="20" width="170" height="54" rx="6"/><text class="t v" x="105.0" y="37.0">SDI sources</text><text class="s v" x="105.0" y="57.0">cameras, LSM</text><rect class="bx " x="250" y="20" width="200" height="54" rx="6"/><text class="t " x="350.0" y="37.0">Transparent router</text><text class="s " x="350.0" y="57.0">Videohub, KUMO</text><rect class="bx l" x="20" y="130" width="170" height="54" rx="6"/><text class="t l" x="105.0" y="147.0">LTC of LSM 1, 2, 3</text><text class="s l" x="105.0" y="167.0">analogue outputs</text><rect class="bx " x="520" y="130" width="200" height="54" rx="6"/><text class="t " x="620.0" y="147.0">External embedder</text><text class="s " x="620.0" y="167.0">4 analogue inputs</text><rect class="bx eko" x="790" y="130" width="56" height="54" rx="6"/><text class="t eko" x="818.0" y="157.0">EKO</text><path class="ln v" d="M190 47 H246" marker-end="url(#ah-v)"/><path class="ln v" d="M450 47 H852" marker-end="url(#ah-v)"/><text class="s lb" x="650" y="33" style="text-anchor:middle">broadcast PGM, untouched</text><path class="ln v" d="M350 74 V104 H620 V126" marker-end="url(#ah-v)"/><text class="s lb" x="485" y="92" style="text-anchor:middle">dedicated output</text><path class="ln l" d="M190 157 H516" marker-end="url(#ah-l)"/><path class="ln n" d="M720 157 H786" marker-end="url(#ah-n)"/><path class="ln v" d="M20 214 H48"/><text class="s lb" x="56" y="214" style="text-anchor:start">Video and ancillary</text><path class="ln l" d="M209 214 H237"/><text class="s lb" x="245" y="214" style="text-anchor:start">LTC</text></svg><figcaption>Transparent router: an external embedder in front of EKO inserts the three LTCs.</figcaption></figure>
+<ul>
+<li><strong>Principle</strong>: the router cannot embed (Blackmagic Videohub, AJA KUMO). An embedder in front of EKO inserts the three LTCs.</li>
+<li><strong>Advantage</strong>: the solution is identical in every truck and can ship with the machine.</li>
+<li><strong>Hard point</strong>: only the AJA 3G-AMA and the Lynx PDM 1383 document the choice of the channels written. For the Blackmagic unit, this needs a bench check.</li>
+</ul>
+<p>Detail and sources: <a href="report.html#s3">report, section 3</a> and <a href="report.html#s5">section 5</a> for the router tables.</p>
+<h2 id="p4">Following the programme bus</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 234" role="img"><title>Programme-bus follow by the control system</title><desc>The control system reads the vision mixer&#x27;s PGM bus status and drives the router on the video and ancillary level only. The destination&#x27;s audio stays fixed.</desc><rect class="bx " x="20" y="26" width="220" height="64" rx="6"/><text class="t " x="130.0" y="48.0">Vision mixer</text><text class="s " x="130.0" y="68.0">PGM bus status</text><rect class="bx " x="320" y="20" width="240" height="76" rx="6"/><text class="t " x="440.0" y="38.0">Control system</text><text class="s " x="440.0" y="58.0">if PGM bus = source n,</text><text class="s " x="440.0" y="77.0">route source n</text><rect class="bx " x="640" y="26" width="200" height="64" rx="6"/><text class="t " x="740.0" y="48.0">Router</text><text class="s " x="740.0" y="68.0">video and ANC level only</text><rect class="bx eko" x="640" y="140" width="200" height="46" rx="6"/><text class="t eko" x="740.0" y="163.0">“EKO” destination</text><rect class="bx a" x="320" y="140" width="240" height="46" rx="6"/><text class="t a" x="440.0" y="163.0">Destination audio: fixed</text><path class="ln c" d="M240 58 H316" marker-end="url(#ah-c)"/><path class="ln c" d="M560 58 H636" marker-end="url(#ah-c)"/><path class="ln v" d="M740 90 V136" marker-end="url(#ah-v)"/><path class="ln a" d="M560 163 H636" marker-end="url(#ah-a)"/><path class="ln c" d="M20 216 H48"/><text class="s lb" x="56" y="216" style="text-anchor:start">Control</text><path class="ln v" d="M130 216 H158"/><text class="s lb" x="166" y="216" style="text-anchor:start">Video and ancillary</text><path class="ln a" d="M319 216 H347"/><text class="s lb" x="355" y="216" style="text-anchor:start">Audio</text></svg><figcaption>PGM Follow: rules read the PGM bus status and switch the video and ancillary level only.</figcaption></figure>
+<ul>
+<li><strong>No function named "PGM Follow"</strong> was found in the public documentation of the control systems.</li>
+<li><strong>Through control</strong>: rules of the form "if the PGM bus is on source n, route source n", limited to the video and ancillary level. The documented building blocks are the GPIO and crosspoint logic of Lawo VSM and the "Virtual Tally Router" of TSL TallyMan.</li>
+<li><strong>Inside the vision mixer</strong>: Bus Linking (K-Frame) or Auto Follow (Ross Acuity). Timing is tighter, but an Aux output is a processed output: ancillary pass-through is documented only at Ross.</li>
+<li><strong>Bus status, not tally</strong>: tally lights several sources during a mix. The rule must read the PGM bus crosspoint.</li>
+<li><strong>Delay</strong>: no manufacturer publishes a figure. The reasoned budget is one to a few frames.</li>
+</ul>
+<p>Detail and sources: <a href="report.html#s3-4">report, sections 3.4 and 3.5</a> and <a href="report.html#s6">section 6</a>.</p>
+<h2 id="p5">Getting the three LTCs in</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Price seen on 11 October 2026</th>
+<th>Remark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free line inputs on the console or a stagebox</td>
+<td>0</td>
+<td>Unverified assumption; risk of audio processing on the path</td>
+</tr>
+<tr>
+<td>Blackmagic Mini Converter Audio to SDI, 4 inputs</td>
+<td>$275 <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek</a></span>; €249 incl. VAT <span class="cite"><a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann</a></span></td>
+<td>Channels written not confirmed; 3G-SDI only</td>
+</tr>
+<tr>
+<td>Lynx Yellobrik PDM 1383, 4 inputs</td>
+<td>$885.40 <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/lnx-pdm-1383/lynx-technik-yellobrik-pdm-1383-analog-audio-embedder-de-embedder">Markertek</a></span>; £760 excl. VAT <span class="cite"><a target="_blank" rel="noopener" href="https://canford.co.uk/LYNX-YELLOBRIK-AUDIO-EMBEDDERS-AND-DE-EMBEDDERS">Canford</a></span></td>
+<td>Group selection documented</td>
+</tr>
+<tr>
+<td>AJA 3G-AMA, 4 inputs</td>
+<td>$1,118 <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek</a></span>; €1,023.97 excl. VAT <span class="cite"><a target="_blank" rel="noopener" href="https://en.vocas.nl/aja-3g-ama-3g-sdi-analog-audio-embed-disembed.html">Vocas</a></span></td>
+<td>Per-pair selection documented</td>
+</tr>
+<tr>
+<td>Audinate Dante AVIO, 2 inputs</td>
+<td>$229 each <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-adpdai-au2x0/audinate-adp-dai-au-2x0-dante-avio-analog-input-adapter-with-rj45-and-2-xlr-female-2-channel-version">Markertek</a></span></td>
+<td>Two units; useful if the truck's Dante already reaches the router</td>
+</tr>
+<tr>
+<td>Analogue input card in the router</td>
+<td>No public price</td>
+<td>Documented at Evertz (EMR frame), Utah, Imagine and FOR-A; rarely justified for three signals</td>
+</tr>
+</tbody>
+</table></div>
+<p>LTC travels safely on a linear 48 kHz PCM channel, provided the path stays unprocessed: no dynamics, no filter, no sample-rate conversion.</p>
+<p>Detail and sources: <a href="report.html#s4">report, section 4</a>.</p>
+<h2 id="p6">Within reach of which truck?</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type of truck</th>
+<th>Assessment</th>
+<th>Hard point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseband hybrid router</td>
+<td>Within reach; most favourable case</td>
+<td>A free, licensed embedder output</td>
+</tr>
+<tr>
+<td>Riedel MediorNet network</td>
+<td>Plausible, to be confirmed with Riedel</td>
+<td>Mono granularity and ancillary handling not confirmed; neither analogue nor AES3 listed on MicroN, entry through MADI</td>
+</tr>
+<tr>
+<td>ST 2110 with SDI gateways</td>
+<td>Within reach</td>
+<td>LTC to be brought into 2110-30; a free gateway output</td>
+</tr>
+<tr>
+<td>Transparent router (Videohub, KUMO)</td>
+<td>Within reach with an external embedder</td>
+<td>One more box in EKO's path</td>
+</tr>
+<tr>
+<td>Software-defined production (GV AMPP)</td>
+<td>Not established</td>
+<td>No classic router output</td>
+</tr>
+</tbody>
+</table></div>
+<p>Detail and sources: <a href="report.html#s8">report, section 8</a>.</p>
+<h2 id="p7">What the providers have in their trucks</h2>
+<ul>
+<li><strong>Mediapro</strong>: OB52 (2019) runs a SAM Sirius 830 under Lawo VSM. Router and control are not published for the Spanish UHD units or for Mediapro Belgium.</li>
+<li><strong>AMP Visual TV</strong>: no classic router, but a decentralised Riedel MediorNet network (68 MicroN on Millenium Signature 12). The control system is not published.</li>
+<li><strong>EMG / Gravity Media</strong>: Nova 103 and 104 run Grass Valley Sirius 840 under EVS Cerebrum; the diPloy platform is ST 2110.</li>
+<li><strong>NEP</strong>: Lawo V__matrix IP cores on US, Australian and Belgian trucks; proprietary TFC control in the United States; NEP Belgium Units 14 to 18 under Lawo VSM.</li>
+<li><strong>France Télévisions</strong>: UM1 and UM2 are hybrid SDI and ST 2110 (Sony XVS, Imagine SNP gateways). Router and control are not published.</li>
+<li><strong>RTBF</strong>: the 2020 twins are full ST 2110 (Arista, Lawo V__matrix, VSM) and keep 32 baseband outputs.</li>
+<li><strong>ZDF</strong>: only MP-6, from the HD era, is documented (NVision 8500 under VSM). Nothing was found on the current trucks.</li>
+<li><strong>Trend</strong>: in continental Europe, baseband (mostly Sirius), MediorNet or hybrid, under Lawo VSM in 19 of the 25 inventory rows where control is named. In the English-speaking sample, 33 rows out of 53 are IP. These counts cover publicised trucks, not the installed base.</li>
+</ul>
+<p>Detail and sources, truck by truck: <a href="report.html#s7">report, section 7</a>.</p>
+<h2 id="p8">What to test first</h2>
+<ol>
+<li><strong>ATC on the re-embedded output.</strong> Route the PGM to the embedder destination, replace channels 14 to 16, check ATC on an analyser, clean switch on then off.</li>
+<li><strong>EVS server LTC away from nominal speed.</strong> Slow motion at 33%, jog, reverse, still frame. No public document read describes this behaviour.</li>
+<li><strong>Delay of the follow.</strong> Cut, mix, wipe, still store, M/E re-entry.</li>
+<li><strong>Audio-versus-video offset.</strong> It must be constant and calibrated once per truck; frame sync is to be disabled on the EKO destination.</li>
+<li><strong>LTC path.</strong> Unprocessed, with the same delay on all three channels.</li>
+</ol>
+<p>Detail: <a href="report.html#s9">report, section 9</a>. The checklist of questions for the truck's engineer-in-charge is in <a href="report.html#s10">section 10</a>.</p>
+<h2 id="p9">Limits of this research</h2>
+<ul>
+<li><strong>Research interrupted</strong>: the web-search budget ran out part-way. The absences below are absences of research, not findings.</li>
+<li><strong>ZDF</strong>: a single truck, from the HD era.</li>
+<li><strong>EVS</strong>: the manuals of the VIA generation could not be opened.</li>
+<li><strong>Prices</strong>: no public price for router audio cards and licences.</li>
+<li><strong>Providers not studied</strong>: VRT, Videohouse, RAI, NEP Germany and Nordics, TopVision, the ARD trucks, among others.</li>
+</ul>
+<p>The full list is in the <a href="report.html#s11">report, section 11</a>.</p>
+    <p class="note">All sources are linked in the full report. Prices seen on 11 October 2026.</p>
+  </main>
+</div>
+<footer class="foot">Kreativ Labs · EKO · Internal R&D document, not intended for public distribution. · info@kreativlabs.tv</footer>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

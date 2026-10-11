@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EKO Matrice Follow</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('eko-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah v" d="M2 1L8 5L2 9"/></marker><marker id="ah-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah a" d="M2 1L8 5L2 9"/></marker><marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah l" d="M2 1L8 5L2 9"/></marker><marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah c" d="M2 1L8 5L2 9"/></marker><marker id="ah-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah n" d="M2 1L8 5L2 9"/></marker></defs></svg>
+<div class="page summary">
+<header class="top">
+  <a class="brand" href="index.html"><span class="brand-eko">EKO</span><span class="brand-sub">Kreativ Labs</span></a>
+  <nav class="pages"><a href="index.html" aria-current="page">Synthèse</a><a href="rapport.html">Rapport complet</a></nav>
+  <div class="tools">
+    <a class="tool lang" href="en/index.html" hreflang="en" title="English">EN</a>
+    <button class="tool" id="theme" type="button" title="Thème clair ou sombre" aria-label="Thème clair ou sombre"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
+    <button class="tool" id="print" type="button" title="Imprimer ou enregistrer en PDF" aria-label="Imprimer ou enregistrer en PDF">PDF</button>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-in">
+    <p class="eyebrow">Dossier R&D · v0.1 · 11 octobre 2026 · Document interne</p>
+    <h1>La matrice au service d'EKO</h1>
+    <p class="lede">Recevoir de la matrice du car une sortie dédiée portant le PGM, le son international et le LTC des trois LSM en audio, sans toucher au PGM de diffusion : comment le faire, avec quelles matrices, à quel coût et avec quelles limites.</p>
+  </div>
+</section>
+<div class="layout">
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <a class="l2" href="#p1">L&#x27;essentiel</a>
+    <a class="l2" href="#p2">Le signal demandé</a>
+    <a class="l2" href="#p3">Trois façons de le construire</a>
+    <a class="l2" href="#p4">Faire suivre le bus programme</a>
+    <a class="l2" href="#p5">Faire entrer les trois LTC</a>
+    <a class="l2" href="#p6">À la portée de quel car ?</a>
+    <a class="l2" href="#p7">Ce que les prestataires ont dans leurs cars</a>
+    <a class="l2" href="#p8">À tester en premier</a>
+    <a class="l2" href="#p9">Limites de cette recherche</a>
+  </nav>
+  <main>
+
+<h2 id="p1">L'essentiel</h2>
+<ul>
+<li><strong>Faisable sur la plupart des cars documentés, garanti nulle part sans essai.</strong> L'embedding se fait sortie par sortie : le PGM qui part à l'antenne n'est pas modifié.</li>
+<li><strong>Trois conditions pratiques</strong> : une sortie « embedder » libre et licenciée, une entrée pour trois LTC analogiques, et une règle de suivi si l'on veut le PGM Follow.</li>
+<li><strong>Conversion du LTC</strong> : de 249 € TTC à environ 1 024 € HT pour un embedder externe à quatre entrées analogiques (prix vus le 11 octobre 2026).</li>
+<li><strong>Carte analogique de matrice</strong> : aucun prix public trouvé. Le soupçon d'un surcoût par rapport à une entrée numérique n'est ni confirmé ni réfuté. Sirius 800, NVISION 8500, Ultrix, MicroN et .edge n'ont pas d'entrée analogique documentée.</li>
+<li><strong>À tester avant tout</strong> : la tenue de l'ATC sur la sortie ré-embeddée, le LTC des serveurs EVS hors vitesse nominale, et le retard du suivi.</li>
+</ul>
+<h2 id="p2">Le signal demandé</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 766 326" role="img"><title>Le signal demandé par EKO</title><desc>Une destination dédiée de la matrice réunit la vidéo et son ancillaire, le son international et les LTC des trois LSM sur les canaux 14, 15 et 16.</desc><rect class="bx v" x="20" y="20" width="250" height="54" rx="6"/><text class="t v" x="145.0" y="37.0">Vidéo et ancillaire (ATC)</text><text class="s v" x="145.0" y="57.0">suit la source à l&#x27;antenne</text><rect class="bx a" x="20" y="92" width="250" height="54" rx="6"/><text class="t a" x="145.0" y="109.0">Son international</text><text class="s a" x="145.0" y="129.0">fixe</text><rect class="bx l" x="20" y="164" width="250" height="54" rx="6"/><text class="t l" x="145.0" y="181.0">LTC des LSM 1, 2, 3</text><text class="s l" x="145.0" y="201.0">fixes, transportés en audio</text><rect class="bx " x="350" y="92" width="260" height="54" rx="6"/><text class="t " x="480.0" y="109.0">Destination dédiée de la matrice</text><text class="s " x="480.0" y="129.0">composée sur cette sortie seulement</text><rect class="bx eko" x="690" y="92" width="56" height="54" rx="6"/><text class="t eko" x="718.0" y="119.0">EKO</text><path class="ln v" d="M270 47 H310 V104 H346" marker-end="url(#ah-v)"/><path class="ln a" d="M270 119 H346" marker-end="url(#ah-a)"/><path class="ln l" d="M270 191 H310 V134 H346" marker-end="url(#ah-l)"/><path class="ln n" d="M610 119 H686" marker-end="url(#ah-n)"/><text class="s lb" x="60" y="250" style="text-anchor:start">Les 16 canaux audio embedded de cette sortie</text><rect class="bx cell a" x="60" y="264" width="40" height="30" rx="3"/><text class="s a" x="80" y="279">1</text><rect class="bx cell a" x="100" y="264" width="40" height="30" rx="3"/><text class="s a" x="120" y="279">2</text><rect class="bx cell " x="140" y="264" width="40" height="30" rx="3"/><text class="s " x="160" y="279">3</text><rect class="bx cell " x="180" y="264" width="40" height="30" rx="3"/><text class="s " x="200" y="279">4</text><rect class="bx cell " x="220" y="264" width="40" height="30" rx="3"/><text class="s " x="240" y="279">5</text><rect class="bx cell " x="260" y="264" width="40" height="30" rx="3"/><text class="s " x="280" y="279">6</text><rect class="bx cell " x="300" y="264" width="40" height="30" rx="3"/><text class="s " x="320" y="279">7</text><rect class="bx cell " x="340" y="264" width="40" height="30" rx="3"/><text class="s " x="360" y="279">8</text><rect class="bx cell " x="380" y="264" width="40" height="30" rx="3"/><text class="s " x="400" y="279">9</text><rect class="bx cell " x="420" y="264" width="40" height="30" rx="3"/><text class="s " x="440" y="279">10</text><rect class="bx cell " x="460" y="264" width="40" height="30" rx="3"/><text class="s " x="480" y="279">11</text><rect class="bx cell " x="500" y="264" width="40" height="30" rx="3"/><text class="s " x="520" y="279">12</text><rect class="bx cell " x="540" y="264" width="40" height="30" rx="3"/><text class="s " x="560" y="279">13</text><rect class="bx cell l" x="580" y="264" width="40" height="30" rx="3"/><text class="s l" x="600" y="279">14</text><rect class="bx cell l" x="620" y="264" width="40" height="30" rx="3"/><text class="s l" x="640" y="279">15</text><rect class="bx cell l" x="660" y="264" width="40" height="30" rx="3"/><text class="s l" x="680" y="279">16</text><text class="s lb" x="100" y="310" style="text-anchor:middle">son inter</text><text class="s lb" x="360" y="310" style="text-anchor:middle">libres ou conservés</text><text class="s lb" x="640" y="310" style="text-anchor:middle">LTC 1 · 2 · 3</text></svg><figcaption>Une destination, trois essences indépendantes : la vidéo suit, le son international et les LTC restent fixes.</figcaption></figure>
+<p>La matrice traite trois essences séparément :</p>
+<ul>
+<li>la vidéo et son ancillaire, qui suivent la source ;</li>
+<li>le son international, fixe ;</li>
+<li>les trois LTC, fixes, transportés comme des canaux audio PCM ordinaires.</li>
+</ul>
+<p>Détail et sources : <a href="rapport.html#s2">rapport, section 2</a>.</p>
+<h2 id="p3">Trois façons de le construire</h2>
+<h3>Matrice hybride baseband</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 364" role="img"><title>Matrice hybride baseband</title><desc>Le crosspoint audio route le son international et les trois LTC, convertis en numérique, vers une carte de sortie embedder. Le PGM de diffusion sort par une sortie standard, sans traitement.</desc><rect class="bx v" x="20" y="20" width="170" height="54" rx="6"/><text class="t v" x="105.0" y="37.0">Sources SDI</text><text class="s v" x="105.0" y="57.0">caméras, LSM</text><rect class="bx " x="400" y="20" width="180" height="54" rx="6"/><text class="t " x="490.0" y="37.0">Crosspoint vidéo</text><text class="s " x="490.0" y="57.0">vidéo et ancillaire</text><rect class="bx " x="600" y="20" width="170" height="54" rx="6"/><text class="t " x="685.0" y="37.0">Sortie standard</text><text class="s " x="685.0" y="57.0">PGM de diffusion, intact</text><rect class="bx " x="600" y="120" width="170" height="54" rx="6"/><text class="t " x="685.0" y="137.0">Sortie embedder</text><text class="s " x="685.0" y="157.0">16 canaux mono</text><rect class="bx eko" x="796" y="120" width="56" height="54" rx="6"/><text class="t eko" x="824.0" y="147.0">EKO</text><rect class="bx " x="400" y="220" width="180" height="54" rx="6"/><text class="t " x="490.0" y="237.0">Crosspoint audio TDM</text><text class="s " x="490.0" y="257.0">routage au niveau mono</text><rect class="bx a" x="20" y="184" width="170" height="54" rx="6"/><text class="t a" x="105.0" y="201.0">Son international</text><text class="s a" x="105.0" y="221.0">console, en MADI</text><rect class="bx l" x="20" y="262" width="170" height="54" rx="6"/><text class="t l" x="105.0" y="279.0">LTC des LSM 1, 2, 3</text><text class="s l" x="105.0" y="299.0">sorties analogiques</text><rect class="bx " x="220" y="262" width="150" height="54" rx="6"/><text class="t " x="295.0" y="279.0">Conversion A/N</text><text class="s " x="295.0" y="299.0">vers MADI ou AES</text><path class="ln v" d="M190 47 H396" marker-end="url(#ah-v)"/><path class="ln v" d="M580 47 H596" marker-end="url(#ah-v)"/><path class="ln v" d="M490 74 V147 H596" marker-end="url(#ah-v)"/><path class="ln n" d="M770 147 H792" marker-end="url(#ah-n)"/><path class="ln v" d="M770 47 H852" marker-end="url(#ah-v)"/><text class="s lb" x="812" y="32" style="text-anchor:middle">diffusion</text><path class="ln a" d="M190 211 H300 V238 H396" marker-end="url(#ah-a)"/><path class="ln l" d="M190 289 H216" marker-end="url(#ah-l)"/><path class="ln l" d="M370 289 H385 V256 H396" marker-end="url(#ah-l)"/><path class="ln a" d="M580 247 H685 V178" marker-end="url(#ah-a)"/><path class="ln v" d="M20 346 H48"/><text class="s lb" x="56" y="346" style="text-anchor:start">Vidéo et ancillaire</text><path class="ln a" d="M209 346 H237"/><text class="s lb" x="245" y="346" style="text-anchor:start">Audio</text><path class="ln l" d="M306 346 H334"/><text class="s lb" x="342" y="346" style="text-anchor:start">LTC</text></svg><figcaption>Matrice hybride : le composite est fabriqué sur une carte de sortie embedder ; la sortie de diffusion n&#x27;est pas traitée.</figcaption></figure>
+<ul>
+<li><strong>Principe</strong> : une route mono du crosspoint audio vers une carte de sortie embedder, 16 canaux par sortie.</li>
+<li><strong>Familles</strong> : Evertz EQX et NEXX, Grass Valley Sirius 800 (modules AHP) et NVISION 8500 Hybrid, Imagine Platinum IP3, Utah UTAH-400 Series 2, Ross Ultrix (Ultrimix).</li>
+<li><strong>Point dur</strong> : les sorties embedder sont le plus souvent un sous-ensemble des sorties, sous licence. La question sur site est « reste-t-il une destination embedder libre ? ».</li>
+<li><strong>Mise en œuvre</strong> : un réglage d'ingénierie fait une fois, puis mémorisé en salvo ou en destination virtuelle.</li>
+</ul>
+<h3>Car ST 2110</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 786 310" role="img"><title>Car ST 2110</title><desc>La passerelle reconstruit la sortie SDI à partir de récepteurs indépendants. Le contrôle repointe la vidéo et l&#x27;ancillaire ; le shuffler audio reste fixe sur le son international et les trois LTC.</desc><rect class="bx v" x="20" y="20" width="230" height="54" rx="6"/><text class="t v" x="135.0" y="37.0">Source à l&#x27;antenne</text><text class="s v" x="135.0" y="57.0">flux -20 vidéo et -40 ANC</text><rect class="bx a" x="20" y="114" width="230" height="54" rx="6"/><text class="t a" x="135.0" y="131.0">Son international</text><text class="s a" x="135.0" y="151.0">flux -30</text><rect class="bx l" x="20" y="208" width="230" height="54" rx="6"/><text class="t l" x="135.0" y="225.0">LTC des LSM 1, 2, 3</text><text class="s l" x="135.0" y="245.0">entrées ligne, puis flux -30</text><rect class="bx " x="340" y="10" width="280" height="54" rx="6"/><text class="t " x="480.0" y="27.0">Système de contrôle</text><text class="s " x="480.0" y="47.0">repointe -20 et -40 ensemble</text><rect class="bx " x="340" y="106" width="280" height="84" rx="6"/><text class="t " x="480.0" y="128.0">Passerelle ST 2110 vers SDI</text><text class="s " x="480.0" y="148.0">récepteurs -20, -30 et -40</text><text class="s " x="480.0" y="167.0">shuffler 16 canaux mono</text><rect class="bx eko" x="710" y="121" width="56" height="54" rx="6"/><text class="t eko" x="738.0" y="148.0">EKO</text><path class="ln v" d="M250 47 H295 V126 H336" marker-end="url(#ah-v)"/><path class="ln a" d="M250 141 H280 V148 H336" marker-end="url(#ah-a)"/><path class="ln l" d="M250 235 H295 V170 H336" marker-end="url(#ah-l)"/><path class="ln c" d="M480 64 V102" marker-end="url(#ah-c)"/><path class="ln n" d="M620 148 H706" marker-end="url(#ah-n)"/><path class="ln v" d="M20 292 H48"/><text class="s lb" x="56" y="292" style="text-anchor:start">Vidéo et ancillaire</text><path class="ln a" d="M209 292 H237"/><text class="s lb" x="245" y="292" style="text-anchor:start">Audio</text><path class="ln l" d="M306 292 H334"/><text class="s lb" x="342" y="292" style="text-anchor:start">LTC</text><path class="ln c" d="M389 292 H417"/><text class="s lb" x="425" y="292" style="text-anchor:start">Contrôle</text></svg><figcaption>ST 2110 : la sortie SDI est reconstruite dans la passerelle ; l&#x27;audio fixe y est un breakaway standard.</figcaption></figure>
+<ul>
+<li><strong>Principe</strong> : la passerelle reconstruit la sortie SDI à partir de récepteurs indépendants. L'audio fixe pendant que la vidéo suit y est un breakaway standard.</li>
+<li><strong>Shuffler documenté</strong> : Lawo .edge, Grass Valley IQUCP25, Nevion Virtuoso, Sony avec l'option NXLL-AM50.</li>
+<li><strong>Point dur</strong> : les trois LTC doivent d'abord exister dans un flux 2110-30, et le récepteur -40 doit suivre le récepteur vidéo pour garder l'ATC de la source.</li>
+</ul>
+<h3>Matrice transparente et embedder externe</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 232" role="img"><title>Matrice transparente et embedder externe</title><desc>La matrice route sans traitement. Un embedder externe, placé entre la sortie dédiée et EKO, insère les trois LTC. Le PGM de diffusion n&#x27;est pas concerné.</desc><rect class="bx v" x="20" y="20" width="170" height="54" rx="6"/><text class="t v" x="105.0" y="37.0">Sources SDI</text><text class="s v" x="105.0" y="57.0">caméras, LSM</text><rect class="bx " x="250" y="20" width="200" height="54" rx="6"/><text class="t " x="350.0" y="37.0">Matrice transparente</text><text class="s " x="350.0" y="57.0">Videohub, KUMO</text><rect class="bx l" x="20" y="130" width="170" height="54" rx="6"/><text class="t l" x="105.0" y="147.0">LTC des LSM 1, 2, 3</text><text class="s l" x="105.0" y="167.0">sorties analogiques</text><rect class="bx " x="520" y="130" width="200" height="54" rx="6"/><text class="t " x="620.0" y="147.0">Embedder externe</text><text class="s " x="620.0" y="167.0">4 entrées analogiques</text><rect class="bx eko" x="790" y="130" width="56" height="54" rx="6"/><text class="t eko" x="818.0" y="157.0">EKO</text><path class="ln v" d="M190 47 H246" marker-end="url(#ah-v)"/><path class="ln v" d="M450 47 H852" marker-end="url(#ah-v)"/><text class="s lb" x="650" y="33" style="text-anchor:middle">PGM de diffusion, intact</text><path class="ln v" d="M350 74 V104 H620 V126" marker-end="url(#ah-v)"/><text class="s lb" x="485" y="92" style="text-anchor:middle">sortie dédiée</text><path class="ln l" d="M190 157 H516" marker-end="url(#ah-l)"/><path class="ln n" d="M720 157 H786" marker-end="url(#ah-n)"/><path class="ln v" d="M20 214 H48"/><text class="s lb" x="56" y="214" style="text-anchor:start">Vidéo et ancillaire</text><path class="ln l" d="M209 214 H237"/><text class="s lb" x="245" y="214" style="text-anchor:start">LTC</text></svg><figcaption>Matrice transparente : un embedder externe devant EKO insère les trois LTC.</figcaption></figure>
+<ul>
+<li><strong>Principe</strong> : la matrice ne sait pas embedder (Blackmagic Videohub, AJA KUMO). Un embedder placé devant EKO insère les trois LTC.</li>
+<li><strong>Avantage</strong> : la solution est identique dans tous les cars et peut être livrée avec la machine.</li>
+<li><strong>Point dur</strong> : seuls l'AJA 3G-AMA et le Lynx PDM 1383 documentent le choix des canaux écrits. Pour le Blackmagic, c'est à valider sur table.</li>
+</ul>
+<p>Détail et sources : <a href="rapport.html#s3">rapport, section 3</a> et <a href="rapport.html#s5">section 5</a> pour le tableau des matrices.</p>
+<h2 id="p4">Faire suivre le bus programme</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 234" role="img"><title>Suivi du bus programme par le système de contrôle</title><desc>Le système de contrôle lit l&#x27;état du bus PGM du mélangeur et commande la matrice sur le seul niveau vidéo et ancillaire. L&#x27;audio de la destination reste fixe.</desc><rect class="bx " x="20" y="26" width="220" height="64" rx="6"/><text class="t " x="130.0" y="48.0">Mélangeur</text><text class="s " x="130.0" y="68.0">état du bus PGM</text><rect class="bx " x="320" y="20" width="240" height="76" rx="6"/><text class="t " x="440.0" y="38.0">Système de contrôle</text><text class="s " x="440.0" y="58.0">si bus PGM = source n,</text><text class="s " x="440.0" y="77.0">router la source n</text><rect class="bx " x="640" y="26" width="200" height="64" rx="6"/><text class="t " x="740.0" y="48.0">Matrice</text><text class="s " x="740.0" y="68.0">niveau vidéo et ANC seul</text><rect class="bx eko" x="640" y="140" width="200" height="46" rx="6"/><text class="t eko" x="740.0" y="163.0">Destination « EKO »</text><rect class="bx a" x="320" y="140" width="240" height="46" rx="6"/><text class="t a" x="440.0" y="163.0">Audio de la destination : fixe</text><path class="ln c" d="M240 58 H316" marker-end="url(#ah-c)"/><path class="ln c" d="M560 58 H636" marker-end="url(#ah-c)"/><path class="ln v" d="M740 90 V136" marker-end="url(#ah-v)"/><path class="ln a" d="M560 163 H636" marker-end="url(#ah-a)"/><path class="ln c" d="M20 216 H48"/><text class="s lb" x="56" y="216" style="text-anchor:start">Contrôle</text><path class="ln v" d="M136 216 H164"/><text class="s lb" x="172" y="216" style="text-anchor:start">Vidéo et ancillaire</text><path class="ln a" d="M325 216 H353"/><text class="s lb" x="361" y="216" style="text-anchor:start">Audio</text></svg><figcaption>PGM Follow : des règles lisent l&#x27;état du bus PGM et ne commutent que le niveau vidéo et ancillaire.</figcaption></figure>
+<ul>
+<li><strong>Aucune fonction nommée « PGM Follow »</strong> n'a été trouvée dans la documentation publique des systèmes de contrôle.</li>
+<li><strong>Par le contrôle</strong> : des règles « si le bus PGM est sur la source n, router la source n », limitées au niveau vidéo et ancillaire. Les briques documentées sont la logique GPIO et crosspoints de Lawo VSM et le « Virtual Tally Router » de TSL TallyMan.</li>
+<li><strong>Dans le mélangeur</strong> : Bus Linking (K-Frame) ou Auto Follow (Ross Acuity). Le timing est plus serré, mais une sortie Aux est une sortie traitée : le passage de l'ancillaire n'est documenté que chez Ross.</li>
+<li><strong>État de bus, pas tally</strong> : le tally allume plusieurs sources pendant un mix. La règle doit lire le crosspoint du bus PGM.</li>
+<li><strong>Retard</strong> : aucun constructeur ne publie de chiffre. Le budget raisonné est d'une à quelques images.</li>
+</ul>
+<p>Détail et sources : <a href="rapport.html#s3-4">rapport, sections 3.4 et 3.5</a> et <a href="rapport.html#s6">section 6</a>.</p>
+<h2 id="p5">Faire entrer les trois LTC</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Prix relevé le 11 octobre 2026</th>
+<th>Remarque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entrées ligne libres de la console ou d'une stagebox</td>
+<td>0</td>
+<td>Hypothèse non vérifiée ; risque de traitement audio sur le chemin</td>
+</tr>
+<tr>
+<td>Blackmagic Mini Converter Audio to SDI, 4 entrées</td>
+<td>275 $ <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/bmd-convmcauds2/blackmagic-convmcauds2-mini-converter-audio-to-sdi-embedder">Markertek</a></span> ; 249 € TTC <span class="cite"><a target="_blank" rel="noopener" href="https://www.thomann.fr/blackmagic_design_mini_converter_audio_to_sdi.htm">Thomann</a></span></td>
+<td>Canaux écrits non confirmés ; 3G-SDI seulement</td>
+</tr>
+<tr>
+<td>Lynx Yellobrik PDM 1383, 4 entrées</td>
+<td>885,40 $ <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/lnx-pdm-1383/lynx-technik-yellobrik-pdm-1383-analog-audio-embedder-de-embedder">Markertek</a></span> ; 760 £ HT <span class="cite"><a target="_blank" rel="noopener" href="https://canford.co.uk/LYNX-YELLOBRIK-AUDIO-EMBEDDERS-AND-DE-EMBEDDERS">Canford</a></span></td>
+<td>Choix du groupe documenté</td>
+</tr>
+<tr>
+<td>AJA 3G-AMA, 4 entrées</td>
+<td>1 118 $ <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/aja-3g-ama/aja-3g-ama-3g-sdi-analog-audio-embedder-disembedder">Markertek</a></span> ; 1 023,97 € HT <span class="cite"><a target="_blank" rel="noopener" href="https://en.vocas.nl/aja-3g-ama-3g-sdi-analog-audio-embed-disembed.html">Vocas</a></span></td>
+<td>Choix par paire documenté</td>
+</tr>
+<tr>
+<td>Audinate Dante AVIO, 2 entrées</td>
+<td>229 $ pièce <span class="cite"><a target="_blank" rel="noopener" href="https://www.markertek.com/product/adn-adpdai-au2x0/audinate-adp-dai-au-2x0-dante-avio-analog-input-adapter-with-rj45-and-2-xlr-female-2-channel-version">Markertek</a></span></td>
+<td>Deux unités ; utile si le Dante du car rejoint déjà la matrice</td>
+</tr>
+<tr>
+<td>Carte d'entrée analogique de matrice</td>
+<td>Aucun prix public</td>
+<td>Documentée chez Evertz (châssis EMR), Utah, Imagine et FOR-A ; rarement justifiée pour trois signaux</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le LTC passe sans dommage sur un canal PCM linéaire à 48 kHz, à condition que le chemin reste sans traitement : ni dynamique, ni filtre, ni conversion de fréquence d'échantillonnage.</p>
+<p>Détail et sources : <a href="rapport.html#s4">rapport, section 4</a>.</p>
+<h2 id="p6">À la portée de quel car ?</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type de car</th>
+<th>Appréciation</th>
+<th>Point dur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Matrice hybride baseband</td>
+<td>À portée ; cas le plus favorable</td>
+<td>Une sortie embedder libre et licenciée</td>
+</tr>
+<tr>
+<td>Réseau Riedel MediorNet</td>
+<td>Plausible, à confirmer avec Riedel</td>
+<td>Granularité mono et ancillaire non confirmés ; ni analogique ni AES3 listés sur MicroN, entrée par MADI</td>
+</tr>
+<tr>
+<td>ST 2110 avec passerelles SDI</td>
+<td>À portée</td>
+<td>LTC à amener en 2110-30 ; une sortie de passerelle libre</td>
+</tr>
+<tr>
+<td>Matrice transparente (Videohub, KUMO)</td>
+<td>À portée avec un embedder externe</td>
+<td>Un boîtier de plus dans le chemin d'EKO</td>
+</tr>
+<tr>
+<td>Production software-defined (GV AMPP)</td>
+<td>Non établi</td>
+<td>Pas de sortie de matrice classique</td>
+</tr>
+</tbody>
+</table></div>
+<p>Détail et sources : <a href="rapport.html#s8">rapport, section 8</a>.</p>
+<h2 id="p7">Ce que les prestataires ont dans leurs cars</h2>
+<ul>
+<li><strong>Mediapro</strong> : l'OB52 (2019) est en SAM Sirius 830 sous Lawo VSM. Matrice et contrôle ne sont pas publiés pour les unités UHD espagnoles ni pour Mediapro Belgium.</li>
+<li><strong>AMP Visual TV</strong> : pas de matrice classique, mais un réseau décentralisé Riedel MediorNet (68 MicroN sur le Millenium Signature 12). Le système de contrôle n'est pas publié.</li>
+<li><strong>EMG / Gravity Media</strong> : Nova 103 et 104 en Grass Valley Sirius 840 sous EVS Cerebrum ; la plate-forme diPloy est en ST 2110.</li>
+<li><strong>NEP</strong> : cœurs IP Lawo V__matrix sur des cars américains, australiens et belges ; contrôle propriétaire TFC aux États-Unis ; Units 14 à 18 de NEP Belgium sous Lawo VSM.</li>
+<li><strong>France Télévisions</strong> : UM1 et UM2 sont hybrides SDI et ST 2110 (Sony XVS, passerelles Imagine SNP). Matrice et contrôle ne sont pas publiés.</li>
+<li><strong>RTBF</strong> : les jumeaux de 2020 sont en ST 2110 complet (Arista, Lawo V__matrix, VSM) et gardent 32 sorties baseband.</li>
+<li><strong>ZDF</strong> : seul le MP-6, de l'ère HD, est documenté (NVision 8500 sous VSM). Rien n'a été trouvé sur les cars actuels.</li>
+<li><strong>Tendance</strong> : en Europe continentale, baseband (surtout Sirius), MediorNet ou hybride, sous Lawo VSM dans 19 des 25 lignes de l'inventaire où le contrôle est nommé. Dans l'échantillon anglo-saxon, 33 lignes sur 53 sont IP. Ces décomptes portent sur les cars médiatisés, pas sur le parc.</li>
+</ul>
+<p>Détail et sources, car par car : <a href="rapport.html#s7">rapport, section 7</a>.</p>
+<h2 id="p8">À tester en premier</h2>
+<ol>
+<li><strong>ATC sur la sortie ré-embeddée.</strong> Router le PGM vers la destination embedder, remplacer les canaux 14 à 16, vérifier l'ATC à l'analyseur, clean switch activé puis désactivé.</li>
+<li><strong>LTC des serveurs EVS hors vitesse nominale.</strong> Ralenti à 33 %, jog, marche arrière, arrêt sur image. Aucun document public lu ne décrit ce comportement.</li>
+<li><strong>Retard du suivi.</strong> Cut, mix, volet, still store, ré-entrée de M/E.</li>
+<li><strong>Décalage audio contre vidéo.</strong> Il doit être constant et calibré une fois par car ; le frame sync est à désactiver sur la destination EKO.</li>
+<li><strong>Chemin des LTC.</strong> Sans traitement, et avec le même retard sur les trois canaux.</li>
+</ol>
+<p>Détail : <a href="rapport.html#s9">rapport, section 9</a>. La liste des questions à poser au chef de car est en <a href="rapport.html#s10">section 10</a>.</p>
+<h2 id="p9">Limites de cette recherche</h2>
+<ul>
+<li><strong>Recherche interrompue</strong> : le budget de recherches web s'est épuisé en cours de route. Les absences ci-dessous sont des absences de recherche, non des constats.</li>
+<li><strong>ZDF</strong> : un seul car, de l'ère HD.</li>
+<li><strong>EVS</strong> : les manuels de la génération VIA n'ont pas pu être ouverts.</li>
+<li><strong>Prix</strong> : aucun prix public pour les cartes et licences audio des matrices.</li>
+<li><strong>Prestataires non étudiés</strong> : VRT, Videohouse, RAI, NEP Germany et Nordics, TopVision, les cars de l'ARD, entre autres.</li>
+</ul>
+<p>La liste complète est dans le <a href="rapport.html#s11">rapport, section 11</a>.</p>
+    <p class="note">Toutes les sources sont en lien dans le rapport complet. Prix relevés le 11 octobre 2026.</p>
+  </main>
+</div>
+<footer class="foot">Kreativ Labs · EKO · Document interne de R&D, non destiné à la diffusion publique. · info@kreativlabs.tv</footer>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>
