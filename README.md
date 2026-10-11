@@ -16,6 +16,7 @@ Document interne, non destiné à la diffusion publique.
 | `diagrams.py` | Schémas SVG, en français et en anglais |
 | `build.py` | Génère les quatre pages HTML |
 | `assets/` | Feuille de style et script (thème clair ou sombre, impression PDF) |
+| `middleware.js` | Contrôle d'accès du site : formulaire de code, cookie de 30 jours |
 
 ## Mettre à jour
 
@@ -24,3 +25,9 @@ Document interne, non destiné à la diffusion publique.
 3. Valider les quatre pages HTML générées avec les sources.
 
 Le site est statique : Vercel sert les fichiers tels quels, sans étape de build.
+
+## Accès
+
+Le site est réservé à l'équipe. `middleware.js` demande un code d'accès avant de servir la moindre page.
+Le code n'est pas dans ce dépôt : il est lu dans la variable d'environnement Vercel `ACCESS_CODE`.
+Sans cette variable, le site reste fermé. Changer sa valeur invalide tous les accès déjà ouverts.
