@@ -98,7 +98,15 @@ function form(target, error) {
   );
 }
 
+function next() {
+  // Let the request through to the static files.
+  return new Response(null, { headers: { 'x-middleware-next': '1' } });
+}
+
 export default async function middleware(request) {
+  // robots.txt stays readable so crawlers see the "Disallow: /" rule. It holds nothing else.
+  if (new URL(request.url).pathname === '/robots.txt') return next();
+
   const code = (typeof process !== 'undefined' && process.env && process.env.ACCESS_CODE) || '';
   if (!code) {
     return page(`<h1>Accès non configuré</h1><p>Le code d'accès de ce site n'est pas encore défini. Le site reste fermé.</p>`, 503);
@@ -122,9 +130,6 @@ export default async function middleware(request) {
     });
   }
 
-  if (sameString(readCookie(request, COOKIE), expected)) {
-    // Let the request through to the static files.
-    return new Response(null, { headers: { 'x-middleware-next': '1' } });
-  }
+  if (sameString(readCookie(request, COOKIE), expected)) return next();
   return form(safeTarget(url.pathname + url.search), false);
 }
