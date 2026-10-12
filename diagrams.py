@@ -242,8 +242,103 @@ def d_follow(lang):
     return wrap(860, 234, L["title"], L["desc"], b)
 
 
+def _device(lang, name, rows, out_port, height):
+    """Shared layout for the two installation diagrams.
+
+    rows: list of (title, sub, box class, arrow class, port label), top to bottom.
+    """
+    console = {"fr": ("Console audio", "16 canaux EKO"), "en": ("Audio console", "16 EKO channels")}[lang]
+    b = f'<rect class="bx v" x="370" y="20" width="200" height="{height}" rx="6"/>'
+    b += f'<text class="t" x="505" y="{20 + height / 2 + 50}">{esc(name)}</text>'
+    for i, (title, sub, cls, acls, port) in enumerate(rows):
+        y = 20 + i * 70
+        b += box(20, y, 250, 54, title, sub, cls=cls)
+        b += arrow(f"M270 {y + 27} H366", acls)
+        b += f'<text class="s" x="384" y="{y + 27}" style="text-anchor:start">{esc(port)}</text>'
+    b += box(650, 90, 190, 54, console[0], console[1], cls="a")
+    b += arrow("M570 117 H646", "a")
+    b += f'<text class="s" x="556" y="117" style="text-anchor:end">{esc(out_port)}</text>'
+    return b
+
+
+def d_mini(lang):
+    t = T[lang]
+    L = {
+        "fr": dict(rows=[
+            ("PGM et son international", "départ courant du car", "v", "v", "IN 1"),
+            ("Sortie de chaque LSM", "1 à 6 canaux de lecture, TC dans le SDI", "v", "v", "IN 2 à 7"),
+            ("Référence du car", None, "", "n", "REF"),
+            ("Micros avant fader", "en MADI, option", "a", "a", "USB"),
+            ("Tally et état des faders", "TSL UMD, CSCP ou Ember+", "", "c", "IP"),
+        ], title="Installation de l'EKO Mini",
+            desc="L'EKO Mini reçoit le PGM avec le son international, la sortie SDI de chaque LSM, la référence, en option les micros en MADI, et par IP le tally et l'état des faders. Une seule sortie SDI porte 16 canaux vers la console audio."),
+        "en": dict(rows=[
+            ("PGM and international sound", "standard truck feed", "v", "v", "IN 1"),
+            ("Output of each LSM", "1 to 6 play channels, TC in the SDI", "v", "v", "IN 2 to 7"),
+            ("Truck reference", None, "", "n", "REF"),
+            ("Pre-fader microphones", "as MADI, optional", "a", "a", "USB"),
+            ("Tally and fader status", "TSL UMD, CSCP or Ember+", "", "c", "IP"),
+        ], title="EKO Mini installation",
+            desc="EKO Mini receives the PGM with the international sound, the SDI output of each LSM, the reference, optionally the microphones as MADI, and over IP the tally and fader status. A single SDI output carries 16 channels to the audio console."),
+    }[lang]
+    b = _device(lang, "EKO Mini", L["rows"], "OUT 8", 334)
+    b += legend(384, [("v", t["video"]), ("a", t["audio"]), ("c", t["ctrl"])])
+    return wrap(860, 402, L["title"], L["desc"], b)
+
+
+def d_nano(lang):
+    t = T[lang]
+    L = {
+        "fr": dict(rows=[
+            ("PGM et son international", "départ courant du car", "v", "v", "SDI IN"),
+            ("LTC de chaque LSM", "XLR, interface audio USB", "l", "l", "USB"),
+            ("Référence du car", None, "", "n", "REF"),
+            ("Tally", "TSL UMD sur IP, ou GPI", "", "c", "IP"),
+        ], title="Installation de l'EKO Nano",
+            desc="L'EKO Nano reçoit le PGM avec le son international sur son entrée SDI, le LTC de chaque LSM en XLR par une interface audio USB, la référence, et le tally par IP. Sa sortie SDI porte 16 canaux vers la console audio."),
+        "en": dict(rows=[
+            ("PGM and international sound", "standard truck feed", "v", "v", "SDI IN"),
+            ("LTC of each LSM", "XLR, USB audio interface", "l", "l", "USB"),
+            ("Truck reference", None, "", "n", "REF"),
+            ("Tally", "TSL UMD over IP, or GPI", "", "c", "IP"),
+        ], title="EKO Nano installation",
+            desc="EKO Nano receives the PGM with the international sound on its SDI input, the LTC of each LSM on XLR through a USB audio interface, the reference, and tally over IP. Its SDI output carries 16 channels to the audio console."),
+    }[lang]
+    b = _device(lang, "EKO Nano", L["rows"], "SDI OUT", 264)
+    b += legend(314, [("v", t["video"]), ("l", t["ltc"]), ("a", t["audio"]), ("c", t["ctrl"])])
+    return wrap(860, 332, L["title"], L["desc"], b)
+
+
+def d_fader(lang):
+    L = {
+        "fr": dict(live="Direct", replay="Ralenti EKO", action="action",
+                   late="le fader s'ouvre après l'action",
+                   early="le même micro, avant fader, dès avant l'action",
+                   title="Rejouer la décision de l'ingénieur du son",
+                   desc="Dans le direct, le fader du micro s'ouvre après l'action. Au ralenti, EKO rejoue le même micro à partir de son enregistrement avant fader, donc dès avant l'action."),
+        "en": dict(live="Live", replay="EKO replay", action="action",
+                   late="the fader opens after the action",
+                   early="the same microphone, pre-fader, from before the action",
+                   title="Replaying the sound engineer's decision",
+                   desc="In the live programme, the microphone's fader opens after the action. On the replay, EKO plays the same microphone from its pre-fader recording, so from before the action."),
+    }[lang]
+    b = f'<text class="t" x="20" y="61" style="text-anchor:start">{esc(L["live"])}</text>'
+    b += f'<text class="t" x="20" y="131" style="text-anchor:start">{esc(L["replay"])}</text>'
+    b += '<path class="ax" d="M150 80 H830"/><path class="ax" d="M150 150 H830"/>'
+    b += '<path class="ln n" style="stroke-dasharray:4 4;stroke-width:1.5" d="M330 30 V162"/>'
+    b += label(330, 18, L["action"])
+    b += '<rect class="bx a" x="420" y="48" width="400" height="26" rx="4"/>'
+    b += f'<text class="s a" x="620" y="61">{esc(L["late"])}</text>'
+    b += '<rect class="bx a" x="250" y="118" width="570" height="26" rx="4"/>'
+    b += f'<text class="s a" x="535" y="131">{esc(L["early"])}</text>'
+    return wrap(860, 176, L["title"], L["desc"], b)
+
+
 CAPTIONS = {
     "fr": {
+        "mini": "EKO Mini : un PGM, jusqu'à six canaux de lecture et une sortie sur les huit connecteurs ; le reste arrive par USB et par IP.",
+        "nano": "EKO Nano : un SDI dans chaque sens ; le timecode des LSM arrive en XLR et le tally par IP.",
+        "fader": "Le micro que l'ingénieur du son a ouvert en retard dans le direct est à l'heure dans le ralenti.",
         "signal": "Une destination, trois essences indépendantes : la vidéo suit, le son international et les LTC restent fixes.",
         "hybrid": "Matrice hybride : le composite est fabriqué sur une carte de sortie embedder ; la sortie de diffusion n'est pas traitée.",
         "ip": "ST 2110 : la sortie SDI est reconstruite dans la passerelle ; l'audio fixe y est un breakaway standard.",
@@ -251,6 +346,9 @@ CAPTIONS = {
         "follow": "PGM Follow : des règles lisent l'état du bus PGM et ne commutent que le niveau vidéo et ancillaire.",
     },
     "en": {
+        "mini": "EKO Mini: one PGM, up to six play channels and one output on the eight connectors; the rest arrives over USB and IP.",
+        "nano": "EKO Nano: one SDI each way; LSM timecode arrives on XLR and tally over IP.",
+        "fader": "The microphone the sound engineer opened late in the live programme is on time in the replay.",
         "signal": "One destination, three independent essences: video follows, international sound and LTC stay fixed.",
         "hybrid": "Hybrid router: the composite is built on an embedder output card; the broadcast output is unprocessed.",
         "ip": "ST 2110: the SDI output is rebuilt in the gateway; fixed audio is a standard breakaway there.",
@@ -265,6 +363,9 @@ DIAGRAMS = {
     "ip": d_ip,
     "transparent": d_transparent,
     "follow": d_follow,
+    "mini": d_mini,
+    "nano": d_nano,
+    "fader": d_fader,
 }
 
 

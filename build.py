@@ -19,15 +19,16 @@ import markdown
 from diagrams import MARKERS, figure
 
 ROOT = pathlib.Path(__file__).parent
-VERSION = "v0.1"
+VERSION = "v0.2"
 SITE_NAME = "EKO Matrice Follow"
 
 UI = {
     "fr": dict(
-        date="11 octobre 2026", eyebrow="Dossier R&D", internal="Document interne",
+        date="12 octobre 2026", eyebrow="Dossier R&D", internal="Document interne",
         nav_summary="Synthèse", nav_report="Rapport complet", toc="Sommaire",
         theme="Thème clair ou sombre", print="Imprimer ou enregistrer en PDF", print_short="PDF",
         summary_href="index.html", report_href="rapport.html",
+        nav_proposal="Proposition", proposal_href="proposition.html",
         footer="Kreativ Labs · EKO · Document interne de R&D, non destiné à la diffusion publique.",
         sources="Toutes les sources sont en lien dans le rapport complet. Prix relevés le 11 octobre 2026.",
         other="English", other_code="EN",
@@ -35,10 +36,11 @@ UI = {
         abstract="Résumé",
     ),
     "en": dict(
-        date="11 October 2026", eyebrow="R&D dossier", internal="Internal document",
+        date="12 October 2026", eyebrow="R&D dossier", internal="Internal document",
         nav_summary="Summary", nav_report="Full report", toc="Contents",
         theme="Light or dark theme", print="Print or save as PDF", print_short="PDF",
         summary_href="index.html", report_href="report.html",
+        nav_proposal="Proposal", proposal_href="proposal.html",
         footer="Kreativ Labs · EKO · Internal R&D document, not intended for public distribution.",
         sources="All sources are linked in the full report. Prices seen on 11 October 2026.",
         other="Français", other_code="FR",
@@ -50,7 +52,9 @@ UI = {
 PAGES = [
     dict(lang="fr", kind="summary", src="content/summary.fr.md", out="index.html", alt="en/index.html"),
     dict(lang="fr", kind="report", src="content/report.fr.md", out="rapport.html", alt="en/report.html"),
+    dict(lang="fr", kind="proposal", src="content/proposal.fr.md", out="proposition.html", alt="en/proposal.html"),
     dict(lang="en", kind="summary", src="content/summary.en.md", out="en/index.html", alt="index.html"),
+    dict(lang="en", kind="proposal", src="content/proposal.en.md", out="en/proposal.html", alt="proposition.html"),
     dict(lang="en", kind="report", src="content/report.en.md", out="en/report.html", alt="rapport.html"),
 ]
 
@@ -150,6 +154,7 @@ def page(p, artifact=False):
     cur = ' aria-current="page"'
     nav = (
         '<a href="%s"%s>%s</a>' % (ui["summary_href"], cur if p["kind"] == "summary" else "", ui["nav_summary"])
+        + '<a href="%s"%s>%s</a>' % (ui["proposal_href"], cur if p["kind"] == "proposal" else "", ui["nav_proposal"])
         + '<a href="%s"%s>%s</a>' % (ui["report_href"], cur if p["kind"] == "report" else "", ui["nav_report"])
     )
     print_btn = "" if artifact else (

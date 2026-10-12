@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EKO listens, the truck programs nothing · EKO Matrice Follow</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<script>try{var t=localStorage.getItem('eko-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="ah-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah v" d="M2 1L8 5L2 9"/></marker><marker id="ah-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah a" d="M2 1L8 5L2 9"/></marker><marker id="ah-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah l" d="M2 1L8 5L2 9"/></marker><marker id="ah-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah c" d="M2 1L8 5L2 9"/></marker><marker id="ah-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah n" d="M2 1L8 5L2 9"/></marker></defs></svg>
+<div class="page proposal">
+<header class="top">
+  <a class="brand" href="index.html"><span class="brand-eko">EKO</span><span class="brand-sub">Kreativ Labs</span></a>
+  <nav class="pages"><a href="index.html">Summary</a><a href="proposal.html" aria-current="page">Proposal</a><a href="report.html">Full report</a></nav>
+  <div class="tools">
+    <a class="tool lang" href="../proposition.html" hreflang="fr" title="Français">FR</a>
+    <button class="tool" id="theme" type="button" title="Light or dark theme" aria-label="Light or dark theme"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg></button>
+    <button class="tool" id="print" type="button" title="Print or save as PDF" aria-label="Print or save as PDF">PDF</button>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-in">
+    <p class="eyebrow">R&D dossier · v0.2 · 12 October 2026 · Internal document</p>
+    <h1>EKO listens, the truck programs nothing</h1>
+    <p class="lede">Installation proposal for the EKO Nano and the EKO Mini: ask the truck only for signals it can already provide, and put the complexity in EKO. The timecode comes from the LSM itself, and the right mic is the one the sound engineer opened during the live broadcast.</p>
+  </div>
+</section>
+<div class="layout">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <a class="l2" href="#p1">The proposal in brief</a>
+    <a class="l2" href="#p2">What we ask of the truck</a>
+    <a class="l2" href="#p3">EKO Mini: eight connectors, seven inputs and one output</a>
+    <a class="l2" href="#p4">EKO Nano: one input, one output, two connections</a>
+    <a class="l2" href="#p5">The sound engineer&#x27;s three sounds</a>
+    <a class="l2" href="#p6">What I rule out at base level, and why</a>
+    <a class="l2" href="#p7">What this requires of EKO</a>
+    <a class="l2" href="#p8">To validate before development</a>
+    <a class="l2" href="#p9">Proposed test order</a>
+  </nav>
+  <main>
+
+<h2 id="p1">The proposal in brief</h2>
+<ul>
+<li><strong>Nothing to program in the truck, at base level.</strong> EKO asks only for ordinary feeds: a PGM with the international sound, the LSM outputs, the reference. No router rules, no custom embedding, no taking control of any machine.</li>
+<li><strong>The timecode comes from the LSM, not from the router.</strong> On the EKO Mini, it is read from the SDI output of each play channel. On the EKO Nano, it arrives through the LTC output of each server, on XLR, directly into EKO.</li>
+<li><strong>The tally says which LSM is on air.</strong> It is the same kind of request as hooking up a multiviewer, far simpler than a follow rule in the router.</li>
+<li><strong>The right mic is the one the sound engineer chose during the live broadcast.</strong> EKO records the mics pre-fader and logs which faders were open. In the replay, it plays back the same mics, on time.</li>
+<li><strong>Layers that add up.</strong> On the Mini, the cables alone already give the international sound for every replay. The tally, the console, the LSM protocol and tracking are added one by one, and any of them can be missing without blocking the rest. On the Nano, the tally is part of the base.</li>
+</ul>
+<h2 id="p2">What we ask of the truck</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Request</th>
+<th>From whom</th>
+<th>What it is for</th>
+<th>Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A PGM feed with the international sound embedded</td>
+<td>EIC</td>
+<td>Programme picture, international sound</td>
+<td>Base</td>
+</tr>
+<tr>
+<td>EKO Mini: one SDI output from each play channel. EKO Nano: the LTC output of each server, on XLR</td>
+<td>EIC, EVS operator</td>
+<td>Original timecode of the replayed pictures</td>
+<td>Base</td>
+</tr>
+<tr>
+<td>The truck reference</td>
+<td>EIC</td>
+<td>EKO clock</td>
+<td>Base</td>
+</tr>
+<tr>
+<td>An SDI return from EKO to the console</td>
+<td>Sound engineer (A1)</td>
+<td>The EKO sounds</td>
+<td>Base</td>
+</tr>
+<tr>
+<td>The tally, as TSL UMD over IP or as GPI contacts</td>
+<td>EIC</td>
+<td>Knowing which LSM is on air</td>
+<td>Recommended on Mini, base on Nano</td>
+</tr>
+<tr>
+<td>The pitch mics pre-fader, over MADI</td>
+<td>Sound engineer (A1)</td>
+<td>Playing back a specific mic</td>
+<td>Option</td>
+</tr>
+<tr>
+<td>The fader state of these mics, or failing that a "pitch effects" sub-group</td>
+<td>Sound engineer (A1)</td>
+<td>Choosing the right mic</td>
+<td>Option</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="p3">EKO Mini: eight connectors, seven inputs and one output</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 402" role="img"><title>EKO Mini installation</title><desc>EKO Mini receives the PGM with the international sound, the SDI output of each LSM, the reference, optionally the microphones as MADI, and over IP the tally and fader status. A single SDI output carries 16 channels to the audio console.</desc><rect class="bx v" x="370" y="20" width="200" height="334" rx="6"/><text class="t" x="505" y="237.0">EKO Mini</text><rect class="bx v" x="20" y="20" width="250" height="54" rx="6"/><text class="t v" x="145.0" y="37.0">PGM and international sound</text><text class="s v" x="145.0" y="57.0">standard truck feed</text><path class="ln v" d="M270 47 H366" marker-end="url(#ah-v)"/><text class="s" x="384" y="47" style="text-anchor:start">IN 1</text><rect class="bx v" x="20" y="90" width="250" height="54" rx="6"/><text class="t v" x="145.0" y="107.0">Output of each LSM</text><text class="s v" x="145.0" y="127.0">1 to 6 play channels, TC in the SDI</text><path class="ln v" d="M270 117 H366" marker-end="url(#ah-v)"/><text class="s" x="384" y="117" style="text-anchor:start">IN 2 to 7</text><rect class="bx " x="20" y="160" width="250" height="54" rx="6"/><text class="t " x="145.0" y="187.0">Truck reference</text><path class="ln n" d="M270 187 H366" marker-end="url(#ah-n)"/><text class="s" x="384" y="187" style="text-anchor:start">REF</text><rect class="bx a" x="20" y="230" width="250" height="54" rx="6"/><text class="t a" x="145.0" y="247.0">Pre-fader microphones</text><text class="s a" x="145.0" y="267.0">as MADI, optional</text><path class="ln a" d="M270 257 H366" marker-end="url(#ah-a)"/><text class="s" x="384" y="257" style="text-anchor:start">USB</text><rect class="bx " x="20" y="300" width="250" height="54" rx="6"/><text class="t " x="145.0" y="317.0">Tally and fader status</text><text class="s " x="145.0" y="337.0">TSL UMD, CSCP or Ember+</text><path class="ln c" d="M270 327 H366" marker-end="url(#ah-c)"/><text class="s" x="384" y="327" style="text-anchor:start">IP</text><rect class="bx a" x="650" y="90" width="190" height="54" rx="6"/><text class="t a" x="745.0" y="107.0">Audio console</text><text class="s a" x="745.0" y="127.0">16 EKO channels</text><path class="ln a" d="M570 117 H646" marker-end="url(#ah-a)"/><text class="s" x="556" y="117" style="text-anchor:end">OUT 8</text><path class="ln v" d="M20 384 H48"/><text class="s lb" x="56" y="384" style="text-anchor:start">Video and ancillary</text><path class="ln a" d="M209 384 H237"/><text class="s lb" x="245" y="384" style="text-anchor:start">Audio</text><path class="ln c" d="M306 384 H334"/><text class="s lb" x="342" y="384" style="text-anchor:start">Control</text></svg><figcaption>EKO Mini: one PGM, up to six play channels and one output on the eight connectors; the rest arrives over USB and IP.</figcaption></figure>
+<ul>
+<li><strong>Connector split</strong>: one PGM, up to six play channels and one output. Blackmagic describes the card as "8 x 3G-SDI mini DIN connections independently configurable as Input or Output", with 16 embedded audio channels per SDI and a reference input <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/products/decklink/techspecs/W-DLK-30">Blackmagic, DeckLink Quad 2</a></span>.</li>
+<li><strong>One setting to make</strong>: the card ships configured as four input and output pairs. The eight connectors become independent once each pair is switched from the "SDI 1 &amp; SDI 2" mode to the "SDI 1" mode (and likewise for the other three pairs), in Desktop Video Setup or through the SDK's half-duplex profile <span class="cite"><a target="_blank" rel="noopener" href="https://www.blackmagicdesign.com/developer/support/faq/desktop-video-developer-support-faqs">Blackmagic, developer FAQ</a>; <a target="_blank" rel="noopener" href="https://sdk-doc.blackmagicdesign.com/decklink-sdk/HighLevel/profiles.html">Blackmagic, SDK profiles</a></span>.</li>
+<li><strong>Timecode</strong>: each HD output of an EVS server can insert timecode as HANC LTC and HANC VITC; it is a per-channel setting, documented in the XSnano 12.02 manual, from the same software generation as the XT3. The DeckLink SDK returns the RP188 timecode of each captured frame, in HD only on this card <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1421853/Evs-Xsnano.html?page=126">EVS, XSnano Configuration Manual 12.02</a>; <a target="_blank" rel="noopener" href="https://sdk-doc.blackmagicdesign.com/decklink-sdk/HighLevel/timecode.html">Blackmagic, timecode in the SDK</a></span>.</li>
+<li><strong>LSM on air</strong>: the tally if it is available. Otherwise EKO compares the PGM picture with those of the play channels it receives. When both exist, they cross-check each other.</li>
+<li><strong>Replayed camera</strong>: for a clip, it is the letter in the ID (111A, 111B) <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/2596542/Evs-Lsm-Via.html?page=73">EVS, LSM-VIA User Manual 1.4</a></span>. The on-screen display (OSD) of the monitoring output shows the clip ID; for a live train, only the name of the record channel, as free text, is documented <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualsdir.com/manuals/254262/evs-multicamlsm-version-1100-operating-manual.html?page=21">EVS, Multicam Operating Manual 11.00</a></span>. Reading it through the LinX API is an assumption to be checked with EVS.</li>
+<li><strong>A single output per play channel</strong>: the monitoring output, wired today, carries the OSD, so the image comparison must avoid the OSD lines. Whether HANC timecode is present on that output remains to be confirmed; if it is missing, the clean output must be used and reading the OSD abandoned.</li>
+<li><strong>Output</strong>: a single SDI carries the 16 channels to the console.</li>
+</ul>
+<p>For the Mini, this is today's wiring, simplified: the PGM stays a standard PGM, and the tally replaces the follow rule in the router.</p>
+<h2 id="p4">EKO Nano: one input, one output, two connections</h2>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 332" role="img"><title>EKO Nano installation</title><desc>EKO Nano receives the PGM with the international sound on its SDI input, the LTC of each LSM on XLR through a USB audio interface, the reference, and tally over IP. Its SDI output carries 16 channels to the audio console.</desc><rect class="bx v" x="370" y="20" width="200" height="264" rx="6"/><text class="t" x="505" y="202.0">EKO Nano</text><rect class="bx v" x="20" y="20" width="250" height="54" rx="6"/><text class="t v" x="145.0" y="37.0">PGM and international sound</text><text class="s v" x="145.0" y="57.0">standard truck feed</text><path class="ln v" d="M270 47 H366" marker-end="url(#ah-v)"/><text class="s" x="384" y="47" style="text-anchor:start">SDI IN</text><rect class="bx l" x="20" y="90" width="250" height="54" rx="6"/><text class="t l" x="145.0" y="107.0">LTC of each LSM</text><text class="s l" x="145.0" y="127.0">XLR, USB audio interface</text><path class="ln l" d="M270 117 H366" marker-end="url(#ah-l)"/><text class="s" x="384" y="117" style="text-anchor:start">USB</text><rect class="bx " x="20" y="160" width="250" height="54" rx="6"/><text class="t " x="145.0" y="187.0">Truck reference</text><path class="ln n" d="M270 187 H366" marker-end="url(#ah-n)"/><text class="s" x="384" y="187" style="text-anchor:start">REF</text><rect class="bx " x="20" y="230" width="250" height="54" rx="6"/><text class="t " x="145.0" y="247.0">Tally</text><text class="s " x="145.0" y="267.0">TSL UMD over IP, or GPI</text><path class="ln c" d="M270 257 H366" marker-end="url(#ah-c)"/><text class="s" x="384" y="257" style="text-anchor:start">IP</text><rect class="bx a" x="650" y="90" width="190" height="54" rx="6"/><text class="t a" x="745.0" y="107.0">Audio console</text><text class="s a" x="745.0" y="127.0">16 EKO channels</text><path class="ln a" d="M570 117 H646" marker-end="url(#ah-a)"/><text class="s" x="556" y="117" style="text-anchor:end">SDI OUT</text><path class="ln v" d="M20 314 H48"/><text class="s lb" x="56" y="314" style="text-anchor:start">Video and ancillary</text><path class="ln l" d="M209 314 H237"/><text class="s lb" x="245" y="314" style="text-anchor:start">LTC</text><path class="ln a" d="M292 314 H320"/><text class="s lb" x="328" y="314" style="text-anchor:start">Audio</text><path class="ln c" d="M389 314 H417"/><text class="s lb" x="425" y="314" style="text-anchor:start">Control</text></svg><figcaption>EKO Nano: one SDI each way; LSM timecode arrives on XLR and tally over IP.</figcaption></figure>
+<ul>
+<li><strong>SDI</strong>: the PGM with the international sound as input, the EKO sounds as output.</li>
+<li><strong>LSM timecode</strong>: the LTC output of each server, on XLR, into a small four-input USB audio interface, for example a Behringer UMC404HD at €98 incl. VAT (Thomann Belgium, seen on 12 October 2026). EKO decodes the LTC itself <span class="cite"><a target="_blank" rel="noopener" href="https://www.thomann.de/be/behringer_umc404hd.htm">Thomann</a>; <a target="_blank" rel="noopener" href="https://github.com/x42/libltc">libltc</a></span>.</li>
+<li><strong>LSM on air</strong>: the tally is required, as TSL UMD over IP or as GPI contacts.</li>
+<li><strong>No conversion in the truck</strong>: the analogue conversion is done in EKO. The router has nothing to embed.</li>
+</ul>
+<p>The limits of the Nano:</p>
+<ul>
+<li><strong>One LTC per server.</strong> The LTC output of an XT3 is single, on XLR, and corresponds to PGM1. A server that puts PGM1 and PGM2 on air therefore has only one LTC <span class="cite"><a target="_blank" rel="noopener" href="https://cvp.com/pdf/evs_xt3_brch.pdf">EVS, XT3 brochure</a>; <a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/3607735/Evs-Xt-3.html?page=60">EVS, XT3 Technical Reference 16.6</a></span>.</li>
+<li><strong>Still frame.</strong> LTC cannot, in principle, be read when stopped: EKO holds the last timecode read.</li>
+<li><strong>No LSM pictures.</strong> The camera letter can only come from the protocol, and a clip recorded from the PGM can only be checked against the PGM picture.</li>
+</ul>
+<p>Variant when the truck can do it: the router's PGM Follow output, already described in the installation note. The timecode then arrives in the SDI, without XLR.</p>
+<h2 id="p5">The sound engineer's three sounds</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sound requested</th>
+<th>How EKO finds it</th>
+<th>What it needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>International sound</td>
+<td>The recorded international sound, played back at the picture's original time</td>
+<td>The base</td>
+</tr>
+<tr>
+<td>Sound of the camera on screen</td>
+<td>The mic associated with the replayed camera, via a camera-to-mic table entered once</td>
+<td>The mics over MADI and the camera letter</td>
+</tr>
+<tr>
+<td>Sound of the action</td>
+<td>The mics the sound engineer had open at that moment, taken pre-fader</td>
+<td>The mics over MADI and the fader state</td>
+</tr>
+</tbody>
+</table></div>
+<p>As an option, the mic closest to the ball can be deduced from the ball position and the mic plan. This requires a tracking feed, and therefore an agreement with the league.</p>
+<p>These sounds already exist as separate elements in sports production. At Euro 2020, the objects of the immersive mix were the commentary, the "close ball" effects and the "audio follow video" effects <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/roar-of-the-crowd-telegenic-on-running-a-sound-operation-for-uefa-at-euro-2020/">SVG Europe, 8 July 2021</a></span>.</p>
+<h3>Replaying the sound engineer's decision</h3>
+<figure class="dg-fig"><svg class="dg" viewBox="0 0 860 176" role="img"><title>Replaying the sound engineer&#x27;s decision</title><desc>In the live programme, the microphone&#x27;s fader opens after the action. On the replay, EKO plays the same microphone from its pre-fader recording, so from before the action.</desc><text class="t" x="20" y="61" style="text-anchor:start">Live</text><text class="t" x="20" y="131" style="text-anchor:start">EKO replay</text><path class="ax" d="M150 80 H830"/><path class="ax" d="M150 150 H830"/><path class="ln n" style="stroke-dasharray:4 4;stroke-width:1.5" d="M330 30 V162"/><text class="s lb" x="330" y="18" style="text-anchor:middle">action</text><rect class="bx a" x="420" y="48" width="400" height="26" rx="4"/><text class="s a" x="620" y="61">the fader opens after the action</text><rect class="bx a" x="250" y="118" width="570" height="26" rx="4"/><text class="s a" x="535" y="131">the same microphone, pre-fader, from before the action</text></svg><figcaption>The microphone the sound engineer opened late in the live programme is on time in the replay.</figcaption></figure>
+<p>The problem as posed: EKO records all the mics, but does not know which one to put on air. My answer: someone already decided that during the live broadcast.</p>
+<ul>
+<li><strong>During the live broadcast</strong>, the sound engineer follows the action and opens the closest mic, often slightly late.</li>
+<li><strong>EKO logs that choice</strong>: which fader was open, and at what time.</li>
+<li><strong>In the replay</strong>, EKO plays back that mic from its pre-fader recording. The mic that opened late in the live broadcast is on time in the replay.</li>
+</ul>
+<p>This route avoids two obstacles:</p>
+<ul>
+<li><strong>Mic positions</strong>: none of the console documentation read contains any mic position. Only an add-on such as Lawo KICK knows it.</li>
+<li><strong>Ball tracking</strong>: it exists, but under contract with the league. In the Bundesliga, TRACAB produces the feed and Sportec Solutions, a DFL subsidiary, distributes it <span class="cite"><a target="_blank" rel="noopener" href="https://www.live-production.tv/news/sports/dfl-and-chyronhego-sign-new-tracab%E2%84%A2-contract-bundesliga-and-bundesliga-2.html">Live-Production</a></span>. No source consulted shows an OB provider receiving it by default.</li>
+</ul>
+<p>Three ways to know the faders, from the simplest to the most detailed:</p>
+<ol>
+<li><strong>A post-fader "pitch effects" sub-group.</strong> One more feed to EKO. EKO receives the sound engineer's mix, without the crowd or the commentary.</li>
+<li><strong>Each mic pre-fader and post-fader.</strong> Calrec consoles provide up to four direct outputs per channel, each selectable pre- or post-fader. EKO deduces whether the fader is open by comparing the two. This is an inference to be checked, particularly when a group or a VCA controls the channels <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1341453/Calrec-Artemis.html?page=115">Calrec, Artemis Operator's Manual</a></span>.</li>
+<li><strong>The console protocol.</strong> Calrec's CSCP provides, for up to 192 faders, the position, the Cut or On state and the channel name, over TCP/IP <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1314128/Calrec-Apollo.html?page=62">Calrec, Apollo Installation Manual</a></span>. Lawo announces control of all channel parameters over Ember+; channel names are attested there, but fader position and mute are not detailed in any public document <span class="cite"><a target="_blank" rel="noopener" href="https://lawo.com/products/mc%C2%B256-audio-production-console/">Lawo, mc²56</a></span>.</li>
+</ol>
+<p>The console can also work for EKO in the other direction. Its "audio follow video" functions open a channel on a tally: 256 Autofaders on a Calrec Artemis, 128 events on a Lawo mc²96. Triggered by an LSM tally, they would open the EKO channel by themselves on every replay. No source describes this set-up: it needs to be tried <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1341453/Calrec-Artemis.html?page=90">Calrec, Artemis Operator's Manual</a>; <a target="_blank" rel="noopener" href="https://docs.lawo.com/audio-production-mc-mixing-consoles/mc96/mc96-operation/mc96-channel-operations/mc96-audio-follow-video">Lawo, mc²96 Audio Follow Video</a></span>.</p>
+<h3>Getting the mics in</h3>
+<ul>
+<li><strong>The mic plan</strong>: the historical baseline is 12 mics around the pitch; Sportcast went to 17 in the Bundesliga <span class="cite"><a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/sky-sport-summit-in-cooperation-with-svg-europe-the-future-of-audio-in-sports/">SVG Europe, 26 March 2018</a>; <a target="_blank" rel="noopener" href="https://newsroom.sennheiser.com/broadcast-production-partner-topvision-ensures-authenticity-in-football-broadcasting">Sennheiser, 16 October 2025</a></span>.</li>
+<li><strong>Transport</strong>: a MADI stream of direct outputs, which consoles can route to an external recorder <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/audio-production-mc-mixing-consoles/mc96/mc96-operation/mc96-channel-operations/mc96-direct-out">Lawo, mc²96 Direct Out</a></span>.</li>
+<li><strong>In EKO</strong>: a 64-channel USB MADI interface, for example the RME MADIface USB at €717 incl. VAT (Thomann Austria, seen on 12 October 2026) <span class="cite"><a target="_blank" rel="noopener" href="https://www.thomann.at/rme_madiface_usb_reviews.htm?rating=5">Thomann</a></span>.</li>
+</ul>
+<h2 id="p6">What I rule out at base level, and why</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Why it fails the "simple to install" criterion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LSM LTC embedded by the router</td>
+<td>Three analogue conversions, a free embedder output and a custom channel map, to be redone in every truck</td>
+</tr>
+<tr>
+<td>PGM Follow through rules in the router</td>
+<td>No function of that name was found in the public documentation of control systems; it is an engineering job per truck. It remains a variant for the Nano</td>
+</tr>
+<tr>
+<td>LSM timecode carried in the PGM by the vision mixer</td>
+<td>Passing ancillary data through a vision mixer output is documented, in the manuals consulted, only by Ross</td>
+</tr>
+<tr>
+<td>The LSM protocol as the timecode source</td>
+<td>A serial link per channel with a licence, or the LinX API on the truck network, whose terms are not public, for information already present in the SDI. I keep it for the camera letter only</td>
+</tr>
+<tr>
+<td>Ball tracking</td>
+<td>Depends on a league contract. I keep it as an option, along the lines of Lawo KICK</td>
+</tr>
+</tbody>
+</table></div>
+<p>Lawo KICK makes exactly this choice of the closest mic from TRACAB tracking; the Bundesliga adopted it for the 2017/18 season. Salsa Sound MIXaiR does it from the mic signals alone <span class="cite"><a target="_blank" rel="noopener" href="https://www.sportsvideo.org/2018/12/20/lawo-develops-hockey-version-of-kick-action-following-audio-system/">SVG, 20 December 2018</a>; <a target="_blank" rel="noopener" href="https://www.svgeurope.org/blog/headlines/bundesliga-is-worlds-first-league-to-use-automated-audio-mixing/">SVG Europe, 2 November 2017</a>; <a target="_blank" rel="noopener" href="https://www.svconline.com/the-wire/salsa-sound-launches-software-defined-and-cloud-compatible-version-of-ai-based-audio-mixing-engine-mixair-2-0">SVC Online, 3 November 2021</a></span>.</p>
+<h2 id="p7">What this requires of EKO</h2>
+<ol>
+<li><strong>Mini on eight channels</strong>: configurable input and output split, from 4 + 4 to 7 + 1.</li>
+<li><strong>Tally listening</strong>: TSL UMD v3.1 and v5, over UDP and TCP, with an index table and bit polarity configurable per truck. A GPI input serves as fallback <span class="cite"><a target="_blank" rel="noopener" href="https://tslproducts.com/wp-content/uploads/TSL-UMD-protocol.pdf">TSL, protocol specification</a></span>.</li>
+<li><strong>Image comparison</strong> between the PGM and the play channels received, to cross-check the tally and replace it when it is missing.</li>
+<li><strong>Nano</strong>: LTC input through a USB audio interface.</li>
+<li><strong>Multitrack input</strong> over MADI.</li>
+<li><strong>Timestamped fader log</strong>: CSCP for the documented UHD trucks of AMP Visual TV (Millenium Signature 12, Millenium 3, 4 and 6), which run on Calrec; the older trucks are on Studer Vista <span class="cite"><a target="_blank" rel="noopener" href="https://www.ampvisualtv.tv/en/our-production-resources/mobile-resources/132-millenium.html">AMP Visual TV, Millenium</a></span>.</li>
+<li><strong>Camera letter</strong>: reading the LSM OSD, then the LinX API if EVS confirms it.</li>
+</ol>
+<h2 id="p8">To validate before development</h2>
+<ol>
+<li><strong>On a real LSM</strong>: the timecode insertion setting and how it holds up in slow motion and when stopped. The "No" and "TC 0" values would break the follow <span class="cite"><a target="_blank" rel="noopener" href="https://www.manualslib.com/manual/1421853/Evs-Xsnano.html?page=126">EVS, XSnano Configuration Manual 12.02</a></span>.</li>
+<li><strong>The monitoring output</strong>: HANC timecode present or not; an OSD that the operator can switch off with the F5 key, and whose full layout is not documented.</li>
+<li><strong>The Quad 2 card</strong>: reading RP188 timecode on seven inputs at once, particularly in 1080p50.</li>
+<li><strong>AMP on EVS servers</strong>: AMP does not appear in any EVS document found. The Cerebrum protocol list (V2.01, May 2021) gives AMP for the Grass Valley K2 and the LinX API for the XT and XT-VIA. To be checked on a server before any AMP development <span class="cite"><a target="_blank" rel="noopener" href="https://evs.com/sites/default/files/2021-05/Cerebrum%20protocol%20list%20V2.01%20%28May21%29.pdf">EVS, Cerebrum protocol list</a></span>.</li>
+<li><strong>The tally</strong>: TSL output is documented for Ross vision mixers and for TSL TallyMan, listed without a public procedure for EVS Cerebrum, and not confirmed for Lawo VSM. Bit polarity varies from one manufacturer to another, and behaviour during a dissolve is not documented.</li>
+<li><strong>The console</strong>: the sound engineer's agreement to having the faders read. No read-only mode is documented, and Lawo drops external Ember+ connections on every production load <span class="cite"><a target="_blank" rel="noopener" href="https://docs.lawo.com/audio-production-mc-mixing-consoles/audio-production-software-versions/mc-release-notes-12-0-0">Lawo, mc² 12.0.0 release notes</a></span>.</li>
+<li><strong>The servers' LTC</strong>, for the Nano: its behaviour away from nominal speed is not described in any public document, and the existence of an analogue LTC output on the XT-VIA is not confirmed.</li>
+<li><strong>The DeckLink SDI Micro</strong>: one fixed input and one fixed output according to resellers; the manufacturer's data sheet could not be read, and the number of embedded audio channels is not confirmed.</li>
+</ol>
+<h2 id="p9">Proposed test order</h2>
+<ol>
+<li><strong>Mini, cables only</strong>: one PGM and the play channel outputs, on one match.</li>
+<li><strong>Mini with tally</strong>: compare the tally against the image comparison.</li>
+<li><strong>Nano</strong>: LTC on XLR and tally.</li>
+<li><strong>Mics over MADI</strong> and the "pitch effects" sub-group.</li>
+<li><strong>Fader log</strong> on a Calrec console.</li>
+<li><strong>Camera letter</strong> and the camera-to-mic table.</li>
+</ol>
+    <p class="note">All sources are linked in the full report. Prices seen on 11 October 2026.</p>
+  </main>
+</div>
+<footer class="foot">Kreativ Labs · EKO · Internal R&D document, not intended for public distribution. · info@kreativlabs.tv</footer>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

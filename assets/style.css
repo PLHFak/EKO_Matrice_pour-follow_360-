@@ -157,7 +157,8 @@ a:hover { text-decoration-thickness: 2px; }
 .toc a:hover { color: var(--text); }
 .toc a.active { border-left-color: var(--eko); color: var(--link); font-weight: 500; }
 main { min-width: 0; }
-.summary main { max-width: 880px; }
+.summary main, .proposal main { max-width: 880px; }
+.dg .ax { fill: none; stroke: var(--dg-stroke); stroke-width: 1; }
 
 /* Text */
 h2 {
@@ -243,7 +244,7 @@ td:first-child { font-weight: 500; }
   .hero-in { padding: 0 0 12pt; }
   .hero a, .hero .cite, .hero .cite a { color: #333; }
   .layout { display: block; padding: 12pt 0 0; max-width: none; }
-  .summary main { max-width: none; }
+  .summary main, .proposal main { max-width: none; }
   h2 { font-size: 16pt; margin-top: 18pt; break-after: avoid; }
   h3 { font-size: 12pt; break-after: avoid; }
   .table-wrap { overflow: visible; border: 0; }

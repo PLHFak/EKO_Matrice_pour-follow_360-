@@ -10,7 +10,9 @@ Document interne, non destiné à la diffusion publique.
 | Fichier | Rôle |
 |---|---|
 | `index.html`, `rapport.html` | Synthèse et rapport complet, en français |
-| `en/index.html`, `en/report.html` | Summary and full report, in English |
+| `proposition.html` | Proposition d'installation d'EKO en car (EKO Nano, EKO Mini) |
+| `en/index.html`, `en/proposal.html`, `en/report.html` | Summary, proposal and full report, in English |
+| `content/proposal.*.md` | Sources de la proposition |
 | `content/summary.*.md` | Sources de la synthèse (marqueurs `{{diagram:nom}}` pour les schémas) |
 | `content/report.*.md` | Sources du rapport complet, toutes les références en lien |
 | `diagrams.py` | Schémas SVG, en français et en anglais |
