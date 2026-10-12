@@ -61,7 +61,20 @@ Variante quand le car sait le faire : la sortie PGM Follow de la matrice, déjà
 | Son de la caméra à l'image | Le micro associé à la caméra rejouée, par une table caméra et micro saisie une fois | Les micros en MADI et la lettre de caméra |
 | Son de l'action | Les micros que l'ingénieur du son avait ouverts à cet instant, pris avant fader | Les micros en MADI et l'état des faders |
 
-En option, le micro le plus proche du ballon se déduit de la position du ballon et du plan des micros. Il faut pour cela un flux de tracking, donc un accord avec la ligue.
+En option, le micro le plus proche du ballon se déduit de la position du ballon et du plan des micros. Il faut pour cela un flux de tracking, donc un accord avec la ligue, ou une analyse d'image faite par EKO.
+
+### Les quatre briques micro
+
+Chaque brique choisit un micro ; son nom dit qui décide. « Follow » veut dire automatique, « Select » veut dire humain. Les noms restent en anglais dans toutes les langues.
+
+| Brique | Qui décide du micro | Mode |
+|---|---|---|
+| **CAM FOLLOW** | La caméra rejouée, par sa lettre A, B, C ou D | Automatique |
+| **MIX FOLLOW** | Les faders ouverts par l'ingénieur du son pendant le direct, rejoués en avance au ralenti | Automatique |
+| **BALL FOLLOW** | La position du ballon ou de l'action, par tracking ou analyse d'image | Automatique |
+| **MIC SELECT** | L'opérateur | Humain |
+
+Pistes de sortie d'EKO : EKO INT · CAM FOLLOW · MIX FOLLOW · BALL FOLLOW · MIC SELECT · EKO CLIP · BOOST · MONITOR 1–6.
 
 Ces sons existent déjà comme éléments séparés dans la production sportive. À l'Euro 2020, les objets du mix immersif étaient le commentaire, les effets « close ball » et les effets « audio follow video » ([SVG Europe, 8 juillet 2021](https://www.svgeurope.org/blog/headlines/roar-of-the-crowd-telegenic-on-running-a-sound-operation-for-uefa-at-euro-2020/)).
 

@@ -61,7 +61,20 @@ Variant when the truck can do it: the router's PGM Follow output, already descri
 | Sound of the camera on screen | The mic associated with the replayed camera, via a camera-to-mic table entered once | The mics over MADI and the camera letter |
 | Sound of the action | The mics the sound engineer had open at that moment, taken pre-fader | The mics over MADI and the fader state |
 
-As an option, the mic closest to the ball can be deduced from the ball position and the mic plan. This requires a tracking feed, and therefore an agreement with the league.
+As an option, the mic closest to the ball can be deduced from the ball position and the mic plan. This requires a tracking feed, and therefore an agreement with the league, or image analysis done by EKO.
+
+### The four mic bricks
+
+Each brick picks a mic; its name says who decides. "Follow" means automatic, "Select" means human.
+
+| Brick | Who decides the mic | Mode |
+|---|---|---|
+| **CAM FOLLOW** | The replayed camera, by its letter A, B, C or D | Automatic |
+| **MIX FOLLOW** | The faders the sound engineer opened during the live broadcast, played back early in the replay | Automatic |
+| **BALL FOLLOW** | The position of the ball or the action, from tracking or image analysis | Automatic |
+| **MIC SELECT** | The operator | Human |
+
+EKO output tracks: EKO INT · CAM FOLLOW · MIX FOLLOW · BALL FOLLOW · MIC SELECT · EKO CLIP · BOOST · MONITOR 1–6.
 
 These sounds already exist as separate elements in sports production. At Euro 2020, the objects of the immersive mix were the commentary, the "close ball" effects and the "audio follow video" effects ([SVG Europe, 8 July 2021](https://www.svgeurope.org/blog/headlines/roar-of-the-crowd-telegenic-on-running-a-sound-operation-for-uefa-at-euro-2020/)).
 
